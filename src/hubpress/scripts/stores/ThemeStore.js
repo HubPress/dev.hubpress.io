@@ -41,6 +41,7 @@ function getTemplateOptions() {
 class ThemeStore extends EventEmitter {
 
   constructor(){
+    super();
     this.name = null;
     this.version = null;
     this.templateCache = new Map();

@@ -2,9 +2,9 @@ const React = window.React = require('react');
 const Router = require('react-router');
 const { Route, DefaultRoute, RouteHandler, Link } = Router;
 const assign = require('object-assign');
-const ReactToastr = require("react-toastr");
-const {ToastContainer} = ReactToastr;
-const ToastMessageFactory = React.createFactory(ReactToastr.ToastMessage.jQuery);
+//const ReactToastr = require("react-toastr");
+//const {ToastContainer} = ReactToastr;
+//const ToastMessageFactory = React.createFactory(ReactToastr.ToastMessage.jQuery);
 
 // Components
 const Navbar = require('./Navbar.react');
@@ -96,21 +96,27 @@ class Hubpress {
       extendedTimeOut: 1000
     };
     if (message.type === 'error') {
-      this.refs.toastr.error(
+      /*
+        this.refs.toastr.error(
         message.content,
         message.title, options);
+        */
 
     }
     if (message.type === 'warning') {
+      /*
       this.refs.toastr.warning(
         message.content,
         message.title, options);
-
+      */
     }
     if (message.type === 'success') {
+      /*
+
       this.refs.toastr.success(
         message.content,
         message.title, options);
+      */
     }
 
   }
@@ -135,9 +141,11 @@ class Hubpress {
       return (
         <div>
           {navbar}
+          /*
           <ToastContainer ref="toastr"
           toastMessageFactory={ToastMessageFactory}
           className="toast-top-right" />
+          */
           <RouteHandler/>
           </div>
         );

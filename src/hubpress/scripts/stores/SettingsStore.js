@@ -68,6 +68,7 @@ function dispatcher(payload) {
 class SettingsStore extends EventEmitter {
 
   constructor() {
+    super();
     this.message = null;
     this.dispatcherToken = HpDispatcher.register(dispatcher.bind(this));
   }

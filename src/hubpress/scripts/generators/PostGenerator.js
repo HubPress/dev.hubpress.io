@@ -3,7 +3,7 @@ const _ = require('lodash');
 import ThemeStore from '../stores/ThemeStore';
 import AuthStore from '../stores/AuthStore';
 import SettingsStore from '../stores/SettingsStore';
-const slug = require('slug');
+const S = require('string');
 const url = require('../utils/url');
 
 class PostGenerator {
@@ -30,7 +30,7 @@ class PostGenerator {
     postData.tags = _.map(postData.tags, (tag) => {
       return {
         name: tag,
-        slug: slug(tag)
+        slug: S(tag).slugify().s
       }
     });
 

@@ -53,6 +53,7 @@ function readCredentials() {
 class AuthStore extends EventEmitter {
 
   constructor() {
+    super();
     this.processing = false;
     this.error = null;
     this.message = null;

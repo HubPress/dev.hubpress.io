@@ -1,0 +1,74 @@
+var dest = './dist';
+var src = './src';
+
+module.exports = {
+  browserSync: {
+    server: {
+      // We're serving the src folder as well
+      // for sass sourcemap linking
+      baseDir: [dest, src]
+    },
+    files: [
+      dest + '/**'
+    ]
+  },
+  css: {
+    src: src + "/css/*.css",
+    dest: dest
+  },
+  markup: {
+    src: [
+      src + "/hubpress/index.html",
+      src + "/hubpress/config.json",
+      src + "/hubpress/favicon.ico"
+    ],
+    dest: dest + "/hubpress"
+  },
+  markupHome: {
+    src: [
+      src + "/index.html",
+      src + "/.nojekyll"
+    ],
+    dest: dest
+  },
+  markupImages: {
+    src: [
+      src + "/images/**/*"
+    ],
+    dest: dest + "/images"
+  },
+  markupThemes: {
+    src: [
+      src + "/themes/**/*"
+    ],
+    dest: dest + "/themes"
+  },
+  helpers: {
+    src: src + "/hubpress/scripts/helpers/tpl/**",
+    dest: dest + '/hubpress/scripts/helpers/tpl'
+  },
+  vendors: {
+    src: [
+      src + "/hubpress/bower_components/modernizr/modernizr.js",
+      src + "/hubpress/bower_components/github/lib/base64.min.js",
+      src + "/hubpress/bower_components/github/github.js"
+    ],
+    dest: dest + '/hubpress/scripts/vendors'
+  },
+  fontIcons: {
+    src: src + "/css/font-icons/**",
+    dest: dest + '/font-icons'
+  },
+  browserify: {
+    // Enable source maps
+    debug: true,
+    extensions: [ '.jsx' ],
+    // A separate bundle will be generated for each
+    // bundle config in the list below
+    bundleConfigs: [{
+      entries: src + '/hubpress/scripts/app.react.js',
+      dest: dest,
+      outputName: 'hubpress/scripts/app.js'
+    }]
+  }
+};

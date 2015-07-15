@@ -6,7 +6,7 @@ import AppActionServerCreators from '../actions/AppActionServerCreators';
 import Generators from '../generators/Generators.js';
 const url = require('../utils/url');
 const Q = require('q');
-const slug = require('slug');
+const S = require('string');
 const _ = require('lodash');
 const moment = require('moment');
 const assign = require('object-assign');
@@ -28,7 +28,7 @@ function _localSave(post) {
   let image = post.attributes.map['hp-image'] ;
   let tags = post.attributes.map['hp-tags'] && post.attributes.map['hp-tags'].split(',') ;
   let altTitle = post.attributes.map['hp-alt-title'];
-  let name = slug(published_at + '-' + (altTitle || title)) +'.adoc';
+  let name = S(published_at + '-' + (altTitle || title)).slugify().s +'.adoc';
   let urlPost = url.getPostUrl(name);
 
   let postToSave = assign({}, post, {

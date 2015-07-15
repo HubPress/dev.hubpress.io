@@ -1,4 +1,4 @@
-/** @jsx React.DOM */
+
 
 let React = window.React = require('react');
 let Router = require('react-router');
