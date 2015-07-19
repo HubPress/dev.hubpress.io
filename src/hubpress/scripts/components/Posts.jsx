@@ -3,8 +3,8 @@ const Router = require('react-router');
 const { Link } = Router;
 const uuid = require('node-uuid');
 const Authentication = require('./Authentication');
-const Loader = require('./Loader.react.js');
-const AsciidocRender = require('./AsciidocRender.react.js');
+const Loader = require('./Loader');
+const AsciidocRender = require('./AsciidocRender');
 import PostsStore from '../stores/PostsStore';
 import PostsActionCreators from '../actions/PostsActionCreators';
 

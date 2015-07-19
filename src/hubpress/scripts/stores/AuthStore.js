@@ -36,6 +36,7 @@ function _dispatcher(payload) {
       break;
 
     default:
+      console.info('AuthStores - dispatcher nothing to do');
         // nothing to do
   }
 

@@ -1,12 +1,12 @@
 const React = require('react');
 const assign = require('object-assign');
 const Router = require('react-router');
-const Loader = require('./Loader.react.js');
+const Loader = require('./Loader');
 const Authentication = require('./Authentication');
 require('../utils/codemirror/mode/asciidoc');
 const CodeMirror = require('react-code-mirror');
 
-const AsciidocRender = require('./AsciidocRender.react');
+const AsciidocRender = require('./AsciidocRender');
 
 import SettingsStore from '../stores/SettingsStore';
 import PostsStore from '../stores/PostsStore';

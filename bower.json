@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "dependencies": {
     "modernizr": "^2.8.3",
-    "github": "anthonny/github#master"
+    "github": "anthonny/github#master",
+    "lodash": "~3.10.0"
   }
 }

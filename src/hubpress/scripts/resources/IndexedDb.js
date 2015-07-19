@@ -1,4 +1,4 @@
-const dexie = require("dexie");
+const Dexie = require("dexie");
 
 function _initDb(dbName) {
   const _db = new Dexie(dbName);

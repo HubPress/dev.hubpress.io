@@ -55,7 +55,6 @@ class AppActionServerCreators {
         auth: "oauth"
       });
     }
-
     HpDispatcher.handleViewAction({
       type: ActionTypes.RECEIVE_INIT,
       config: config,

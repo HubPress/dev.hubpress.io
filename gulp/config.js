@@ -3,18 +3,19 @@ var src = './src';
 
 module.exports = {
   browserSync: {
+    port: 9000,
     server: {
       // We're serving the src folder as well
       // for sass sourcemap linking
-      baseDir: [dest, src]
+      baseDir: [dest, src],
     },
     files: [
       dest + '/**'
     ]
   },
   css: {
-    src: src + "/css/*.css",
-    dest: dest
+    src: src + "/hubpress/styles/**/*.less",
+    dest: dest + "/hubpress/styles"
   },
   markup: {
     src: [
@@ -50,6 +51,7 @@ module.exports = {
   vendors: {
     src: [
       src + "/hubpress/bower_components/modernizr/modernizr.js",
+      src + "/hubpress/bower_components/lodash/lodash.min.js",
       src + "/hubpress/bower_components/github/lib/base64.min.js",
       src + "/hubpress/bower_components/github/github.js"
     ],
@@ -66,7 +68,7 @@ module.exports = {
     // A separate bundle will be generated for each
     // bundle config in the list below
     bundleConfigs: [{
-      entries: src + '/hubpress/scripts/app.react.js',
+      entries: src + '/hubpress/scripts/app.jsx',
       dest: dest,
       outputName: 'hubpress/scripts/app.js'
     }]

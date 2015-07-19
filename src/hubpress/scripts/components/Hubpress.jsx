@@ -1,14 +1,11 @@
 const React = window.React = require('react');
+
 const Router = require('react-router');
-const { Route, DefaultRoute, RouteHandler, Link } = Router;
-const assign = require('object-assign');
-//const ReactToastr = require("react-toastr");
-//const {ToastContainer} = ReactToastr;
-//const ToastMessageFactory = React.createFactory(ReactToastr.ToastMessage.jQuery);
+const RouteHandler = Router.RouteHandler;
 
 // Components
-const Navbar = require('./Navbar.react');
-const Loader = require('./Loader.react');
+const Navbar = require('./Navbar');
+const Loader = require('./Loader');
 
 // Actions
 import AppActionCreators from '../actions/AppActionCreators';
@@ -23,26 +20,24 @@ function _appState(){
   return {
     loggedIn: AuthStore.getStatus().loggedIn,
     isInit: AppStore.isInitialize()
-  }
-};
+  };
+}
 
-class Hubpress {
+class Hubpress extends React.Component {
 
-  constructor() {
-    this.mixins = [ Router.Navigation ];
-  }
-
-  getInitialState() {
-    return _appState();
+  constructor(props, context) {
+    super(props, context);
+    this.state= _appState();
+    this.context = context;
+    this.router = context.router;
+    this.props = props;
   }
 
   componentDidMount() {
-    if (this.isMounted()) {
-      AppStore.addChangeListener(this._onAppStoreChange);
-      AuthStore.addChangeListener(this._onAuthStoreChange);
-      PostsStore.addChangeListener(this._onPostsStoreChange);
-      SettingsStore.addChangeListener(this._onSettingsStoreChange);
-    }
+    AppStore.addChangeListener(this._onAppStoreChange.bind(this));
+    AuthStore.addChangeListener(this._onAuthStoreChange.bind(this));
+    PostsStore.addChangeListener(this._onPostsStoreChange.bind(this));
+    SettingsStore.addChangeListener(this._onSettingsStoreChange.bind(this));
   }
 
   componentWillUnmount() {
@@ -60,7 +55,7 @@ class Hubpress {
     if (SettingsStore.message) {
       this.showNotification(SettingsStore.message);
     }
-    this.setState(_appState());
+    //this.setState(_appState());
   }
 
   _onAuthStoreChange() {
@@ -68,12 +63,12 @@ class Hubpress {
       this.showNotification(AuthStore.message);
     }
     if (!AuthStore.getStatus().loggedIn) {
-      this.transitionTo('/');
+      this.router.transitionTo('/');
       this.setState(_appState());
       return;
     }
 
-    if (this.isMounted() && AuthStore.getStatus().loggedIn) {
+    if (AuthStore.getStatus().loggedIn) {
       setTimeout(() => {
         AppActionCreators.startSynchronize();
       },0);
@@ -122,11 +117,6 @@ class Hubpress {
   }
 
   render(){
-    let menuItems = [
-      { route: 'posts', text: 'Posts' },
-      { route: 'css-framework', text: 'CSS Framework' },
-      { route: 'components', text: 'Components' }
-    ];
 
     let navbar;
     if (this.state.loggedIn)
@@ -137,23 +127,24 @@ class Hubpress {
       );
 
 
-    if (this.state.isInit)
+    if (this.state.isInit) {
       return (
         <div>
           {navbar}
-          /*
-          <ToastContainer ref="toastr"
-          toastMessageFactory={ToastMessageFactory}
-          className="toast-top-right" />
-          */
           <RouteHandler/>
           </div>
         );
+    }
     else
       return (
         <Loader loading={true}></Loader>
       );
+
     }
 }
 
-export default React.createClass(assign(Hubpress.prototype, Router.Navigation));
+Hubpress.contextTypes = {
+    router: React.PropTypes.func.isRequired
+};
+
+export default Hubpress;

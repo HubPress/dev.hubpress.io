@@ -16,8 +16,7 @@ function _getConfig() {
         deferred.reject(err);
         return;
       }
-
-      deferred.resolve(config);
+      deferred.resolve(config.body);
     });
 
   return deferred.promise;
@@ -28,12 +27,12 @@ function _loadActiveTheme(name, meta) {
   let promises = [];
   let hubpressUrl = SettingsStore.getHubpressUrl(meta);
   request.get(`${hubpressUrl}/themes/${name}/theme.json?dt=${Date.now()}`)
-    .end((err, theme) => {
+    .end((err, response) => {
       if (err) {
         deferred.reject(err);
         return;
       }
-
+      let theme = response.body;
       let version = theme.version;
       let files = _.pairs(theme.files);
 
@@ -48,7 +47,7 @@ function _loadActiveTheme(name, meta) {
         navigationLoaded = navigationLoaded || file[0] === 'nav';
 
         request.get(`${hubpressUrl}/themes/${name}/${file[1]}?v=${version}`)
-          .end((err, content) => {
+          .end((err, response) => {
             if (err) {
               deferredFile.reject(err)
               return;
@@ -56,7 +55,7 @@ function _loadActiveTheme(name, meta) {
             deferredFile.resolve({
               name: file[0],
               path: file[1],
-              content: content
+              content: response.text
             });
 
           });
@@ -67,7 +66,7 @@ function _loadActiveTheme(name, meta) {
         let deferredPagination = Q.defer();
         promises.push(deferredPagination.promise);
         request.get(`${hubpressUrl}/hubpress/scripts/helpers/tpl/pagination.hbs`)
-          .end((err, content) => {
+          .end((err, response) => {
             if (err) {
               deferredPagination.reject(err)
               return;
@@ -76,7 +75,7 @@ function _loadActiveTheme(name, meta) {
             deferredPagination.resolve({
               name: 'pagination',
               path: 'partials/pagination',
-              content: content
+              content: response.text
             });
           });
       }
@@ -85,7 +84,7 @@ function _loadActiveTheme(name, meta) {
         let deferredNav = Q.defer();
         promises.push(deferredNav.promise);
         request.get(`${hubpressUrl}/hubpress/scripts/helpers/tpl/nav.hbs`)
-          .end((err, content) => {
+          .end((err, response) => {
             if (err) {
               deferredNav.reject(err)
               return;
@@ -93,7 +92,7 @@ function _loadActiveTheme(name, meta) {
             deferredNav.resolve({
               name: 'nav',
               path: 'partials/nav',
-              content: content
+              content: response.text
             });
           });
       }
@@ -104,6 +103,10 @@ function _loadActiveTheme(name, meta) {
             version: version,
             files: values
           });
+        })
+        .catch((error) => {
+          console.log(error);
+          deferred.reject(error);
         });
     });
 

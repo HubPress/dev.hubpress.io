@@ -14,7 +14,7 @@ function applyScript() {
     if (scripts[i].src != "" && addedScripts.indexOf(scripts[i].src) === -1) {
       let tag = document.createElement("script");
       tag.src = scripts[i].src;
-      addedScripts.push(tag.src)
+      addedScripts.push(tag.src);
       document.getElementsByTagName("head")[0].appendChild(tag);
     }
     else {
@@ -43,7 +43,7 @@ let AsciidocRender = React.createClass({
   },
 
   render: function() {
-    this.convertedPost = convertContent(this.props.content || '');
+    this.convertedPost = convertContent(this.props.content || '');
     let htmlContent = this.convertedPost.html;
     let title = this.convertedPost.attributes && this.convertedPost.attributes.map['doctitle'];
     let tags = this.convertedPost.attributes.map['hp-tags'] || this.props.content && 'No tag';
