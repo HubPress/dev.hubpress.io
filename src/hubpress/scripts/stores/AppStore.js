@@ -48,6 +48,7 @@ function dispatcher(payload) {
 
 class AppStore extends EventEmitter {
   constructor(){
+    super();
     this.state = AppStates.INIT;
     this.dispatcherToken = HpDispatcher.register(dispatcher.bind(this));
     this.message = null;

@@ -1,7 +1,7 @@
-import Github from '../resources/Github.js';
-import AuthActionGHCreators from '../actions/AuthActionGHCreators.js';
+import Github from '../resources/Github';
+import AuthActionGHCreators from '../actions/AuthActionGHCreators';
 const platform = require('platform');
-const slug = require('slug');
+const S = require('string');
 const Q = require('q');
 
 function _getRepositoryInfos(repository) {
@@ -56,15 +56,15 @@ function _getUserInformations(user) {
 }
 
 function _getTokenNote() {
-  return slug(`hubpress-${platform.name}-${platform.os}`);
+  return S(`hubpress-${platform.name}-${platform.os}`).slugify().s;
 }
 
 function _searchAndDeleteAuthorization(authorizations, authorization ) {
   let deferred = Q.defer();
   let id = -1;
-
   authorizations.forEach(function(token) {
-    if (token.note === _getTokenNote()) {
+    let note = token.note && token.note.toLowerCase();
+    if (note === _getTokenNote()) {
       id = token.id;
     }
   });

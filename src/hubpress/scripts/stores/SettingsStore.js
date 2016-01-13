@@ -10,18 +10,6 @@ const CHANGE_EVENT = 'change';
 let _config;
 let _db;
 
-function _loadConfig (config) {
-  let urlSite;
-  _config = config;
-
-  urlSite = _getSiteUrl(_config.meta);
-
-  _config.site = assign({}, _config.site, {
-    url: urlSite
-  });
-
-};
-
 function _getSiteUrl(_meta, addProtocol) {
   let meta = _meta || _config.meta;
   let url;
@@ -37,7 +25,18 @@ function _getSiteUrl(_meta, addProtocol) {
   }
 
   return url;
-};
+}
+function _loadConfig (config) {
+  let urlSite;
+  _config = config;
+
+  urlSite = _getSiteUrl(_config.meta);
+
+  _config.site = assign({}, _config.site, {
+    url: urlSite
+  });
+}
+
 
 function dispatcher(payload) {
   let action = payload.action;
@@ -68,6 +67,7 @@ function dispatcher(payload) {
 class SettingsStore extends EventEmitter {
 
   constructor() {
+    super();
     this.message = null;
     this.dispatcherToken = HpDispatcher.register(dispatcher.bind(this));
   }

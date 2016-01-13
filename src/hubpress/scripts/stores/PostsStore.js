@@ -81,6 +81,7 @@ function dispatcher(payload) {
 class PostsStore extends EventEmitter {
 
   constructor() {
+    super();
     this._isLoading = false;
     this._isSynchronizing = false;
     this.posts = null;
