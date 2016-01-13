@@ -21,7 +21,6 @@ module.exports = {
     src: [
       src + "/hubpress/index.html",
       src + "/hubpress/config.json",
-      src + "/hubpress/styles/main.less",
       src + "/hubpress/favicon.ico"
     ],
     dest: dest + "/hubpress"
@@ -29,6 +28,8 @@ module.exports = {
   markupHome: {
     src: [
       src + "/index.html",
+      src + "/*.adoc",
+      src + "/LICENSE",
       src + "/.nojekyll"
     ],
     dest: dest
@@ -57,6 +58,12 @@ module.exports = {
       src + "/hubpress/bower_components/github/github.js"
     ],
     dest: dest + '/hubpress/scripts/vendors'
+  },
+  version: {
+    src: [
+      src + "/hubpress/index.html"
+    ],
+    dest: dest + "/hubpress"
   },
   fontIcons: {
     src: src + "/css/font-icons/**",
