@@ -1,6 +1,7 @@
 const Q = require('q');
 const _ = require('lodash');
 const S = require('string');
+const slugify = require('../utils/slugify');
 import PaginationGenerator from './PaginationGenerator';
 
 
@@ -31,7 +32,7 @@ class TagsGenerator {
       }
 
       let postsTags = _.reduce(post.tags, (memo, postTag) => {
-        let slugTag = S(postTag).slugify().s;
+        let slugTag = slugify(postTag);
         if (!params.tags || params.tags.indexOf(postTag) !== -1) {
           memo.push(slugTag);
         }
@@ -55,7 +56,7 @@ class TagsGenerator {
 
       let tagObject = {
         name: key,
-        slug: S(key).slugify().s
+        slug: slugify(key)
       }
 
       PaginationGenerator.generate({posts: tag, tag: tagObject, template: 'tag', path: `tag/${key}/`})

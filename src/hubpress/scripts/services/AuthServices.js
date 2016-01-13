@@ -62,9 +62,9 @@ function _getTokenNote() {
 function _searchAndDeleteAuthorization(authorizations, authorization ) {
   let deferred = Q.defer();
   let id = -1;
-
   authorizations.forEach(function(token) {
-    if (token.note === _getTokenNote()) {
+    let note = token.note && token.note.toLowerCase();
+    if (note === _getTokenNote()) {
       id = token.id;
     }
   });

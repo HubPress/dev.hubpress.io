@@ -21,6 +21,7 @@ module.exports = {
     src: [
       src + "/hubpress/index.html",
       src + "/hubpress/config.json",
+      src + "/hubpress/styles/main.less",
       src + "/hubpress/favicon.ico"
     ],
     dest: dest + "/hubpress"

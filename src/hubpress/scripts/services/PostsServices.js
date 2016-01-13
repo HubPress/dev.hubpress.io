@@ -7,6 +7,7 @@ import Generators from '../generators/Generators.js';
 const url = require('../utils/url');
 const Q = require('q');
 const S = require('string');
+const slugify = require('../utils/slugify');
 const _ = require('lodash');
 const moment = require('moment');
 const assign = require('object-assign');
@@ -28,7 +29,7 @@ function _localSave(post) {
   let image = post.attributes.map['hp-image'] ;
   let tags = post.attributes.map['hp-tags'] && post.attributes.map['hp-tags'].split(',') ;
   let altTitle = post.attributes.map['hp-alt-title'];
-  let name = S(published_at + '-' + (altTitle || title)).slugify().s +'.adoc';
+  let name = slugify(published_at + '-' + (altTitle || title)) +'.adoc';
   let urlPost = url.getPostUrl(name);
 
   let postToSave = assign({}, post, {

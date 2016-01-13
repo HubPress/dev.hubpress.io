@@ -16,6 +16,7 @@ var config = require('../config').browserify;
 var buffer = require('vinyl-buffer');
 var sourcemaps = require('gulp-sourcemaps');
 var babelify = require('babelify');
+var uglify = require('gulp-uglify');
 
 gulp.task('browserify', [], function(callback) {
 
@@ -53,6 +54,7 @@ gulp.task('browserify', [], function(callback) {
                 // desired output filename here.
                 .pipe(source(bundleConfig.outputName))
                 .pipe(buffer())
+                .pipe(uglify())
                 // Create independent source map file in the build directory
                 .pipe(sourcemaps.init({
                     loadMaps: true

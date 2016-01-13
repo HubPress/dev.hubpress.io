@@ -1,6 +1,7 @@
 const Q = require('q');
 const _ = require('lodash');
 const S = require('string');
+const slugify = require('../utils/slugify');
 import ThemeStore from '../stores/ThemeStore';
 import AuthStore from '../stores/AuthStore';
 import SettingsStore from '../stores/SettingsStore';
@@ -79,7 +80,7 @@ class PaginationGenerator {
         post.tags = _.map(post.tags, (tag) => {
           return  {
             name: tag,
-            slug: S(tag).slugify().s
+            slug: slugify(tag)
           };
         });
       }

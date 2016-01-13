@@ -1,12 +1,16 @@
-const React = require('react');
-const asciidoctor = require('../utils/asciidoctor');
+import React from 'react';
+import asciidoctor from '../utils/asciidoctor';
+import Paper from 'material-ui/lib/paper';
 
 
 function convertContent(content) {
   return asciidoctor.convert(content);
 }
 
-function applyScript() {
+function applyScript(initialChange, hasChanged) {
+  if (!hasChanged)
+    return;
+
   let element = document.getElementById("asciidoc-render");
   let scripts = element.getElementsByTagName("script");
   let addedScripts = [];
@@ -25,24 +29,31 @@ function applyScript() {
   if (window.instgrm)
     window.instgrm.Embeds.process();
 
-  this.props.onChange && this.props.onChange(this.convertedPost);
+  if (this.props.onChange){
+    this.props.onChange(this.convertedPost, initialChange);
+  }
 }
 
-let AsciidocRender = React.createClass({
+class AsciidocRender extends React.Component {
 
-  componentDidMount: function() {
+  constructor(props, context) {
+    super(props, context);
     this.convertedPost = {};
-    applyScript.bind(this)();
-  },
+  }
 
-  componentDidUpdate: function(prevProps, prevState) {
+  componentDidMount() {
+    this.applyScript = applyScript.bind(this);
+
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const initialChange = !prevProps.content;
+    const hasChanged = prevProps.content != this.props.content;
     // Update component only if necessary
-    if (prevProps.content && prevProps.content != this.props.content) {
-      applyScript.bind(this)();
-    }
-  },
+    this.applyScript(initialChange, hasChanged);
+  }
 
-  render: function() {
+  render() {
     this.convertedPost = convertContent(this.props.content || '');
     let htmlContent = this.convertedPost.html;
     let title = this.convertedPost.attributes && this.convertedPost.attributes.map['doctitle'];
@@ -50,19 +61,21 @@ let AsciidocRender = React.createClass({
     let tagsComponent = '';
 
     if (tags) {
-      tagsComponent = (<p><i className="fa fa-tags"></i> {tags}</p>);
+      tagsComponent = (<p><strong>Tags:</strong> {tags}</p>);
     }
 
     return (
-      <div id="asciidoc-render" className="asciidoc-render">
-        <h1>{title}</h1>
-        {tagsComponent}
-        <div ref="content"  dangerouslySetInnerHTML={{__html: htmlContent}}>
+      <div id="asciidoc-render" className={this.props.className}>
+        <div className={"post-content"}>
+          <h1>{title}</h1>
+          {tagsComponent}
+          <hr />
+          <div ref="content"  dangerouslySetInnerHTML={{__html: htmlContent}}>
+          </div>
         </div>
       </div>
     );
   }
+}
 
-});
-
-module.exports = AsciidocRender;
+export default AsciidocRender;
