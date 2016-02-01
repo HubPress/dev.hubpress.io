@@ -9,7 +9,5 @@ export default  (strValue) => {
   var sl = dasherize(new S(new S(strValue).latinise().s.replace(/[^\w\s-]/g, ''))).s;
   if (sl.charAt(0) === '-')
     sl = sl.substr(1);
-
-  console.log('OOOOOOOOOh',strValue, sl);
   return (new S(sl)).s;
 }
