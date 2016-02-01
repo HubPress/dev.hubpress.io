@@ -15,7 +15,8 @@ cp .travis.yml ../dist
 cp src/hubpress/config.default.json ../dist/hubpress/
 cp -R docs/README* ../dist
 cp -R docs/LICENSE ../dist
-cp -R docs/CHANGELOG ../dist
+cp -R docs/CHANGELOG.adoc ../dist
+cp -R docs/CONTRIBUTING.adoc ../dist
 
 cd ..
 echo "# Content of the file dist/hubpress/config.default.json"
