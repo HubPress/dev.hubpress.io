@@ -1,5 +1,9 @@
 ## 0.4.0
 
+* feat(gui): switch to material design with material-ui
+* fix(dependencies): update version of dependencies
+* fix(build): change all the build process
+* doc(README): update README from the branch development
 
 ## 0.3.0
 
