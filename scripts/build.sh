@@ -13,10 +13,12 @@ cp -R dist ..
 # Copy the travis config, the default config file and the documentation
 cp .travis.yml ../dist
 cp src/hubpress/config.default.json ../dist/hubpress/
-cp -R docs/README* ../dist
-cp -R docs/LICENSE ../dist
-cp -R docs/CHANGELOG.adoc ../dist
-cp -R docs/CONTRIBUTING.adoc ../dist
+cp docs/README* ../dist
+cp docs/LICENSE ../dist
+cp docs/CHANGELOG.adoc ../dist
+cp docs/CONTRIBUTING.adoc ../dist
+cp docs/Administration.adoc ../dist
+cp docs/Writers_Guide.adoc ../dist
 
 cd ..
 echo "# Content of the file dist/hubpress/config.default.json"
