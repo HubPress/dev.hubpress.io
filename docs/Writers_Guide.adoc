@@ -108,6 +108,7 @@ If `:compat-mode:` was not specified here, the code sample would render like thi
 
 For more information about `:compat-mode:`, see the http://asciidoctor.org/docs/migration/#compat-mode[AsciiDoctor Migration Guide].
 
+[[Adding_Images]]
 == Adding Images
 
 === Use the /images Directory in Your Repository
@@ -185,6 +186,8 @@ The source link is essentially an absolute target to the hosted file on the serv
 The `//` opens the pointer to the file. 
 See https://github.com/HubPress/hubpress.io/issues/136[this issue] which describes the journey to discovering how to embed content other than Vimeo and YouTube content.
 
+
+
 == Troubleshooting
 
 If something is not working as you expect, some of these tips may help.
@@ -193,24 +196,13 @@ If something is not working as you expect, some of these tips may help.
 
 Sometimes the HubPress local database becomes out-of-sync with your published blog. This can happen because you are editing your blog on your PC, then switch over to your tablet.
 
-HubPress works on a locally-stored database specific to your Browser, so if you switch devices -- and subsequently switch browsers -- you lose the synchronicity between browsers.
+HubPress works on a locally-stored database specific to your Browser, so if you switch devices —and subsequently switch browsers— you lose the synchronicity between browsers.
 
 To return your instance of HubPress to that of the published blog, clear the browser Cache and Data in Settings > Apps. When you do this, HubPress is forced to rebuild the local database, and will reflect the state of the blog in GitHub.
 
 == Frequently Asked Questions
 
 There are some commonly-asked questions in the issue tracker that are worth calling out here.
-
-
-=== How Do I Contribute to HubPress?
-
-At the moment, Pull Requests (PRs) for HubPress should be pushed to the `/Development` branch of HubPress.
-
-It is best practice to create an issue in the issue tracker, so that the idea you have is tracked in the community. Just link your bug reference in the PR, and we can take a look at your motivation behind the Pull Request.
-
-Don't worry about a bug for simple stuff like corrections to URLs, minor typos in the READMEs, and other similar issues: these type of issues require no tracker as they do not require any community vote or agreement.
-
-The team is really grateful for any contributions you make, no matter how small.
 
 === How Do I Use HubPress with Multiple Users?
 
@@ -227,7 +219,8 @@ If you have a close, trusted team of bloggers who just want to write posts, then
 
 Understand that HubPress is really only suited to single bloggers, and does not offer and GitHub authentication intelligence for blogging teams.
 
-=== Can I Specify Other Asciidoctor Backend Attributes in HubPress Posts?
+=== Can I Specify Other Asciidoctor Backend
+
 
 HubPress only supports the HTML5 backend.
 
@@ -237,13 +230,18 @@ Specifying other backend types will result in an error similar to:
 
 If you do want to use a different backend to process your AsciiDoc files, the http://asciidoctor.org/docs/user-manual/#selecting-an-output-format[Asciidoctor User Guide] can help you work out the backend that is right for you, for use with the +asciidoctor+ command-line script.
 
+=== Can I create posts in my repository, and not through the interface?
+
+You can edit your posts in a local copy of your HubPress repository, however you will need to log onto HubPress Admin to publish your post.
+
 If you want a near WYSIWYG interface to edit your AsciiDoc files, applications like http://atom.io[Atom Editor] or http://asciidocfx.com[AsciidocFX Editor] are excellent choices.
-
-== Credits
-
-Thanks to https://github.com/jaredmorgs[Jared Morgan] for initially tidying up the README you see here, and continuing to be the "docs guy" for HubPress.
-Thanks to https://github.com/takkyuuplayer[takkyuuplayer], https://github.com/hinaloe[hinaloe] to have translated the README into Japanese
 
 == Donations
 
-If you love HubPress, and you want to support the team responsible for developing the app, you can use https://gratipay.com/hubpress/[Gratipay] image:https://avatars1.githubusercontent.com/u/1744073?v=3&s=24[]. Any donation you give will be put towards development-enabling products like caffeine.
+HubPress is now on https://gratipay.com/hubpress/[Gratipay]! 
+
+image::https://cloud.githubusercontent.com/assets/2006548/12901016/7b09da22-ceb9-11e5-93f7-16ab135b2e2e.png[]
+
+It's not the only way you can help us, but it is certainly a welcome one. Donations are a great way to show your appreciation for the platform: it inspires us to dedicate extra time away from our families and day jobs to make HubPress an awesome blogging platform for you.
+
+image::https://cloud.githubusercontent.com/assets/2006548/12901085/cc5ee908-ceb9-11e5-9d8b-c526f081f1e9.png[]

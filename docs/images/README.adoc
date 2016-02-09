@@ -5,7 +5,7 @@ To add images to your blog posts:
 . Commit images to this directory.
 . In your blog post, use the following basic AsciiDoc syntax:
 +
-[source,AsciiDoc]
+[source,asciidoc]
 ----
 image::<filename>[]
 ----

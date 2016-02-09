@@ -6,6 +6,8 @@
 
 This guide will help you get the most out of your HubPress blog. It will teach you how to configure the various feature of your blog so you can make it your own.
 
+If you don't care too much about customising your blog at this stage, and just want to start writing, review the helpful info in the link:Writers_Guide.adoc[Writer's Guide] to get you writing blog posts the right way.
+
 NOTE: You do not need any special systems administrtion knowledge to use HubPress. We've split out the Administration information so the README remains small in size.
 
 toc::[]
@@ -14,9 +16,9 @@ toc::[]
 
 The HubPress Administration Console is available at */hubpress*:
 
-* `https://<username>.github.io/hubpress/` for GitHub Hosted blogs, or
-* `https://<username>.github.io/<repositoryName>/hubpress/` for Domain Hosted blogs.
-* `https://[cname_domain]/hubpress` for custom website blogs.
+* `https://[username].github.io/hubpress/` for GitHub Hosted blogs, or
+* `https://[username].github.io/[repositoryName]/hubpress/` for Domain Hosted blogs.
+* `https://[cname_domain]/hubpress` for custom domain-hosted (CNAME) blogs.
 
 NOTE: If you are using a CNAME, you might need to access your Administration console using the `https://<username>.github.io` address pattern initially, so your CNAME redirect will work. 
 
@@ -62,7 +64,7 @@ The *Logo* and *Cover Image* fields can be used the following ways:
 * An HTML link to an image hosting service. For example gravatar.
 * A link to an image committed to the /images directory of your blog repository.
 
-NOTE: See the `/images/README.adoc` file for tips about embedding images into your blog posts.
+NOTE: See the link:Writers_Guide.adoc#Adding_Images[Adding Images] section in the Writer's Guide for more information about using Images.
 
 === Theme
 
@@ -72,6 +74,7 @@ This field is a free-text field, but you need to specify the theme according to 
 The current folder names are:
 
 * Casper
+* ghostium
 * ichi
 * Roon
 * Saga
@@ -100,7 +103,7 @@ The way these values are rendered on your blog depends on the theme selected.
 When you first start HubPress, the *Posts* view is empty. 
 As you create blog posts, the page populates with the list of posts on the left, and a live preview of the blog post itself on the right.
 
-See the Writers Guide for tips about creating posts successfully with HubPress.
+See the link:Writers_Guide.adoc[Writer's Guide] for tips about creating posts successfully with HubPress.
 
 == Update HubPress
 
@@ -119,6 +122,7 @@ https://github.com/[username]/[blog_repository_name]/compare/master...HubPress:m
 ----
 
 username:: Your GitHub username.
+
 blog_repository_name:: Your GitHub Pages URI, where you access your public blog from.
 
 The following link is an actual PR URL, which is provided to demonstrate the syntax
@@ -148,12 +152,16 @@ Global User Name::
 
 If you have a close, trusted team of bloggers who just want to write posts, then you can use HubPress together.
 
-Understand that HubPress is really only suited to single bloggers, and does not offer and GitHub authentication intelligence for blogging teams.
-
-Thanks to https://github.com/jaredmorgs[Jared Morgan] for initially tidying up the README you see here, and continuing to be the "docs guy" for HubPress.
-Thanks to https://github.com/takkyuuplayer[takkyuuplayer], https://github.com/hinaloe[hinaloe] to have translated the README into Japanese
+Understand that HubPress is really only suited to single bloggers, and does not offer any GitHub authentication intelligence for blogging teams.
 
 == Donations
 
-If you love HubPress, and you want to support the team responsible for developing the app, you can use https://gratipay.com/hubpress/[Gratipay] image:https://avatars1.githubusercontent.com/u/1744073?v=3&s=24[]. 
-Any donation you give will be put towards development-enabling products like caffeine and pizza.
+HubPress is now on https://gratipay.com/hubpress/[Gratipay]! 
+
+image::https://cloud.githubusercontent.com/assets/2006548/12901016/7b09da22-ceb9-11e5-93f7-16ab135b2e2e.png[]
+
+It's not the only way you can help us, but it is certainly a welcome one. 
+Donations are a great way to show your appreciation for the platform: it inspires us to dedicate extra time away from our families and day jobs to make HubPress an awesome blogging platform for you.
+
+image::https://cloud.githubusercontent.com/assets/2006548/12901085/cc5ee908-ceb9-11e5-9d8b-c526f081f1e9.png[]
+
