@@ -28,7 +28,7 @@ HubPress는 블로그를 쉽게 관리할 수 있도록 도와주는 웹 애플�
 
 성공적인 HubPress 기여자가 되기 위한 추가 정보는 link:CONTRIBUTING.adoc[Contributors Guide]에서 확인하세요.
 
-== 브라우져 호환성
+== 브라우저 호환성
 
 HubPress는 Chrome Desktop, Firefox Desktop, 안드로이드용 Chrome과 호환됩니다.
 
@@ -42,7 +42,7 @@ HubPress는 Chrome Desktop, Firefox Desktop, 안드로이드용 Chrome과 호환
 
 만약 당신이 GitHub Pages 도메인을 사용한 적이 없다면, 이 방법을 이용해 HubPress 를 빠르게 설치할 수 있을 것입니다. 이 방법을 통해, HubPress를 배포하기 위해 필요한 몇가지 절차만 마치면 HubPress를 이용한 블로그 서비스를 바로 시작할 수 있습니다.
 
-IMPORTANT: 만약 현재 당신인 다른 프로젝트를 위해 `username.github.io` GitHub Pages 도메인을 사용 중이거나 커스텀 도메인 네임을 사용하길 원한다면 다음 단계를 참조하시길 바랍니다.
+IMPORTANT: 만약 현재 다른 프로젝트를 위해 `username.github.io` GitHub Pages 도메인을 사용 중이거나 커스텀 도메인 네임을 사용하길 원한다면 다음 단계를 참조하길 바랍니다.
 
 . 당신의 저장소 이름을 `<username>.github.io` 로 변경합니다.
 
@@ -54,7 +54,7 @@ image:http://hubpress.io/img/edit-config.png[Edit config]
 +
 * `username`, 당신의 GitHub 사용자 이름,
 * `repositoryName`, fork한 저장소의 새로운 이름, 즉 `<username>.github.io`.
-. 변경사항을 Commit 한 뒤, 브라우져에 아래의 GitHub Pages 도메인을 입력하세요 :  `https://<username>.github.io/`.
+. 변경사항을 Commit 한 뒤, 브라우저에 아래의 GitHub Pages 도메인을 입력하세요 :  `https://<username>.github.io/`.
 . HubPress를 제대로 설정하였다면 아래의 화면이 나타날 것입니다.
 +
 image:http://hubpress.io/img/home-install.png[Install complete,300]
@@ -78,7 +78,7 @@ image:http://hubpress.io/img/edit-config-gh-pages.png[Edit config]
 +
 * `username`, 당신의 GitHub 사용자 이름,
 * `repositoryName`, fork한 저장소의 이름. 예시) `hubpress.io`.
-. 변경사항을 Commit 한 뒤, 브라우져에 아래의 GitHub Pages 도메인을 입력하세요:
+. 변경사항을 Commit 한 뒤, 브라우저에 아래의 GitHub Pages 도메인을 입력하세요:
 `https://<username>.github.io/<repositoryName>/`.
 . HubPress를 제대로 설정하였다면 아래의 화면이 나타날 것입니다.
 +
