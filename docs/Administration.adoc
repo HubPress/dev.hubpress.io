@@ -113,24 +113,26 @@ If you're new to GitHub, the repository you forked the project from is referred 
 
 You update HubPress by creating a Pull Request (PR) against the hubpress.io upstream repository.
 
-Use the following URL pattern to directly create a PR from the Base URL (your blog fork) to the Head URL (hubpress.io)
+With cross compare fork feature of github, you can always use updated HubPress.
 
-.Pull Request URL Syntax
-[source,http]
-----
-https://github.com/[username]/[blog_repository_name]/compare/master...HubPress:master
-----
+. Click Compare button in your HubPress repository
++
+image::maintain_the_latest_hubpress_01.png[click compare button]
++
+. Change base fork to your repository and set the proper branch. I use the master branch here. But if you want to use another branch, you can change it. For example, it would be gh-pages branch.
++
+image::maintain_the_latest_hubpress_02.png[set base fork]
++
+. Select compare across forks.
++
+image::maintain_the_latest_hubpress_03.png[compare across forks]
++
+. Change head fork to HubPress/hubpress.io repository.
++
+image::maintain_the_latest_hubpress_04.png[set head fork]
++
 
-username:: Your GitHub username.
-
-blog_repository_name:: Your GitHub Pages URI, where you access your public blog from.
-
-The following link is an actual PR URL, which is provided to demonstrate the syntax
-
-[source,http]
-----
-https://github.com/jaredmorgs/jaredmorgs.github.io/compare/master...HubPress:master
-----
+Now, you can use the most recent HubPress version included bug fixed, new features.
 
 To see a video of the process, see the following YouTube video.
 
