@@ -115,21 +115,21 @@ You update HubPress by creating a Pull Request (PR) against the hubpress.io upst
 
 With cross compare fork feature of github, you can always use updated HubPress.
 
-. Click Compare button in your HubPress repository
+. Click Compare button in your HubPress repository.
 +
-image::maintain_the_latest_hubpress_01.png[click compare button]
+image::https://raw.githubusercontent.com/HubPress/dev.hubpress.io/e57b221/docs/images/maintain_the_latest_hubpress_01.png[click compare button]
 +
 . Change base fork to your repository and set the proper branch. I use the master branch here. But if you want to use another branch, you can change it. For example, it would be gh-pages branch.
 +
-image::maintain_the_latest_hubpress_02.png[set base fork]
+image::https://raw.githubusercontent.com/HubPress/dev.hubpress.io/e57b221/docs/images/maintain_the_latest_hubpress_02.png[set base fork]
 +
 . Select compare across forks.
 +
-image::maintain_the_latest_hubpress_03.png[compare across forks]
+image::https://raw.githubusercontent.com/HubPress/dev.hubpress.io/e57b221/docs/images/maintain_the_latest_hubpress_03.png[compare across forks]
 +
 . Change head fork to HubPress/hubpress.io repository.
 +
-image::maintain_the_latest_hubpress_04.png[set head fork]
+image::https://raw.githubusercontent.com/HubPress/dev.hubpress.io/e57b221/docs/images/maintain_the_latest_hubpress_04.png[set head fork]
 +
 
 Now, you can use the most recent HubPress version included bug fixed, new features.
