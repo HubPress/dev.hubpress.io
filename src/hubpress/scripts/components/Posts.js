@@ -1,60 +1,55 @@
 import React from 'react';
 import uuid from 'node-uuid';
 import { Link } from 'react-router';
+
 import FlatButton from 'material-ui/lib/flat-button';
 import IconButton from 'material-ui/lib/icon-button';
-
 import Paper from 'material-ui/lib/paper';
 import List from 'material-ui/lib/lists/list';
 import ListDivider from 'material-ui/lib/lists/list-divider';
 import ToggleStar from 'material-ui/lib/svg-icons/toggle/star';
-import AsciidocRender from './AsciidocRender';
+import Preview from './Preview';
 import Container from './Container';
 import Loader from './Loader';
 import PostItem from './PostItem';
 import TopBar from './TopBar';
-import PostsStore from '../stores/PostsStore';
+
+import { getLocalPosts, getSelectedPost } from '../actions/posts';
+import { deletePost } from '../actions/post';
+import { connect } from 'react-redux'
 
 class Posts extends React.Component {
 
   constructor(props, context) {
     super(props, context);
-    this.state = {posts: [], selectedPost: {}, loading: true};
-    this._onPostsStoreChange = this._onPostsStoreChange.bind(this);
+    this.handleDeleteClick = this.handleDeleteClick.bind(this);
   }
 
   componentDidMount() {
-    PostsStore.addChangeListener(this._onPostsStoreChange);
-    this.setState({posts: PostsStore.getPosts(true), selectedPost: {}, loading: PostsStore.isLoading()});
-  }
-
-  componentWillUnmount() {
-    PostsStore.removeChangeListener(this._onPostsStoreChange);
-  }
-
-  _onPostsStoreChange(){
-    if (!PostsStore.isLoading()) {
-      let selectedPost = {};
-
-      if (PostsStore.getPosts().length) {
-        selectedPost = PostsStore.getPosts()[0];
-      }
-      this.setState({posts: PostsStore.getPosts(), loading: PostsStore.isLoading(), selectedPost: selectedPost});
-    }
-    else {
-      this.setState({posts: [], selectedPost: {}, loading: PostsStore.isLoading()});
-    }
+    const { dispatch } = this.props;
+    // fetch configuration
+    dispatch(getLocalPosts());
   }
 
   handleClick(post) {
-    this.setState({selectedPost: post});
+    const { dispatch } = this.props;
+    dispatch(getSelectedPost(post._id));
+  }
+
+  handleEditClick(idPost) {
+    return this.history.pushState(null, `/posts/${idPost}`);
+  }
+
+  handleDeleteClick(idPost) {
+    const { dispatch } = this.props;
+    dispatch(deletePost(idPost))
   }
 
   render() {
 
-    let posts = this.state.posts.map(function(post, i) {
+    let posts = this.props.posts.map(function(post, i) {
       return (
-        <PostItem key={post.id} post={post} history={this.props.history} selectedPost={this.state.selectedPost} onClick={this.handleClick.bind(this)}/>
+        <PostItem key={post._id} post={post} history={this.props.history} selectedPost={this.props.selectedPost} onClick={this.handleClick.bind(this)} handleEditClick={this.handleEditClick} handleDeleteClick={this.handleDeleteClick}/>
       );
     }, this);
 
@@ -64,9 +59,16 @@ class Posts extends React.Component {
         </Link>
       );
 
+    let preview = ""
+    if (!!this.props.selectedPost.title) {
+      preview = (
+        <Preview content={this.props.selectedPost.html} title={this.props.selectedPost.title} tags={this.props.selectedPost.tags} className="asciidoc-render"/>
+      )
+    }
+
     return (
       <div>
-        <Loader loading={this.state.loading}></Loader>
+        <Loader loading={this.props.isFetching}></Loader>
         <TopBar ref="topbar" history={this.props.history} location={this.props.location}>
           {newButton}
         </TopBar>
@@ -74,11 +76,22 @@ class Posts extends React.Component {
           <List className="list">
             {posts}
           </List>
-          <AsciidocRender content={this.state.selectedPost.content} className="asciidoc-render"/>
+          {preview}
+
         </Container>
       </div>
     );
   }
 }
 
-export default Posts;
+const mapStateToProps = (state/*, props*/) => {
+  return {
+    isFetching: state.posts.isFetching,
+    posts: state.posts.posts,
+    selectedPost: state.posts.selectedPost || {}
+  };
+}
+
+const ConnectedPosts = connect(mapStateToProps)(Posts)
+
+export default ConnectedPosts;

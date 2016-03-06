@@ -1,12 +1,12 @@
 import React from 'react';
-import ColorsHubPress from '../themes/colors';
+import { Link } from 'react-router';
 import Avatar from 'material-ui/lib/avatar';
 import ListItem from 'material-ui/lib/lists/list-item';
-import { Link } from 'react-router';
 import IconButton from 'material-ui/lib/icon-button';
 import IconMenu from 'material-ui/lib/menus/icon-menu';
 import MenuItem from 'material-ui/lib/menus/menu-item';
 import MoreVertIcon from 'material-ui/lib/svg-icons/navigation/more-vert';
+import ColorsHubPress from '../themes/colors';
 
 class PostItem extends React.Component {
   constructor(props, context) {
@@ -21,7 +21,10 @@ class PostItem extends React.Component {
 
   _handleEditClick(event, item) {
     if (item.props.action == 'edit')
-      this.history.pushState(null, `/posts/${item._owner._currentElement.key}`);
+      return this.props.handleEditClick(item._owner._currentElement.key);
+    if (item.props.action == 'delete')
+      return this.props.handleDeleteClick(item._owner._currentElement.key);
+
   }
 
   render() {
@@ -36,7 +39,7 @@ class PostItem extends React.Component {
       },
     };
 
-    if (this.props.selectedPost.id === this.props.post.id) {
+    if (this.props.selectedPost._id === this.props.post._id) {
       style.post.backgroundColor = ColorsHubPress.selectedItem;
     }
 
@@ -82,22 +85,25 @@ class PostItem extends React.Component {
     let rightIconMenu = (
       <IconMenu iconButtonElement={iconButtonElement} onItemTouchTap={this._handleEditClick}>
         <MenuItem action="edit" primaryText="Edit"/>
+        <MenuItem action="delete" primaryText="Delete"/>
       </IconMenu>
     );
 
 
-    let publishedAt = !!this.props.post.published && `Published at ${this.props.post.published_at}`;
+    let publishedAt = !!this.props.post.published && `Published at ${this.props.post.published_at}` || 'Draft';
+    let author = this.props.post.author && `Author ${this.props.post.author.name || this.props.post.author.login}`;
 
     return (
       <ListItem
         style={style.post}
-        key={this.props.post.id}
+        key={this.props.post._id}
         post={this.props.post}
         rightIconButton={rightIconMenu}
         primaryText={<span style={{color: ColorsHubPress.orange300}} >{this.props.post.title}</span>}
         secondaryText={
           <p>
-            {publishedAt}
+            {publishedAt} <br/>
+            {author}
           </p>
         }
         secondaryTextLines={2} onTouchTap={this.handleClick.bind(this)} />

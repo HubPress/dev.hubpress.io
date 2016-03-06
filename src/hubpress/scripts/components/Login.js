@@ -1,9 +1,8 @@
 import React from 'react';
-// Stores
-import AuthStore from '../stores/AuthStore';
+import { connect } from 'react-redux'
 
 // Actions
-import AuthActionCreators from '../actions/AuthActionCreators';
+import {authenticate} from '../actions/authentication';
 
 // Components
 import TextField from 'material-ui/lib/text-field';
@@ -13,8 +12,6 @@ import Paper from 'material-ui/lib/paper';
 class Login extends React.Component {
   constructor(props, context) {
     super(props, context);
-    console.log('Login - Constructor');
-    this.state = {email: '',password: '', twoFactorCode: '', twoFactorRequired: false, loading: false};
   }
 
   getStyles() {
@@ -25,19 +22,18 @@ class Login extends React.Component {
     };
   }
 
-  componentDidMount() {
-    AuthStore.addChangeListener(() => this._onAuthStoreChange());
-  }
-
-  componentWillUnmount() {
-    AuthStore.removeChangeListener(() => this._onAuthStoreChange());
-  }
-
-  _onAuthStoreChange() {
-    if (AuthStore.getStatus().loggedIn) {
+  redirectToLoginIfNecessary() {
+    if (this.props.isAuthenticated) {
       return this.props.history.pushState(null, '/');
     }
-    return this.setState({loading: false, twoFactorRequired: AuthStore.message && AuthStore.message.otp});
+  }
+
+  componentDidMount() {
+    this.redirectToLoginIfNecessary()
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    this.redirectToLoginIfNecessary()
   }
 
   _handleChangeEmail(event) {
@@ -54,12 +50,14 @@ class Login extends React.Component {
 
   _handleSubmit(event) {
     event.preventDefault();
-    AuthActionCreators.logIn({
+    const { dispatch } = this.props;
+    const credentials = {
       email: this.state.email,
       password: this.state.password,
       twoFactorCode: this.state.twoFactorCode
-    });
-    this.setState({loading: true});
+    };
+
+    dispatch(authenticate(credentials));
   }
 
   render() {
@@ -67,11 +65,11 @@ class Login extends React.Component {
 
     let loginButton = (<RaisedButton type="submit" label="Log in" primary={true} />);
     let twoFactorInput = '';
-    if (this.state.loading) {
+    if (this.props.isFetching) {
       loginButton = (<i className="fa fa-spinner fa-spin"></i>);
     }
 
-    if (this.state.twoFactorRequired) {
+    if (this.props.isTwoFactorRequired) {
       twoFactorInput = (
         <TextField style={textFieldStyle} ref="twoFactorCode" onChange={this._handleChangeTwoFactorCode.bind(this)} hintText="Two factor code" />
       );
@@ -102,4 +100,16 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+const mapStateToProps = (state/*, props*/) => {
+  return {
+    isFetching: state.authentication.isFetching,
+    isAuthenticated: state.authentication.isAuthenticated,
+    credentials: state.authentication.credentials,
+    isTwoFactorRequired: state.authentication.twoFactorRequired,
+    error: state.authentication.error
+  };
+}
+
+const ConnectedLogin = connect(mapStateToProps)(Login)
+
+export default ConnectedLogin;
