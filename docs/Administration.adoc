@@ -33,12 +33,29 @@ Once you authenticate, a personal token is created for future calls from HubPres
 This is synchronized across all sessions of HubPress.
 If you open the Administration Console on your PC and then your Tablet, the token is applicable to all devices.
 
-== Managing Posts
+== Posts View
 
-When you first start HubPress, the *Posts* view is empty.
+The `Posts` view is the default view you see when you first log onto HubPress
+
+When you first start HubPress, the `Posts` view is empty.
 As you create blog posts, the page populates with the list of posts on the left, and a rendered preview of the blog post itself on the right.
 
-NOTE: See the link:Writers_Guide.adoc[Writer's Guide] for tips about creating posts successfully with HubPress.
+=== Add a Blog Post
+
+To start blogging with HubPress, click the pencil icon in the top right of the screen.
+
+This creates an empty blog post for you, ready for your next great idea, or discovery you want to tell the world about.
+
+There are certain structural requirements you must meet in a HubPress blog post, before it can be saved and published to your blog site. See the link:Writers_Guide.adoc[Writer's Guide] for tips about creating posts successfully with HubPress.
+
+=== Edit or Delete a Blog Post
+
+.New in 0.5.0
+NOTE: You can now delete blog posts instead of having to rename them and use them again later.
+
+If you have a post you need to edit to delete, you can do so by accessing the Action Overflow (three dots) menu.
+
+This menu contains the `Edit` and `Delete` functions applicable to each post.
 
 == Settings View
 
