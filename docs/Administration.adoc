@@ -4,7 +4,7 @@
 
 = Administration Guide
 
-This guide will help you get the most out of your HubPress blog. It will teach you how to configure the various feature of your blog so you can make it your own.
+This guide will help you get the most out of your HubPress blog. It will teach you how to configure the various features of your blog so you can make it your own.
 
 If you don't care too much about customising your blog at this stage, and just want to start writing, review the helpful info in the link:Writers_Guide.adoc[Writer's Guide] to get you writing blog posts the right way.
 
@@ -81,15 +81,17 @@ The *Theme* is selectable from the list of themes stored in the `/themes` direct
 This field is a free-text field, but you need to specify the theme according to the folder name.
 The current folder names are:
 
-* Casper
+* casper
 * ghostium
 * ichi
-* Roon
-* Saga
+* roon
+* saga
 * uno
 * uno-zen
 
-NOTE: Capitalisation is important in the folder names. Specify them as they are written.
+.New in 0.5.0
+NOTE: Theme names have all been changed to lowercase for consistency.
+If you find your theme is not loading, check the site settings and adjust the names accordingly.
 
 ==== Google Analytics
 
