@@ -4,9 +4,8 @@ import { createHistory, useBasename } from 'history';
 
 // Components
 import Hubpress from './components/Hubpress';
-import HpWebApiUtils from './utils/HpWebApiUtils.js';
+import { requireAuth } from './routerAuth'
 // Store
-import AuthStore from './stores/AuthStore';
 let Login = require('./components/Login');
 let Posts = require('./components/Posts');
 let Logout = require('./components/Logout');
@@ -16,14 +15,7 @@ let Settings = require('./components/Settings');
 
 const history = useBasename(createHistory)({
   basename: '/'
-})
-
-function requireAuth(nextState, replaceState) {
-  console.log('AppRoutes - requireAuth')
-  if (!AuthStore.getStatus().loggedIn)
-    replaceState({ nextPathname: nextState.location.pathname }, '/login')
-}
-
+});
 
 const AppRoutes = (
   <Router history={history}>

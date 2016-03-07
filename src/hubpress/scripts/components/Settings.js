@@ -1,8 +1,9 @@
 import React from 'react';
-import assign from 'object-assign';
-import SettingsStore from '../stores/SettingsStore';
-import SettingsActionCreators from '../actions/SettingsActionCreators';
-import PostsStore from '../stores/PostsStore';
+import { connect } from 'react-redux';
+
+// Actions
+import {saveConfig} from '../actions/config';
+
 import Container from './Container';
 import Loader from './Loader';
 import IconButton from 'material-ui/lib/icon-button';
@@ -15,30 +16,11 @@ import AutoComplete from 'material-ui/lib/auto-complete';
 class Settings extends React.Component {
   constructor(props, context) {
     super(props, context);
-    this._onPostsStoreChange = this._onPostsStoreChange.bind(this);
-    this._onSettingsStoreChange = this._onSettingsStoreChange.bind(this);
     this.state = this._getState();
   }
 
-  componentDidMount() {
-    PostsStore.addChangeListener(this._onPostsStoreChange);
-    SettingsStore.addChangeListener(this._onSettingsStoreChange);
-  }
-
-  componentWillUnmount() {
-    PostsStore.removeChangeListener(this._onPostsStoreChange);
-    SettingsStore.removeChangeListener(this._onSettingsStoreChange);
-  }
-
-  _onPostsStoreChange() {
-    this.setState(assign(this.state, {loading: PostsStore.isLoading()}));
-  }
-
-  _onSettingsStoreChange() {
-  }
-
   getSiteUrl() {
-    return SettingsStore.getSiteUrl({
+    return this.props.config.urls.getSiteUrl({
       username: this.state.username,
       repositoryName: this.state.repositoryName,
       cname: this.state.cname,
@@ -47,7 +29,7 @@ class Settings extends React.Component {
   }
 
   _getState() {
-    const config = SettingsStore.config();
+    const config = this.props.config;
 
     return {
       // Meta
@@ -78,8 +60,7 @@ class Settings extends React.Component {
       instagram: config.socialnetwork && config.socialnetwork.instagram,
 
       // theme
-      theme: config.theme.name,
-      loading: false
+      theme: config.theme.name
     };
   }
 
@@ -114,13 +95,12 @@ class Settings extends React.Component {
         github: this.state.github
       },
       theme:{
-        name: this.state.theme,
-        url: SettingsStore.getThemeUrl(this.state.theme)
+        name: this.state.theme
       }
     };
-    SettingsActionCreators.saveAndPublish(settings);
 
-    this.setState({loading: true});
+    const { dispatch } = this.props;
+    dispatch(saveConfig(settings));
   }
 
   linkState(context, item) {
@@ -137,7 +117,7 @@ class Settings extends React.Component {
   render() {
     return (
       <div>
-        <Loader loading={this.state.loading}></Loader>
+        <Loader loading={this.props.isFetching}></Loader>
         <TopBar ref="topbar" history={this.props.history} location={this.props.location}>
           <div style={{float: 'right'}}>
             <IconButton onClick={this._handleSubmit.bind(this)} iconStyle={{color: '#fff'}} iconClassName="material-icons">save</IconButton>
@@ -204,4 +184,13 @@ class Settings extends React.Component {
   }
 }
 
-export default Settings;
+const mapStateToProps = (state/*, props*/) => {
+  return {
+    config: state.application.config,
+    isFetching: state.application.isFetching,
+  };
+}
+
+const ConnectedSettings = connect(mapStateToProps)(Settings)
+
+export default ConnectedSettings;
