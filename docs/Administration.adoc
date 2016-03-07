@@ -33,11 +33,22 @@ Once you authenticate, a personal token is created for future calls from HubPres
 This is synchronized across all sessions of HubPress.
 If you open the Administration Console on your PC and then your Tablet, the token is applicable to all devices.
 
-== Settings Page
+== Managing Posts
+
+When you first start HubPress, the *Posts* view is empty.
+As you create blog posts, the page populates with the list of posts on the left, and a rendered preview of the blog post itself on the right.
+
+NOTE: See the link:Writers_Guide.adoc[Writer's Guide] for tips about creating posts successfully with HubPress.
+
+== Settings View
 
 You can configure basic blog settings (such as CNAME and Pagination) and social media accounts you want to connect to your blog.
 
 Each settings group is separated into tabs, to logically group the settings.
+
+.How To Access the Settings View
+. On the Posts View, click the Menu button.
+. Click Settings to load the Settings view.
 
 === Meta
 
@@ -110,13 +121,6 @@ If you have not enabled Disqus for your site, create a site profile at https://d
 All fields in this group require full URLs to your public profile page.
 The way these values are rendered on your blog depends on the theme selected.
 
-== Managing Posts
-
-When you first start HubPress, the *Posts* view is empty.
-As you create blog posts, the page populates with the list of posts on the left, and a live preview of the blog post itself on the right.
-
-See the link:Writers_Guide.adoc[Writer's Guide] for tips about creating posts successfully with HubPress.
-
 == Update HubPress
 
 Because HubPress is hosted on GitHub, you can update by pulling down the latest changes from the HubPress master repository.
@@ -125,28 +129,31 @@ If you're new to GitHub, the repository you forked the project from is referred 
 
 You update HubPress by creating a Pull Request (PR) against the hubpress.io upstream repository.
 
-With cross compare fork feature of github, you can always use updated HubPress.
+With the cross-compare fork feature of GitHub, you can easily update to the latest version.
 
-. Click Compare button in your HubPress repository
+.How To Update Your HubPress Instance to the Latest Version
+. Click the `Compare` button in your HubPress repository.
 +
-image::maintain_the_latest_hubpress_01.png[click compare button]
+image::maintain_the_latest_hubpress_01.png[Click Compare button]
 +
-. Change base fork to your repository and set the proper branch. I use the master branch here. But if you want to use another branch, you can change it. For example, it would be gh-pages branch.
+. Change the base fork to your repository, and set the branch according to your repository configuration (`master` or `gh-pages`).
 +
-image::maintain_the_latest_hubpress_02.png[set base fork]
+image::maintain_the_latest_hubpress_02.png[Set the base fork]
 +
-. Select compare across forks.
+. Select `Compare across forks`.
 +
-image::maintain_the_latest_hubpress_03.png[compare across forks]
+image::maintain_the_latest_hubpress_03.png[Click compare across forks]
 +
-. Change head fork to HubPress/hubpress.io repository.
+. Change the head fork to the `HubPress/hubpress.io` repository.
 +
-image::maintain_the_latest_hubpress_04.png[set head fork]
+image::maintain_the_latest_hubpress_04.png[Set the head fork]
 +
+. Create the Pull Request.
+. Apply the Pull Request to your instance of HubPress.
 
-Now, you can use the most recent HubPress version included bug fixed, new features.
+You can use the most recent HubPress version after apply the PR to your repository.
 
-To see a video of the process, see the following YouTube video.
+For a video demonstration of the PR process, see the following YouTube video.
 
 video::KCylB780zSM[youtube]
 
@@ -154,19 +161,24 @@ https://www.youtube.com/watch?v=KCylB780zSM[Updating HubPress]
 
 == Use HubPress with Multiple Users
 
-You can _technically_ use the same HubPress instance with multiple authors, but it requires some trust from the other users granted access to your blog.
+.New in 0.5.0
+NOTE: You can now work as a team on blog posts.
+Each user granted access to the blog instance is credited with their GitHub name on posts they create.
 
-There are some points to consider before opening up your blog instance to other contributiors.
+You can use the same HubPress instance with multiple authors by adding contributors to the repo in which HubPress is hosted.
 
 Attribution::
-    There is no way to attribute a blog user to individual posts at this stage, unless you perhaps use a :hp-tags: category for the name of each contributor (a crude work-around at best).
-Global User Name::
-    Blog posts are attributed to the primary GitHub User who configures the Settings page.
-    If someone you invite to co-author your blog saves changes to the Settings page, *all* blog posts will have that author as the person who wrote blog posts in your HubPress instance.
+  Posts are attributed based on the first person who created the blog post entry.
+  Edits by other contributors are attributed to the first person who created the post.
+Site Changes::
+  Changes to settings (themes, blog name, social links) _will not_ affect the author data attributed to each post.
 
-If you have a close, trusted team of bloggers who just want to write posts, then you can use HubPress together.
+.How To Add Contributors to your HubPress Repository
+. Open your HubPress site on GitHub.
+. Click `Settings` => `Collaborators`.
+. Add the GitHub users for which you want to grant access to your blog.
 
-Understand that HubPress is really only suited to single bloggers, and does not offer any GitHub authentication intelligence for blogging teams.
+Once you have added contributors, they will be notified by the GitHub notification system. Once they accept the invitation, they can instantly contribute to content development on the blog.
 
 == Donations
 
