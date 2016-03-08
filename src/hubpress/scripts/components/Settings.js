@@ -95,7 +95,7 @@ class Settings extends React.Component {
         github: this.state.github
       },
       theme:{
-        name: this.state.theme
+        name: this.state.theme.toLowerCase()
       }
     };
 
