@@ -5,19 +5,15 @@ import { Link } from 'react-router';
 import AppCanvas from 'material-ui/lib/app-canvas';
 import Styles from 'material-ui/lib/styles';
 import IconButton from 'material-ui/lib/icon-button';
-import AppBafleftnar from 'material-ui/lib/app-bar';
 import ThemeManager from 'material-ui/lib/styles/theme-manager';
 // Custom Components
 import Container from './Container';
 import Loader from './Loader';
 import Toastr from './Toastr';
-// Actions
-import AppActionCreators from '../actions/AppActionCreators';
-// Stores
-import AppStore from '../stores/AppStore';
-import AuthStore from '../stores/AuthStore';
 // Theme
 import HubPressRawTheme from '../themes/hubpress-raw-theme';
+import { start } from '../actions/application';
+import { connect } from 'react-redux'
 
 
 class Hubpress extends React.Component {
@@ -40,44 +36,22 @@ class Hubpress extends React.Component {
   }
 
   componentDidMount() {
-    AppStore.addChangeListener(this._onAppStoreChange.bind(this));
-    AuthStore.addChangeListener(this._onAuthStoreChange.bind(this));
+    const { dispatch } = this.props;
+    // fetch configuration
+    dispatch(start())
 
     // Redirect to login if not connected
-    if (!this.props.history.isActive('/login') && !this.state.loggedIn) {
+    if (!this.props.history.isActive('/login') && !this.props.isAuthenticated) {
       console.log('Hubpress.js - Redirect to login');
       this.props.history.replaceState(null, '/login');
     }
   }
 
-  componentWillUnmount() {
-    AuthStore.removeChangeListener(this._onAuthStoreChange);
-  }
-
-  _onAppStoreChange() {
-    this.setState(this._getState());
-  }
-
-  _onAuthStoreChange() {
-    if (!AuthStore.getStatus().loggedIn) {
-      this.props.history.replaceState(null, '/login');
-      return this.setState(this._getState());
-    }
-
-    if (AuthStore.getStatus().loggedIn) {
-      setTimeout(() => {
-        AppActionCreators.startSynchronize();
-      },0);
-    }
-
-    this.setState(this._getState());
-  }
-
   _getState() {
     let muiTheme = ThemeManager.getMuiTheme(HubPressRawTheme);
     return {
-      loggedIn: AuthStore.getStatus().loggedIn,
-      isInit: AppStore.isInitialize(),
+      loggedIn: this.props.isAuthenticated,
+      isInit: this.props.isInitialized,
       muiTheme
     };
   }
@@ -89,7 +63,7 @@ class Hubpress extends React.Component {
       </div>
     );
 
-    if (this.state.isInit) {
+    if (this.props.isInitialized) {
       return (
         <div>
           <Toastr />
@@ -111,4 +85,16 @@ class Hubpress extends React.Component {
 
 }
 
-export default Hubpress;
+// This is our select function that will extract from the state the data slice we want to expose
+// through props to our component.
+const mapStateToProps = (state/*, props*/) => {
+  return {
+    isInitialized: state.application.isInitialized,
+    isAuthenticated: state.authentication.isAuthenticated
+  };
+}
+
+
+const ConnectedHubpress = connect(mapStateToProps)(Hubpress)
+
+export default ConnectedHubpress;

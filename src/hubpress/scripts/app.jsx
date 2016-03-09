@@ -1,17 +1,36 @@
 import AppRoutes from './app-routes';
-import HpWebApiUtils from './utils/HpWebApiUtils';
+import injectTapEventPlugin  from 'react-tap-event-plugin';
+import createHistory  from 'history/lib/createHashHistory';
 
 import React from 'react';
 import { render } from 'react-dom';
 import {Router} from 'react-router';
-const injectTapEventPlugin = require('react-tap-event-plugin');
-const createHistory = require('history/lib/createHashHistory');
+import { Provider } from 'react-redux';
+import configureStore from './configureStore'
+import plugins from 'hubpress-core-plugins'
+
+//plugins
+import {asciidocPlugin} from 'hubpress-plugin-asciidoc'
+import {githubPlugin} from 'hubpress-plugin-github'
+import {githubUrlsPlugin} from 'hubpress-plugin-github-urls'
+import {pouchDbPlugin} from 'hubpress-plugin-pouchdb'
+import {sessionStoragePlugin} from 'hubpress-plugin-session-storage'
+import {templatePlugin} from 'hubpress-plugin-template'
 
 
 //Helpers for debugging
 window.React = React;
-//window.Perf = require('react-addons-perf');
+//window.Perf = require('react-addons-perf')
 
+
+plugins.register(
+  githubUrlsPlugin,
+  templatePlugin,
+  sessionStoragePlugin,
+  githubPlugin,
+  pouchDbPlugin,
+  asciidocPlugin
+);
 
 let mountNode = document.getElementById("hubpress");
 
@@ -21,16 +40,19 @@ let mountNode = document.getElementById("hubpress");
 //https://github.com/zilverline/react-tap-event-plugin
 injectTapEventPlugin();
 
-HpWebApiUtils.getConfig();
 /** Render the main app component. You can read more about the react-router here:
   *  https://github.com/rackt/react-router/blob/master/docs/guides/overview.md
   */
 
+const store = configureStore()
+
 render(
-  <Router
-    history={createHistory({queryKey: false})}
-    onUpdate={() => window.scrollTo(0, 0)}
-  >
-    {AppRoutes}
-  </Router>
+  <Provider store={store}>
+    <Router
+      history={createHistory({queryKey: false})}
+      onUpdate={() => window.scrollTo(0, 0)}
+    >
+      {AppRoutes}
+    </Router>
+  </Provider>
 , mountNode);

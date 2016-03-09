@@ -1,6 +1,7 @@
-let React = require('react');
-let Router = require('react-router');
-let { MenuItem, LeftNav, Mixins, Styles, Avatar } = require('material-ui');
+import React from 'react';
+import Router from 'react-router';
+import { connect } from 'react-redux';
+import { MenuItem, LeftNav, Mixins, Styles, Avatar } from 'material-ui';
 import List from 'material-ui/lib/lists/list';
 import ListItem from 'material-ui/lib/lists/list-item';
 import {SelectableContainerEnhance} from 'material-ui/lib/hoc/selectable-enhance';
@@ -8,8 +9,6 @@ import {SelectableContainerEnhance} from 'material-ui/lib/hoc/selectable-enhance
 const SelectableList = SelectableContainerEnhance(List);
 let { Colors, Spacing, Typography } = Styles;
 let { StylePropable } = Mixins;
-// Stores
-import AuthStore from '../stores/AuthStore';
 
 let menuItems = [
     { route: '/posts', text: 'Posts' },
@@ -47,7 +46,13 @@ let AppLeftNav = React.createClass({
   },
 
   render() {
-    let author = AuthStore.getAuthor() || {};
+    const author = {
+      id: this.props.userInfos.id,
+      name: this.props.userInfos.name,
+      location:this.props.userInfos.location,
+      website:this.props.userInfos.blog,
+      image:this.props.userInfos.avatar_url
+    };
 
     let header = (
       <div style={this.getStyles()} onTouchTap={this._onHeaderClick}>
@@ -119,4 +124,4 @@ let AppLeftNav = React.createClass({
 
 });
 
-module.exports = AppLeftNav;
+export default AppLeftNav;
