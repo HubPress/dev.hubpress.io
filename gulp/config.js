@@ -52,10 +52,7 @@ module.exports = {
   },
   vendors: {
     src: [
-      src + "/hubpress/bower_components/modernizr/modernizr.js",
-      src + "/hubpress/bower_components/lodash/lodash.min.js",
-      src + "/hubpress/bower_components/github/lib/base64.min.js",
-      src + "/hubpress/bower_components/github/github.js"
+      src + "/hubpress/bower_components/modernizr/modernizr.js"
     ],
     dest: dest + '/hubpress/scripts/vendors'
   },
