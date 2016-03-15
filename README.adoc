@@ -1,0 +1,3 @@
+= HubPress: Development
+
+image:https://travis-ci.org/HubPress/dev.hubpress.io.svg?branch=development["Build Status", link="https://travis-ci.org/HubPress/dev.hubpress.io"]
