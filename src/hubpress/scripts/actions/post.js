@@ -220,6 +220,7 @@ export function publish(idPost) {
         .then(payload => plugins.fireReceiveSaveRemotePost(getState(), payload))
         // Maybe we should make something fireRequestMarkAsPublished
         .then(payload => {
+          payload.post.original.author = payload.post.original.author || payload.post.author;
           payload.post.published = 1;
           return payload;
         })
