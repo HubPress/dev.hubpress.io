@@ -4,29 +4,25 @@ import FlatButton from 'material-ui/lib/flat-button';
 import IconButton from 'material-ui/lib/icon-button';
 import Dialog from 'material-ui/lib/dialog';
 import TopBar from './TopBar';
-import assign from 'object-assign';
 import Loader from './Loader';
 
 import asciidocMode from '../utils/codemirror/mode/asciidoc';
 import CodeMirror from 'react-code-mirror';
-import AsciidocRender from './AsciidocRender';
+import Preview from './Preview';
 
-import SettingsStore from '../stores/SettingsStore';
-import PostsStore from '../stores/PostsStore';
-import PostsActionCreators from '../actions/PostsActionCreators';
+import { getLocalPost, switchViewing, renderAndLocalSave, remoteSave, publish, unpublish } from '../actions/post';
+import { connect } from 'react-redux'
 
 
 class Post extends React.Component {
 
   constructor(props, context) {
     super(props, context);
-    this.state = {post: {}, asciidocContent: '', loading: true, viewActive: false};
-    this._onPostsStoreChange = this._onPostsStoreChange.bind(this);
+    this.content = null;
     this.handleChange = this.handleChange.bind(this);
     this.handlePublish = this.handlePublish.bind(this);
     this.handleUnpublish = this.handleUnpublish.bind(this);
     this.handleRemoteSave = this.handleRemoteSave.bind(this);
-    this.handleAsciidocChange = this.handleAsciidocChange.bind(this);
     this.doAnimation = this.doAnimation.bind(this);
   }
 
@@ -35,83 +31,69 @@ class Post extends React.Component {
   }
 
   componentDidMount() {
-    PostsStore.addChangeListener(this._onPostsStoreChange);
-    const post = PostsStore.getPost(this.getParams().postId);
-    this.setState({post: post, asciidocContent: post.content,loading: PostsStore.isLoading(), viewActive: false});
+    const { dispatch } = this.props;
+    dispatch(getLocalPost(this.getParams().postId));
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    if (!this.content) {
+      console.log('Post - Initial content loaded');
+      this.content = nextProps.post.content;
+    }
   }
 
   componentWillUnmount() {
-    PostsStore.removeChangeListener(this._onPostsStoreChange);
-  }
-
-  _onPostsStoreChange(){
-    console.log('PostsStore.isLoading()', PostsStore.isLoading());
-    if (!PostsStore.isLoading()) {
-      let post = PostsStore.getPost(this.getParams().postId);
-      this.setState({post: post, asciidocContent: post.content, loading: PostsStore.isLoading()});
-
-    }
-    else {
-      this.setState({post: this.state.post, asciidocContent: this.state.asciidocContent, loading: PostsStore.isLoading()});
-    }
-
+    this.content = null;
   }
 
   handleRemoteSave() {
-    PostsActionCreators.remoteSave(this.getParams().postId);
-    this.setState({loading: true});
+    const { dispatch } = this.props;
+    dispatch(remoteSave(this.getParams().postId));
   }
 
   handlePublish() {
-    PostsActionCreators.publish(this.getParams().postId);
+    const { dispatch } = this.props;
+    dispatch(publish(this.getParams().postId));
   }
 
   handleUnpublish() {
-    PostsActionCreators.unpublish(this.getParams().postId);
+    const { dispatch } = this.props;
+    dispatch(unpublish(this.getParams().postId));
   }
 
   handleChange(event) {
-    const config = SettingsStore.config();
-    let post = this.state.post;
+    const { dispatch } = this.props;
 
     if (this.timeout) {
       window.clearTimeout(this.timeout);
     }
 
+    const config = this.props.config;
     this.timeout = window.setTimeout(() => {
-      let content = this.state.post.content;
-      this.setState({asciidocContent: content });
+      dispatch(renderAndLocalSave(this.getParams().postId, event.target.value));
     }, config.meta.delay ? config.meta.delay : 200);
 
-    post.content = event.target.value;
-    this.setState({post: post});
-  }
-
-  handleAsciidocChange(postConverted, isInitialChange) {
-    postConverted.title = postConverted.attributes && postConverted.attributes.map.doctitle;
-    if (!PostsStore.isLoading() && postConverted.title && !isInitialChange) {
-      let postToSave = assign({}, this.state.post, postConverted);
-      this.postAttributes = postToSave.attributes;
-      PostsActionCreators.localSave(postToSave);
-    }
+    this.content = event.target.value;
   }
 
   doAnimation() {
-    this.setState({
-      viewActive: !this.state.viewActive
-    });
+    const { dispatch } = this.props;
+    dispatch(switchViewing());
   }
 
 
   render() {
 
     let buttons = {
+      delete: {},
       save: {},
       publish: {},
       preview: {}
     };
 
-    if (this.state.viewActive) {
+    const isTopActionsVisible = !!this.props.post.title;
+
+    if (this.props.isViewing) {
       buttons.preview.label = 'visibility_off';
       buttons.preview.click = this.doAnimation;
     }
@@ -120,7 +102,7 @@ class Post extends React.Component {
       buttons.preview.click = this.doAnimation;
     }
 
-    if (this.state.post.published) {
+    if (this.props.post.published) {
       buttons.publish.label = "cloud_download";
       buttons.publish.click = this.handleUnpublish;
 
@@ -144,27 +126,48 @@ class Post extends React.Component {
         primary={true} />,
     ];
 
+    let viewer = "";
+    if (this.props.isViewing) {
+      viewer = (
+        <Preview content={this.props.post.html} title={this.props.post.title} tags={this.props.post.tags} className="asciidoc-render"/>
+      )
+
+    }
+
+    let actionDelete = ""
+    let actionSave = ""
+    let actionPublish = ""
+    if (isTopActionsVisible) {
+      actionSave = (
+        <IconButton onClick={buttons.save.click} iconStyle={{color: '#fff'}} iconClassName="material-icons">{buttons.save.label}</IconButton>
+      );
+      actionPublish = (
+        <IconButton onClick={buttons.publish.click} iconStyle={{color: '#fff'}} iconClassName="material-icons">{buttons.publish.label}</IconButton>
+      )
+    }
+
     return (
       <div>
-        <Loader loading={this.state.loading}></Loader>
+        <Loader loading={this.props.isFetching}></Loader>
         <TopBar ref="topbar" history={this.props.history} location={this.props.location}>
           <div style={{float: 'right'}}>
             <IconButton onClick={buttons.preview.click} iconStyle={{color: '#fff'}} iconClassName="material-icons">{buttons.preview.label}</IconButton>
-            <IconButton onClick={buttons.save.click} iconStyle={{color: '#fff'}} iconClassName="material-icons">{buttons.save.label}</IconButton>
-            <IconButton onClick={buttons.publish.click} iconStyle={{color: '#fff'}} iconClassName="material-icons">{buttons.publish.label}</IconButton>
+            {actionDelete}
+            {actionSave}
+            {actionPublish}
           </div>
         </TopBar>
         <Container>
 
           <div>
 
-            <div className={this.state.viewActive ? 'container view-active' : 'container view-inactive'}>
+            <div className={this.props.isViewing ? 'container view-active' : 'container view-inactive'}>
 
               <CodeMirror mode={'asciidoc'}
               theme={'solarized dark'}
               className={'editor'}
               textAreaClassName={['form-control']}
-              value={this.state.post.content}
+              value={this.content}
               textAreaStyle= {{minHeight: '10em'}}
               style= {{border: '1px solid black'}}
               lineNumbers={false}
@@ -173,9 +176,9 @@ class Post extends React.Component {
               onChange={this.handleChange}
               />
 
-              <div className="viewer" >
-                <AsciidocRender content={this.state.asciidocContent} onChange={this.handleAsciidocChange}/>
-              </div>
+            <div className="viewer" >
+              {viewer}
+            </div>
             </div>
           </div>
 
@@ -185,4 +188,17 @@ class Post extends React.Component {
   }
 }
 
-export default Post;
+
+
+const mapStateToProps = (state/*, props*/) => {
+  return {
+    config: state.application.config,
+    isFetching: state.post.isFetching,
+    post: state.post.post || {},
+    isViewing: state.post.isViewing
+  };
+}
+
+const ConnectedPost = connect(mapStateToProps)(Post)
+
+export default ConnectedPost;

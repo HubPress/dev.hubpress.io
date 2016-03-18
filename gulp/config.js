@@ -47,7 +47,7 @@ module.exports = {
     dest: dest + "/themes"
   },
   helpers: {
-    src: src + "/hubpress/scripts/helpers/tpl/**",
+    src: "./node_modules/hubpress-plugin-template/lib/helpers/tpl/**",
     dest: dest + '/hubpress/scripts/helpers/tpl'
   },
   vendors: {

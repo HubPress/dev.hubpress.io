@@ -1,7 +1,9 @@
 {
   "name": "hubpress",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "HubPress: A web application to blog on GitHub",
+  "author": "Anthonny Quérouil <anthonny.querouil@gmail.com> (http://anthonnyquerouil.fr)",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/hubpress/hubpress.io.git"
@@ -10,18 +12,14 @@
     "start": "gulp"
   },
   "devDependencies": {
-    "asciidoctor.js": "1.5.2",
     "babel-eslint": "^3.1.17",
     "babelify": "^6.1.1",
     "browser-sync": "^1.8.1",
     "browserify": "^10.2.0",
     "browserify-shim": "^3.8.0",
     "codemirror": "^5.10.0",
-    "dexie": "^1.1.0",
-    "downsize": "0.0.8",
     "eslint": "^0.23.0",
     "eslint-plugin-react": "^2.5.2",
-    "flux": "^2.0.1",
     "gulp": "^3.8.10",
     "gulp-less": "^3.0.3",
     "gulp-notify": "^2.1.0",
@@ -30,25 +28,33 @@
     "gulp-sourcemaps": "1.5.2",
     "gulp-uglify": "^1.5.1",
     "gulp-util": "^3.0.1",
-    "handlebars": "^2.0.0",
     "history": "^1.12.5",
+    "hubpress-core-plugins": "github:hubpress/hubpress-core-plugins#582b47d",
+    "hubpress-core-slugify": "github:hubpress/hubpress-core-slugify#59d8f72",
+    "hubpress-plugin-asciidoc": "github:hubpress/hubpress-plugin-asciidoc#296ae56",
+    "hubpress-plugin-github": "github:hubpress/hubpress-plugin-github#e28323d",
+    "hubpress-plugin-github-urls": "github:hubpress/hubpress-plugin-github-urls#f209a67",
+    "hubpress-plugin-pouchdb": "github:hubpress/hubpress-plugin-pouchdb#809e4c4",
+    "hubpress-plugin-session-storage": "github:hubpress/hubpress-plugin-session-storage#da9064b",
+    "hubpress-plugin-template": "github:hubpress/hubpress-plugin-template#56d7840",
     "less-plugin-autoprefix": "^1.4.2",
     "less-plugin-clean-css": "^1.5.0",
+    "lodash": "^4.6.1",
     "material-ui": "^0.14.0",
-    "moment": "^2.8.4",
     "node-uuid": "^1.4.2",
-    "object-assign": "^2.0.0",
-    "platform": "^1.3.0",
     "pretty-hrtime": "^0.2.2",
     "q": "^1.1.2",
     "react": ">=0.14",
     "react-code-mirror": "^3.0.3",
     "react-mixin": "^2.0.2",
+    "react-redux": "^4.4.0",
     "react-router": "^1.0.0-rc1",
     "react-tap-event-plugin": "^0.2.0",
     "react-toastr": "^2.2.2",
+    "redux": "^3.3.1",
+    "redux-logger": "^2.5.0",
+    "redux-thunk": "^1.0.3",
     "require-dir": "^0.1.0",
-    "string": "^3.3.0",
     "superagent": "^1.2.0",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.0.0",
@@ -56,14 +62,5 @@
   },
   "dependencies": {
     "highlight.js": "^8.4.0"
-  },
-  "browserify": {
-    "transform": [
-      "browserify-shim"
-    ]
-  },
-  "browserify-shim": {
-    "github": "global:Github",
-    "lodash": "global:_"
   }
 }

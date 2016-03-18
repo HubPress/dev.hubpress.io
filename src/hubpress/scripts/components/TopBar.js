@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import IconButton from 'material-ui/lib/icon-button';
 import Menu from 'material-ui/lib/svg-icons/navigation/menu';
 import AppLeftNav from './AppLeftNav';
@@ -35,11 +36,20 @@ class TopBar extends React.Component {
             {this.props.children}
 
         </div>
-        <AppLeftNav ref="leftNav" history={this.props.history} location={this.props.location} />
+        <AppLeftNav ref="leftNav" history={this.props.history} location={this.props.location} userInfos={this.props.userInfos}/>
       </div>
     );
   }
 
 }
 
-export default TopBar;
+
+const mapStateToProps = (state/*, props*/) => {
+  return {
+    userInfos: state.authentication.credentials.userInformations
+  };
+}
+
+const ConnectedTopBar = connect(mapStateToProps)(TopBar)
+
+module.exports = ConnectedTopBar;
