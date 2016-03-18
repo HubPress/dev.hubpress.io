@@ -38,7 +38,7 @@ function requestStart () {
 
 function receiveStart (payload) {
   if (payload.authentication.isAuthenticated) {
-    const userInformations = payload.authentication.credentials.userInformations;
+    const userInformations = payload.authentication.userInformations;
 
     payload.message = {
       content: `Welcome back ${userInformations.name}.`,

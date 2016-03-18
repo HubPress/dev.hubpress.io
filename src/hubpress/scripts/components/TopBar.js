@@ -46,7 +46,7 @@ class TopBar extends React.Component {
 
 const mapStateToProps = (state/*, props*/) => {
   return {
-    userInfos: state.authentication.credentials.userInformations
+    userInfos: state.authentication.userInformations
   };
 }
 

@@ -24,7 +24,6 @@ export function authentication (state = {
     case RECEIVE_AUTHENTICATION:
       delete action.payload.authentication.credentials.password;
       const credentials = Object.assign({}, action.payload.authentication.credentials, {
-        userInformations: action.payload.authentication.userInformations,
         permissions: action.payload.authentication.permissions,
         token: action.payload.authentication.token
       });
@@ -34,6 +33,7 @@ export function authentication (state = {
         isAuthenticated: action.payload.authentication.isAuthenticated,
         credentials: credentials,
         twoFactorRequired: !!action.payload.authentication.twoFactorRequired,
+        userInformations: action.payload.authentication.userInformations,
         error: undefined
       });
     case RECEIVE_AUTHENTICATION_OTP:
@@ -75,6 +75,7 @@ export function authentication (state = {
         isAuthenticated: authentication.isAuthenticated,
         credentials: authentication.credentials,
         twoFactorRequired: !!authentication.twoFactorRequired,
+        userInformations: authentication.userInformations,
         error: undefined
       });
     default:
