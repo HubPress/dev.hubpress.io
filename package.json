@@ -36,7 +36,7 @@
     "hubpress-plugin-github-urls": "github:hubpress/hubpress-plugin-github-urls#f209a67",
     "hubpress-plugin-pouchdb": "github:hubpress/hubpress-plugin-pouchdb#edeeb65",
     "hubpress-plugin-session-storage": "github:hubpress/hubpress-plugin-session-storage#b707e98",
-    "hubpress-plugin-template": "github:hubpress/hubpress-plugin-template#bc24549",
+    "hubpress-plugin-template": "github:hubpress/hubpress-plugin-template#c194681",
     "less-plugin-autoprefix": "^1.4.2",
     "less-plugin-clean-css": "^1.5.0",
     "lodash": "^4.6.1",
