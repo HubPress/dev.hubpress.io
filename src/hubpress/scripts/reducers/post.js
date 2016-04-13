@@ -1,5 +1,5 @@
 import {
-  REQUEST_LOCAL_POST, RECEIVE_LOCAL_POST, RECEIVE_LOCAL_POST_FAIL, SWITCH_VIEWING,
+  REQUEST_LOCAL_POST, RECEIVE_LOCAL_POST, RECEIVE_LOCAL_POST_FAIL, SWITCH_VIEWING, SWITCH_LIGHT,
   REQUEST_RENDER_AND_LOCAL_SAVE, RECEIVE_RENDER_AND_LOCAL_SAVE, RECEIVE_RENDER_AND_LOCAL_SAVE_FAIL,
 
   REQUEST_REMOTE_SAVE,
@@ -13,11 +13,16 @@ import {
   REQUEST_UNPUBLISH_POST,
   RECEIVE_UNPUBLISH_POST,
   RECEIVE_UNPUBLISH_POST_FAIL
-} from '../actions/post'
+} from '../actions/post';
+
+import {
+  RECEIVE_LOGOUT
+} from '../actions/authentication';
 
 export function post (state = {
   isFetching: false,
   isViewing: false,
+  isDark: false,
   isRendering: false,
   post: {}
 }, action) {
@@ -54,6 +59,10 @@ export function post (state = {
     case SWITCH_VIEWING:
       return Object.assign({}, state, {
         isViewing: !state.isViewing
+      });
+    case SWITCH_LIGHT:
+      return Object.assign({}, state, {
+        isDark: !state.isDark
       });
     case REQUEST_REMOTE_SAVE:
       return Object.assign({}, state, {
@@ -93,6 +102,13 @@ export function post (state = {
     case RECEIVE_UNPUBLISH_POST_FAIL:
       return Object.assign({}, state, {
         isFetching: false,
+      });
+    case RECEIVE_LOGOUT:
+      return Object.assign({}, state, {
+        isFetching: false,
+        isViewing: false,
+        isRendering: false,
+        post: {}
       });
     default:
       return state;

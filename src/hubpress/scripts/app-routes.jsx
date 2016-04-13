@@ -25,8 +25,7 @@ const AppRoutes = (
       <Route path="logout" component={Logout} onEnter={requireAuth} />
       <Route path="posts" component={Posts} onEnter={requireAuth} />
       <Route path="posts/:postId" component={Post} onEnter={requireAuth} />
-      // <Route path="posts/:postId" component={Post} onEnter={requireAuth} />
-      // <Route path="settings" component={Settings} onEnter={requireAuth} />
+      <Route path="settings" component={Settings} onEnter={requireAuth} />
     </Route>
   </Router>
 );

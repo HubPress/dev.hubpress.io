@@ -1,4 +1,5 @@
 @import (less) "codemirror.css";
+@import (less) "solarize.css";
 // @import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css);
 
 @import (less) "asciidoctor.css";
@@ -287,6 +288,18 @@ body {
     background-color: rgb(251,251,251);
     transition: all 500ms ease-out;
     padding: 5px 5px;
+  }
+
+
+  .editor.dark {
+    background-color: #002b36;
+    .CodeMirror div.CodeMirror-cursor {
+      border-left: 1px solid white;
+    }
+  }
+
+  .editor.light {
+    background-color: #fdf6e3;
   }
 
   .viewer {

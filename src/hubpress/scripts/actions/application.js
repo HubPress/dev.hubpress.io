@@ -58,7 +58,7 @@ function receiveStartFailure (payload) {
   }
 }
 
-export function start() {
+export function start () {
   return (dispatch, getState) => {
     return dispatch(() => {
 
@@ -76,15 +76,31 @@ export function start() {
         .then(payload => plugins.fireReceiveTheme(getState(), payload))
         .then(payload => plugins.fireRequestSavedAuth(getState(), payload))
         .then(payload => plugins.fireReceiveSavedAuth(getState(), payload))
-        .then(payload => plugins.fireRequestRemoteSynchronization(getState(), payload))
-        .then(payload => plugins.fireReceiveRemoteSynchronization(getState(), payload))
-        .then(payload => plugins.fireRequestRenderingDocuments(getState(), payload))
-        .then(payload => plugins.fireReceiveRenderingDocuments(getState(), payload))
-        .then(payload => plugins.fireRequestLocalSynchronization(getState(), payload))
-        .then(payload => plugins.fireReceiveLocalSynchronization(getState(), payload))
         .then(payload => dispatch(receiveStart(payload)))
         .catch(failure => dispatch(receiveStartFailure(failure)));
 
     });
-  }
+  };
+}
+
+export function synchronize () {
+  return (dispatch, getState) => {
+    return dispatch(() => {
+      dispatch(requestSynchronize());
+
+      return plugins.fireRequestRemoteSynchronization(getState(), {
+        synchronization: {},
+        documents: {}
+      })
+      .then(payload => plugins.fireReceiveRemoteSynchronization(getState(), payload))
+      .then(payload => plugins.fireRequestRenderingDocuments(getState(), payload))
+      .then(payload => plugins.fireReceiveRenderingDocuments(getState(), payload))
+      .then(payload => plugins.fireRequestLocalSynchronization(getState(), payload))
+      .then(payload => plugins.fireReceiveLocalSynchronization(getState(), payload))
+      .then(payload => plugins.fireRequestLocalPosts(getState(), payload))
+      .then(payload => plugins.fireReceiveLocalPosts(getState(), payload))
+      .then(payload => dispatch(receiveSynchronize(payload)))
+      .catch(failure => dispatch(receiveSynchronizeFailure(failure)));
+    });
+  };
 }

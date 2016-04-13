@@ -7,10 +7,13 @@ import TopBar from './TopBar';
 import Loader from './Loader';
 
 import asciidocMode from '../utils/codemirror/mode/asciidoc';
-import CodeMirror from 'react-code-mirror';
+import overlay from '../utils/codemirror/mode/overlay';
+// FIXME Spellcheck not works well
+//import spellcheck from '../utils/codemirror/mode/spell-checker';
+import Codemirror from 'react-codemirror';
 import Preview from './Preview';
 
-import { getLocalPost, switchViewing, renderAndLocalSave, remoteSave, publish, unpublish } from '../actions/post';
+import { getLocalPost, switchViewing, switchLight, renderAndLocalSave, remoteSave, publish, unpublish } from '../actions/post';
 import { connect } from 'react-redux'
 
 
@@ -23,6 +26,7 @@ class Post extends React.Component {
     this.handlePublish = this.handlePublish.bind(this);
     this.handleUnpublish = this.handleUnpublish.bind(this);
     this.handleRemoteSave = this.handleRemoteSave.bind(this);
+    this.handleSwitchLight = this.handleSwitchLight.bind(this);
     this.doAnimation = this.doAnimation.bind(this);
   }
 
@@ -61,7 +65,7 @@ class Post extends React.Component {
     dispatch(unpublish(this.getParams().postId));
   }
 
-  handleChange(event) {
+  handleChange(codeValue) {
     const { dispatch } = this.props;
 
     if (this.timeout) {
@@ -70,10 +74,15 @@ class Post extends React.Component {
 
     const config = this.props.config;
     this.timeout = window.setTimeout(() => {
-      dispatch(renderAndLocalSave(this.getParams().postId, event.target.value));
+      dispatch(renderAndLocalSave(this.getParams().postId, codeValue));
     }, config.meta.delay ? config.meta.delay : 200);
 
-    this.content = event.target.value;
+    this.content = codeValue;
+  }
+
+  handleSwitchLight() {
+    const { dispatch } = this.props;
+    dispatch(switchLight());
   }
 
   doAnimation() {
@@ -88,7 +97,8 @@ class Post extends React.Component {
       delete: {},
       save: {},
       publish: {},
-      preview: {}
+      preview: {},
+      light: {}
     };
 
     const isTopActionsVisible = !!this.props.post.title;
@@ -100,6 +110,15 @@ class Post extends React.Component {
     else {
       buttons.preview.label = 'visibility';
       buttons.preview.click = this.doAnimation;
+    }
+
+    if (this.props.isDark) {
+      buttons.light.label = 'brightness_high';
+      buttons.light.click = this.handleSwitchLight;
+    }
+    else {
+      buttons.light.label = 'brightness_low';
+      buttons.light.click = this.handleSwitchLight;
     }
 
     if (this.props.post.published) {
@@ -146,11 +165,22 @@ class Post extends React.Component {
       )
     }
 
+    // Options for CodeMirror
+    const cmOptions = {
+      autofocus: true,
+      lineWrapping: true,
+      lineNumbers: false,
+      //mode: 'spell-checker',
+      mode: 'asciidoc',
+      theme: 'solarized' + (this.props.isDark?' dark':' lightt')
+    }
+
     return (
       <div>
         <Loader loading={this.props.isFetching}></Loader>
         <TopBar ref="topbar" history={this.props.history} location={this.props.location}>
           <div style={{float: 'right'}}>
+            <IconButton onClick={buttons.light.click} iconStyle={{color: '#fff'}} iconClassName="material-icons">{buttons.light.label}</IconButton>
             <IconButton onClick={buttons.preview.click} iconStyle={{color: '#fff'}} iconClassName="material-icons">{buttons.preview.label}</IconButton>
             {actionDelete}
             {actionSave}
@@ -163,7 +193,16 @@ class Post extends React.Component {
 
             <div className={this.props.isViewing ? 'container view-active' : 'container view-inactive'}>
 
-              <CodeMirror mode={'asciidoc'}
+              <Codemirror
+                ref="editor"
+                value={this.content}
+                onChange={this.handleChange}
+                options={cmOptions}
+                className={'editor' + (this.props.isDark?' dark':' lightt')}
+                style= {{border: '1px solid black'}}/>
+              {/*<CodeMirror
+              mode={'spell-checker'}
+              //backdrop={'asciidoc'}
               theme={'solarized dark'}
               className={'editor'}
               textAreaClassName={['form-control']}
@@ -174,7 +213,7 @@ class Post extends React.Component {
               lineWrapping={true}
               autofocus={true}
               onChange={this.handleChange}
-              />
+              />*/}
 
             <div className="viewer" >
               {viewer}
@@ -195,7 +234,8 @@ const mapStateToProps = (state/*, props*/) => {
     config: state.application.config,
     isFetching: state.post.isFetching,
     post: state.post.post || {},
-    isViewing: state.post.isViewing
+    isViewing: state.post.isViewing,
+    isDark: state.post.isDark
   };
 }
 

@@ -12,7 +12,7 @@ import Loader from './Loader';
 import Toastr from './Toastr';
 // Theme
 import HubPressRawTheme from '../themes/hubpress-raw-theme';
-import { start } from '../actions/application';
+import { start, synchronize } from '../actions/application';
 import { connect } from 'react-redux'
 
 
@@ -37,14 +37,19 @@ class Hubpress extends React.Component {
 
   componentDidMount() {
     const { dispatch } = this.props;
-    // fetch configuration
-    dispatch(start())
+    console.info('HubPress component mounted');
+    // fetch configuration and start
+    dispatch(start());
+  }
 
-    // Redirect to login if not connected
-    if (!this.props.history.isActive('/login') && !this.props.isAuthenticated) {
-      console.log('Hubpress.js - Redirect to login');
-      this.props.history.replaceState(null, '/login');
+  componentWillUpdate(nextProps, nextState) {
+    const {dispatch} = this.props;
+    const canSync = nextProps.isAuthenticated && nextProps.isInitialized && !nextProps.synchronizeTime;
+
+    if (canSync) {
+      dispatch(synchronize());
     }
+
   }
 
   _getState() {
@@ -63,7 +68,7 @@ class Hubpress extends React.Component {
       </div>
     );
 
-    if (this.props.isInitialized) {
+    if (this.props.isReady) {
       return (
         <div>
           <Toastr />
@@ -90,9 +95,11 @@ class Hubpress extends React.Component {
 const mapStateToProps = (state/*, props*/) => {
   return {
     isInitialized: state.application.isInitialized,
-    isAuthenticated: state.authentication.isAuthenticated
+    isAuthenticated: state.authentication.isAuthenticated,
+    synchronizeTime: state.application.synchronize.time,
+    isReady: state.application.isInitialized && !state.authentication.isAuthenticated || state.authentication.isAuthenticated && state.application.synchronize.time
   };
-}
+};
 
 
 const ConnectedHubpress = connect(mapStateToProps)(Hubpress)

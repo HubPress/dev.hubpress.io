@@ -14,6 +14,7 @@ import Loader from './Loader';
 import PostItem from './PostItem';
 import TopBar from './TopBar';
 
+import { synchronize } from '../actions/application';
 import { getLocalPosts, getSelectedPost } from '../actions/posts';
 import { deletePost } from '../actions/post';
 import { connect } from 'react-redux'
@@ -27,8 +28,10 @@ class Posts extends React.Component {
 
   componentDidMount() {
     const { dispatch } = this.props;
-    // fetch configuration
-    dispatch(getLocalPosts());
+    // fetch configuration only synchronized
+    if (this.props.hasBeenSynchronize) {
+      dispatch(getLocalPosts());
+    }
   }
 
   handleClick(post) {
@@ -45,6 +48,11 @@ class Posts extends React.Component {
     dispatch(deletePost(idPost))
   }
 
+  handleSynchronize() {
+    const { dispatch } = this.props;
+    dispatch(synchronize());
+  }
+
   render() {
 
     let posts = this.props.posts.map(function(post, i) {
@@ -59,6 +67,10 @@ class Posts extends React.Component {
         </Link>
       );
 
+    let syncButton = (
+        <IconButton onClick={this.handleSynchronize.bind(this)} style={{float:'right'}} iconStyle={{color: '#fff'}} iconClassName="material-icons">sync</IconButton>
+      );
+
     let preview = ""
     if (!!this.props.selectedPost.title) {
       preview = (
@@ -71,6 +83,7 @@ class Posts extends React.Component {
         <Loader loading={this.props.isFetching}></Loader>
         <TopBar ref="topbar" history={this.props.history} location={this.props.location}>
           {newButton}
+          {syncButton}
         </TopBar>
         <Container id="posts">
           <List className="list">
@@ -87,11 +100,12 @@ class Posts extends React.Component {
 const mapStateToProps = (state/*, props*/) => {
   return {
     isFetching: state.posts.isFetching,
+    hasBeenSynchronize: state.application.synchronize.time,
     posts: state.posts.posts,
     selectedPost: state.posts.selectedPost || {}
   };
 }
 
-const ConnectedPosts = connect(mapStateToProps)(Posts)
+const ConnectedPosts = connect(mapStateToProps)(Posts);
 
 export default ConnectedPosts;

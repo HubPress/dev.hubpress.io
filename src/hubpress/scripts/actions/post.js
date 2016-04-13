@@ -5,6 +5,7 @@ export const REQUEST_LOCAL_POST = 'REQUEST_LOCAL_POST'
 export const RECEIVE_LOCAL_POST = 'RECEIVE_LOCAL_POST'
 export const RECEIVE_LOCAL_POST_FAIL = 'RECEIVE_LOCAL_POST_FAIL'
 export const SWITCH_VIEWING = 'SWITCH_VIEWING'
+export const SWITCH_LIGHT = 'SWITCH_LIGHT'
 export const REQUEST_RENDER_AND_LOCAL_SAVE = 'REQUEST_RENDER_AND_LOCAL_SAVE'
 export const RECEIVE_RENDER_AND_LOCAL_SAVE = 'RECEIVE_RENDER_AND_LOCAL_SAVE'
 export const RECEIVE_RENDER_AND_LOCAL_SAVE_FAIL = 'RECEIVE_RENDER_AND_LOCAL_SAVE_FAIL'
@@ -73,6 +74,20 @@ export function switchViewing () {
   }
 }
 
+function emitSwitchLight () {
+  return {
+    type: SWITCH_LIGHT
+  }
+}
+
+export function switchLight () {
+  return (dispatch, getState) => {
+    return dispatch(() => {
+      dispatch(emitSwitchLight())
+    })
+  }
+}
+
 function requestRenderAndLocalSave (payload) {
   return {
     type: REQUEST_RENDER_AND_LOCAL_SAVE,
@@ -102,7 +117,10 @@ export function renderAndLocalSave (idPost, content) {
         config: getState().application.config
       };
       dispatch(requestRenderAndLocalSave(payload))
-      return plugins.fireRequestRenderingPost(getState(), payload)
+      return plugins.fireRequestLocalPost(getState(), payload)
+        .then(payload => plugins.fireReceiveLocalPost(getState(), payload))
+        .then(payload => {payload.post.content = content; return payload})
+        .then(payload => plugins.fireRequestRenderingPost(getState(), payload))
         .then(payload => plugins.fireReceiveRenderingPost(getState(), payload))
         .then(payload => {
 
