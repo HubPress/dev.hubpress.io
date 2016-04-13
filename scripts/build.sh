@@ -10,6 +10,8 @@ fi
 # Backup the dist directory, will be paste in the master and in the gh-pages
 cp -R dist ..
 
+echo "# Content of the backup of dist"
+ls -ltra ../dist
 # Copy the travis config, the default config file and the documentation
 cp .travis.yml ../dist
 cp src/hubpress/config.default.json ../dist/hubpress/
