@@ -66,7 +66,7 @@ git status
 
 # Commit and push
 echo "# Commit and push"
-git add .
+git add . .*
 git commit -m "Travis - Build from ${TRAVIS_BRANCH} with the commit ${TRAVIS_COMMIT}"
 git push $GH_PUSH_URL master > /dev/null 2>&1
 
@@ -94,6 +94,6 @@ git status
 
 # Commit and push
 echo "# Commit and push"
-git add .
+git add . .*
 git commit -m "Travis - Build from ${TRAVIS_BRANCH} with the commit ${TRAVIS_COMMIT}"
 git push $GH_PUSH_URL gh-pages > /dev/null 2>&1
