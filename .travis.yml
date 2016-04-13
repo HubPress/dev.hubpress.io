@@ -1,0 +1,29 @@
+language: node_js
+node_js:
+  - "4.2.4"
+branches:
+  only:
+    - development
+
+before_script:
+  - npm install -g gulp bower
+  - npm install
+  - bower install
+
+script:
+  - node -v
+  - npm -v
+  - gulp build
+env:
+  global:
+    - secure: "TSc0JROnl2RXBrIyflVS95zt+kRYk4SPD1xGvDx4Jg5Eu+8u6Q1KmMV7ahXGnJy4dSU3ynzJVonlWsUqQpr9DMoofFtOak9ET9NpsBTT2q0084Lyw98LmGDnVuPhBO7leEWxs3XsvZWRedYRpQQG9RP4ns/WckxFlnJF4CO4Tyo="
+    - GH_REPO_URL: https://github.com/$TRAVIS_REPO_SLUG.git
+    - GH_PUSH_URL: https://$GH_TOKEN@github.com/$TRAVIS_REPO_SLUG.git
+    - OWNER: $(echo $TRAVIS_REPO_SLUG | cut -f1 -d/)
+    - REPOSITORY: $(echo $TRAVIS_REPO_SLUG | cut -f2 -d/)
+
+after_script:
+  # inside this git repo we'll pretend to be a new user
+  - ./scripts/build.sh
+
+sudo: false
