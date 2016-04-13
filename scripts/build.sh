@@ -50,7 +50,8 @@ git checkout master
 
 # Copy files
 cp -R ../dist/* .
-cp -R ../dist/.travis.yml .
+cp ../dist/.* .
+cp ../dist/.travis.yml .
 
 # Set the branch to master in the config file
 sed "s/your-branch/master/g" hubpress/config.default.json > hubpress/config.json
@@ -66,7 +67,7 @@ git status
 
 # Commit and push
 echo "# Commit and push"
-git add . .*
+git add .
 git commit -m "Travis - Build from ${TRAVIS_BRANCH} with the commit ${TRAVIS_COMMIT}"
 git push $GH_PUSH_URL master > /dev/null 2>&1
 
@@ -80,7 +81,8 @@ git clean -f
 
 # Copy files
 cp -R ../dist/* .
-cp -R ../dist/.travis.yml .
+cp ../dist/.* .
+cp ../dist/.travis.yml .
 
 # Set the branch to gh-pages in the config file
 sed "s/your-branch/gh-pages/g" hubpress/config.default.json > hubpress/config.json
@@ -94,6 +96,6 @@ git status
 
 # Commit and push
 echo "# Commit and push"
-git add . .*
+git add .
 git commit -m "Travis - Build from ${TRAVIS_BRANCH} with the commit ${TRAVIS_COMMIT}"
 git push $GH_PUSH_URL gh-pages > /dev/null 2>&1
