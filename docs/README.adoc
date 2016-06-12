@@ -87,7 +87,7 @@ Now you have successfully configured HubPress, you can customise it by adding so
 
 See the link:Administration.adoc[Administration Guide] for the next steps you need to take in setting up your HubPress blog.
 
-Once you've completed the configuration aspects, you can write your first blog post. Follow the guidelines in the link:Writers_Guide.adoc[Writer's Guide] to write a sucessful first blog post.
+Once you've completed the configuration aspects, you can write your first blog post. Follow the guidelines in the link:Writers_Guide.adoc[Writer's Guide] to write a successful first blog post.
 
 == HubPress Team
 
