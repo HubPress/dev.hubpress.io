@@ -10,7 +10,7 @@ import asciidocMode from '../utils/codemirror/mode/asciidoc';
 import overlay from '../utils/codemirror/mode/overlay';
 // FIXME Spellcheck not works well
 //import spellcheck from '../utils/codemirror/mode/spell-checker';
-import Codemirror from 'react-codemirror';
+import CodeMirror from './CodeMirror';
 import Preview from './Preview';
 
 import { getLocalPost, switchViewing, switchLight, renderAndLocalSave, remoteSave, publish, unpublish } from '../actions/post';
@@ -197,28 +197,12 @@ class Post extends React.Component {
           <div>
 
             <div className={this.props.isViewing ? 'container view-active' : 'container view-inactive'}>
-
-              <Codemirror
+              <CodeMirror
                 ref="editor"
                 value={this.content}
                 onChange={this.handleChange}
                 options={cmOptions}
-                className={'editor' + this.getCMTheme() }
-                style= {{border: '1px solid black'}}/>
-              {/*<CodeMirror
-              mode={'spell-checker'}
-              //backdrop={'asciidoc'}
-              theme={'solarized dark'}
-              className={'editor'}
-              textAreaClassName={['form-control']}
-              value={this.content}
-              textAreaStyle= {{minHeight: '10em'}}
-              style= {{border: '1px solid black'}}
-              lineNumbers={false}
-              lineWrapping={true}
-              autofocus={true}
-              onChange={this.handleChange}
-              />*/}
+                isDark={this.props.isDark}/>
 
             <div className="viewer" >
               {viewer}
