@@ -31,7 +31,7 @@
     "history": "^1.12.5",
     "hubpress-core-plugins": "github:hubpress/hubpress-core-plugins#0.1.0",
     "hubpress-core-slugify": "github:hubpress/hubpress-core-slugify#0.1.0",
-    "hubpress-plugin-asciidoc": "github:hubpress/hubpress-plugin-asciidoc#0.1.0",
+    "hubpress-plugin-asciidoc": "github:hubpress/hubpress-plugin-asciidoc#0.1.1",
     "hubpress-plugin-github": "github:hubpress/hubpress-plugin-github#0.1.0",
     "hubpress-plugin-github-urls": "github:hubpress/hubpress-plugin-github-urls#0.1.0",
     "hubpress-plugin-pouchdb": "github:hubpress/hubpress-plugin-pouchdb#0.1.0",

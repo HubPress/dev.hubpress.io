@@ -28,6 +28,7 @@ class Post extends React.Component {
     this.handleRemoteSave = this.handleRemoteSave.bind(this);
     this.handleSwitchLight = this.handleSwitchLight.bind(this);
     this.doAnimation = this.doAnimation.bind(this);
+    this.getCMTheme = this.getCMTheme.bind(this);
   }
 
   getParams() {
@@ -88,6 +89,10 @@ class Post extends React.Component {
   doAnimation() {
     const { dispatch } = this.props;
     dispatch(switchViewing());
+  }
+
+  getCMTheme() {
+    return this.props.isDark?' dark':' light';
   }
 
 
@@ -198,7 +203,7 @@ class Post extends React.Component {
                 value={this.content}
                 onChange={this.handleChange}
                 options={cmOptions}
-                className={'editor' + (this.props.isDark?' dark':' lightt')}
+                className={'editor' + this.getCMTheme() }
                 style= {{border: '1px solid black'}}/>
               {/*<CodeMirror
               mode={'spell-checker'}
