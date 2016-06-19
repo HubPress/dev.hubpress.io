@@ -73,7 +73,7 @@ git push $GH_PUSH_URL master > /dev/null 2>&1
 
 
 #########################################################
-# Build master
+# Build gh-pages
 #########################################################
 echo "# Checkout gh-pages"
 git checkout gh-pages
