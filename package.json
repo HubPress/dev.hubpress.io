@@ -1,6 +1,6 @@
 {
   "name": "hubpress",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "HubPress: A web application to blog on GitHub",
   "author": "Anthonny Quérouil <anthonny.querouil@gmail.com> (http://anthonnyquerouil.fr)",
   "license": "MIT",
@@ -36,7 +36,7 @@
     "hubpress-plugin-github-urls": "github:hubpress/hubpress-plugin-github-urls#0.1.0",
     "hubpress-plugin-pouchdb": "github:hubpress/hubpress-plugin-pouchdb#0.1.0",
     "hubpress-plugin-session-storage": "github:hubpress/hubpress-plugin-session-storage#0.1.0",
-    "hubpress-plugin-template": "github:hubpress/hubpress-plugin-template#0.1.0",
+    "hubpress-plugin-template": "github:hubpress/hubpress-plugin-template#0.1.1",
     "less-plugin-autoprefix": "^1.4.2",
     "less-plugin-clean-css": "^1.5.0",
     "lodash": "^4.6.1",
