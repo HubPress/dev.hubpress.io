@@ -1,3 +1,8 @@
+## 0.5.2
+
+* fix(template): fix a bug with the pagination on gh-pages
+* fix(theme): fix the typo of the theme saga
+
 ## 0.5.1
 
 * feat(author): now the author of a post is the author of the first commit of the post, in the next version we will add an attribute to specify the author explicitely,
