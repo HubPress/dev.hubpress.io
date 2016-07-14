@@ -26,6 +26,8 @@ export function application (state = {
       });
     case RECEIVE_START:
       config = action.payload.config;
+      //FIXME must set this value with the build not hardcoded
+      config.version = "0.5.2";
       config.site = config.site || {};
       config.site.url = config.urls.site;
 

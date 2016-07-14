@@ -36,7 +36,7 @@ class TopBar extends React.Component {
             {this.props.children}
 
         </div>
-        <AppLeftNav ref="leftNav" history={this.props.history} location={this.props.location} userInfos={this.props.userInfos}/>
+        <AppLeftNav ref="leftNav" history={this.props.history} location={this.props.location} userInfos={this.props.userInfos} config={this.props.config}/>
       </div>
     );
   }
@@ -46,7 +46,8 @@ class TopBar extends React.Component {
 
 const mapStateToProps = (state/*, props*/) => {
   return {
-    userInfos: state.authentication.userInformations
+    userInfos: state.authentication.userInformations,
+    config: state.application.config
   };
 }
 

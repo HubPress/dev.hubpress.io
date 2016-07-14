@@ -1,9 +1,14 @@
 import React from 'react';
-import Router from 'react-router';
+import {Router, Link} from 'react-router';
 import { connect } from 'react-redux';
 import { MenuItem, LeftNav, Mixins, Styles, Avatar } from 'material-ui';
+import ListDivider from 'material-ui/lib/lists/list-divider';
 import List from 'material-ui/lib/lists/list';
 import ListItem from 'material-ui/lib/lists/list-item';
+import Payment from 'material-ui/lib/svg-icons/action/payment';
+import Subject from 'material-ui/lib/svg-icons/action/subject';
+import Settings from 'material-ui/lib/svg-icons/action/settings';
+import PowerSettingsNew from 'material-ui/lib/svg-icons/action/power-settings-new';
 import {SelectableContainerEnhance} from 'material-ui/lib/hoc/selectable-enhance';
 
 const SelectableList = SelectableContainerEnhance(List);
@@ -71,14 +76,17 @@ let AppLeftNav = React.createClass({
           <ListItem
             value="/posts"
             primaryText="Posts"
+            leftIcon={<Subject />}
           />
           <ListItem
             value="/settings"
             primaryText="Settings"
+            leftIcon={<Settings />}
           />
           <ListItem
             value="/logout"
             primaryText="Logout"
+            leftIcon={<PowerSettingsNew />}
           />
         </SelectableList>
     );
@@ -92,6 +100,25 @@ let AppLeftNav = React.createClass({
         >
         {header}
         {menus}
+        <ListDivider />
+        <SelectableList
+            valueLink={{
+              value: "",
+              requestChange: this.handleRequestChangeLink,
+            }}
+          >
+          <ListItem
+            value="https://www.paypal.me/anthonny/5"
+            primaryText="Donation PayPal"
+            leftIcon={<Payment />}
+          />
+          <ListItem
+            value="https://gratipay.com/hubpress/"
+            primaryText="Donation Gratipay"
+            leftIcon={<Payment />}
+          />
+        </SelectableList>
+        <div style={{position: 'absolute', bottom: 0, width: '100%', textAlign: 'center', marginBottom:'8px'}} >version {this.props.config.version}</div>
       </LeftNav>
     );
   },
@@ -100,6 +127,10 @@ let AppLeftNav = React.createClass({
     this.setState({
       leftNavOpen: !this.state.leftNavOpen,
     });
+  },
+
+  handleRequestChangeLink(event, value) {
+    window.location = value;
   },
 
   handleRequestChangeList(e, value) {
