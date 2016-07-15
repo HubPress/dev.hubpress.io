@@ -80,7 +80,7 @@ class Login extends React.Component {
 
         <Paper zDepth={1} className={'login-paper'}>
 
-          <header><img src="http://hubpress.io/img/logo.png" className="avatar"/>
+          <header><img src="https://raw.githubusercontent.com/HubPress/site.hubpress.io/gh-pages/img/logo.png" className="avatar"/>
           <p>Welcome !</p>
 
           </header>
