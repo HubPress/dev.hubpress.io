@@ -132,7 +132,7 @@ let AppLeftNav = React.createClass({
             leftIcon={<Update />}
             />
         </SelectableList>
-        <div style={{position: 'absolute', bottom: 0, width: '100%', textAlign: 'center', marginBottom:'8px'}} >version {this.props.config.version}</div>
+        <div style={{position: 'absolute', bottom: 0, width: '100%', textAlign: 'center', marginBottom:'8px'}} >HubPress {this.props.config.version}</div>
       </LeftNav>
     );
   },
