@@ -6,6 +6,7 @@ import ListDivider from 'material-ui/lib/lists/list-divider';
 import List from 'material-ui/lib/lists/list';
 import ListItem from 'material-ui/lib/lists/list-item';
 import Payment from 'material-ui/lib/svg-icons/action/payment';
+import Update from 'material-ui/lib/svg-icons/action/update';
 import Subject from 'material-ui/lib/svg-icons/action/subject';
 import Settings from 'material-ui/lib/svg-icons/action/settings';
 import PowerSettingsNew from 'material-ui/lib/svg-icons/action/power-settings-new';
@@ -117,6 +118,19 @@ let AppLeftNav = React.createClass({
             primaryText="Donation Gratipay"
             leftIcon={<Payment />}
           />
+        </SelectableList>
+        <ListDivider />
+        <SelectableList
+          valueLink={{
+            value: "",
+            requestChange: this.handleRequestChangeLink,
+          }}
+          >
+          <ListItem
+            value={`https://github.com/${this.props.config.meta.username}/${this.props.config.meta.repositoryName}/compare/${this.props.config.meta.branch}...HubPress:${this.props.config.meta.branch}`}
+            primaryText="Check for upgrade"
+            leftIcon={<Update />}
+            />
         </SelectableList>
         <div style={{position: 'absolute', bottom: 0, width: '100%', textAlign: 'center', marginBottom:'8px'}} >version {this.props.config.version}</div>
       </LeftNav>
