@@ -1,6 +1,7 @@
 ## 0.6.0
 
 * feat(rss): add the generation of the RSS feed
+* feat(rss): uncomment RSS links in themes
 * fix(template): fix a bug with the pagination on gh-pages
 * fix(theme): fix the typo of the theme saga
 * fix(admin): add the version of the application and donation items
