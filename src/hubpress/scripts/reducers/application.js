@@ -10,6 +10,8 @@ import {
   REQUEST_SYNCHRONIZE, RECEIVE_SYNCHRONIZE, RECEIVE_SYNCHRONIZE_FAIL
 } from '../actions/application';
 
+//FIXME must set this value with the build not hardcoded
+const VERSION = '0.6.0';
 
 export function application (state = {
   isInitialized: false,
@@ -26,8 +28,7 @@ export function application (state = {
       });
     case RECEIVE_START:
       config = action.payload.config;
-      //FIXME must set this value with the build not hardcoded
-      config.version = "0.5.2";
+      config.version = VERSION;
       config.site = config.site || {};
       config.site.url = config.urls.site;
 

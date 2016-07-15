@@ -16,6 +16,7 @@ import {githubUrlsPlugin} from 'hubpress-plugin-github-urls'
 import {pouchDbPlugin} from 'hubpress-plugin-pouchdb'
 import {sessionStoragePlugin} from 'hubpress-plugin-session-storage'
 import {templatePlugin} from 'hubpress-plugin-template'
+import {rssPlugin} from 'hubpress-plugin-rss'
 
 
 //Helpers for debugging
@@ -29,7 +30,8 @@ plugins.register(
   sessionStoragePlugin,
   githubPlugin,
   pouchDbPlugin,
-  asciidocPlugin
+  asciidocPlugin,
+  rssPlugin
 );
 
 let mountNode = document.getElementById("hubpress");
