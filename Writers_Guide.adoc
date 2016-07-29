@@ -108,6 +108,12 @@ If `:compat-mode:` was not specified here, the code sample would render like thi
 
 For more information about `:compat-mode:`, see the http://asciidoctor.org/docs/migration/#compat-mode[AsciiDoctor Migration Guide].
 
+=== Links & Hyperlinks 
+[source, asciidoc]
+---
+http://example.com This is a link 
+http://example.com[example] This is a hyperlink
+
 [[Adding_Images]]
 == Adding Images
 
