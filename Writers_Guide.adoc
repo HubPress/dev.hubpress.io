@@ -110,11 +110,11 @@ For more information about `:compat-mode:`, see the http://asciidoctor.org/docs/
 
 === Links & Hyperlinks 
 [source, asciidoc]
----
+----
 http://duckduckgo.com This is a link 
 
 http://duckduckgo.com[click here!] This is a hyperlink
----
+----
 
 [[Adding_Images]]
 == Adding Images
