@@ -19,18 +19,20 @@ HubPress is a web application that makes it easy for you to maintain a blog. It 
 * Backed by the power of http://asciidoctor.org/docs/user-manual/[AsciiDoc markup] for tight control of content presentation to your requirements.
 * Administration console to customise many aspect of your blog's content.
 * Disqus integration for blog comments.
-* Google Analytics integration to track visitor activity. 
+* Google Analytics integration to track visitor activity.
 * A number of different themes shipped with the product, ready to use.
 
 Hosting for your blog is provided by GitHub Pages.
 
-If you see something wrong with the documentation, please raise an issue. Your help with improving every aspect of HubPress is greatly appreciated. Pull Requests are *always* welcome. 
+If you see something wrong with the documentation, please raise an issue. Your help with improving every aspect of HubPress is greatly appreciated. Pull Requests are *always* welcome.
 
-See the link:CONTRIBUTING.adoc[Contributors Guide] for more information about being a successful HubPress contributor.
+Learn more about contributing to HubPress in the https://hubpress.gitbooks.io/hubpress-knowledgebase/content/develop/contribute_pr.html[HubPress Contributing FAQ].
 
 == Browser Compatibility
 
 HubPress is compatible with Chrome Desktop, Firefox Desktop, and Chrome for Android.
+
+Other browsers may work, but are not officially supported.
 
 == Getting Started
 
@@ -59,7 +61,7 @@ The following parameters are mandatory:
 +
 image:http://hubpress.io/img/home-install.png[Install complete,300]
 
-=== Use a Custom Domain or GitHub Page Domain Already In Use
+=== Using a Custom Domain or Already Using Your GitHub Page Domain?
 
 If you want your blog to be available on a custom domain, or you are already using your GitHub Pages domain to host another project, some extra configuration is required.
 
@@ -83,30 +85,84 @@ The following parameters are mandatory:
 +
 image:http://hubpress.io/img/home-install.png[Install complete,300]
 
-Now you have successfully configured HubPress, you can customise it by adding social network information, experiment with different themes, and make your HubPress blog your own. 
+== HubPress Documentation
 
-See the link:Administration.adoc[Administration Guide] for the next steps you need to take in setting up your HubPress blog.
+=== New Location
 
-Once you've completed the configuration aspects, you can write your first blog post. Follow the guidelines in the link:Writers_Guide.adoc[Writer's Guide] to write a sucessful first blog post.
+The docs have been migrated to the https://hubpress.gitbooks.io/hubpress-knowledgebase/content/[HubPress Knowledgebase] (KBase).
+
+Type your question into the search field, and you will see matches to your question display as you type.
+You can also scroll down the categories and look for information by groups.
+
+If you can't find the information you need, https://www.gitbook.com/book/hubpress/hubpress-knowledgebase/discussions[create a discussion] and the HubPress community will help you find what you need, or get an Article created so others can benefit from your observations.
+
+Read on to find out why the docs have moved to GitBook, and how you can contribute.
+
+=== The Past
+
+HubPress documentation was originally static AsciiDoc files, which were stored in each blogger's forked repository.
+This was fine in the early days of HubPress, but it became obvious from repeated documentation bugs that this approach was not meeting the needs of a growing HubPress Blog base.
+
+Bloggers were finding it difficult to find answers to common questions scattered througout the files, and action needed to be taken to improve the User Experience.
+
+=== The Present
+
+The https://hubpress.gitbooks.io/hubpress-knowledgebase/content/[HubPress Knowledgebase] (KBase) is the new place to learn how to use HubPress.
+
+The KBase is hosted on https://GitBook.com, and uses the `theme-faq` template to provision the Knowledgebase.
+The source is still AsciiDoc files, but the structure has changed.
+
+Content in the KBase is designed to be searchable, and is presented as a mixture of a narrative flow (by the prescribed order of the articles on the home page) and stand-alone reference articles.
+Where it makes sense, articles contain links to related articles at the bottom of each post.
+The vision https://github.com/jaredmorgs[Jared] has for the KBase is that it becomes a scalable resource that not only meets our User's needs, but also meets the basic requirements of http://everypageispageone.com/[Every Page is Page One].
+
+=== The Future
+
+Great documentation is a collaborative effort, and we need your help.
+
+If you would like to contribute to the documentation (whatever the language), request to be added to the GitBook project by mentioning @jaredmorgs on https://hubbpressio.slack.com[HubPress Slack].
+
+Jared can introduce new writers to the way GitBook works.
+
+The plan is to host the GitBook documentation in GitHub itself, so that anyone can make casual, minor changes to the documentation through the regular GitHub Pull Request system.
+
+== Customising and Using Your Blog Site
+
+Once you have logged on as instructed in the HubPress Knowledgebase, you can customise your Blog site by completing the following tasks:
+
+* https://hubpress.gitbooks.io/hubpress-knowledgebase/content/tabs/about_social_tab.html[adding social network information],
+* https://hubpress.gitbooks.io/hubpress-knowledgebase/content/fields/about_themes.html[experiment with different themes],
+* https://hubpress.gitbooks.io/hubpress-knowledgebase/content/views/about_writing_view.html[write your first blog post].
 
 == HubPress Team
 
 Code by http://github.com/anthonny[Anthonny Quérouil] (Twitter - http://twitter.com/anthonny_q[@anthonny_q]).
 
-English Docs by http://github.com/jaredmorgs[Jared Morgan]  (Twitter - http://twitter.com/jaredmorgs[@jaredmorgs]).
+English documentation and content architecture by http://github.com/jaredmorgs[Jared Morgan]  (Twitter - http://twitter.com/jaredmorgs[@jaredmorgs]).
 
-Translations (Japanese) by:
+Translations by:
 
-* https://github.com/takkyuuplayer[takkyuuplayer], 
+* https://github.com/takkyuuplayer[takkyuuplayer],
 * https://github.com/hinaloe[hinaloe].
 
 == Donations
 
-HubPress is now on https://gratipay.com/hubpress/[Gratipay]! 
+HubPress is now on https://gratipay.com/hubpress/[Gratipay]!
 
 image::https://cloud.githubusercontent.com/assets/2006548/12901016/7b09da22-ceb9-11e5-93f7-16ab135b2e2e.png[]
 
-It's not the only way you can help us, but it is certainly a welcome one. 
+It's not the only way you can help us, but it is certainly a welcome one.
 Donations are a great way to show your appreciation for the platform: it inspires us to dedicate extra time away from our families and day jobs to make HubPress an awesome blogging platform for you.
 
 image::https://cloud.githubusercontent.com/assets/2006548/12901085/cc5ee908-ceb9-11e5-9d8b-c526f081f1e9.png[]
+
+== Thank You!
+
+Thank you to all HubPress contributors (great and small) that have made the platform better by:
+
+* asking a question,
+* fixing a bug,
+* sharing the project with their friends,
+* supporting the project financially.
+
+No matter how you do it, HubPress would not be the successful Open Source project it is without your support.
