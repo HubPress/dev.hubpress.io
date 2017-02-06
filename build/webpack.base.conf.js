@@ -24,6 +24,7 @@ module.exports = {
     fallback: [path.join(__dirname, '../node_modules')],
     alias: {
       'vue$': 'vue/dist/vue.common.js',
+      'handlebars': 'handlebars/dist/handlebars.js',
       'src': path.resolve(__dirname, '../src'),
       'assets': path.resolve(__dirname, '../src/assets'),
       'components': path.resolve(__dirname, '../src/components')
@@ -82,6 +83,10 @@ module.exports = {
   },
   eslint: {
     formatter: require('eslint-friendly-formatter')
+  },
+  node: {
+    fs: "empty",
+    child_process: "empty"
   },
   vue: {
     loaders: utils.cssLoaders({ sourceMap: useCssSourceMap }),
