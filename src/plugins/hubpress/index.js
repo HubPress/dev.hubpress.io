@@ -87,6 +87,7 @@ export default function hubpressPlugin (context) {
         label: 'Posts',
         name: 'posts',
         path: 'posts',
+        item: 'Content',
         component: Posts
       },
       {

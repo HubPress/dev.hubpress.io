@@ -76,6 +76,7 @@ function _searchAndDeleteAuthorization(repositoryName, authorizations, authoriza
   const TOKEN_NOTE = getTokenNote(repositoryName)
   authorizations.forEach(function(token) {
     let note = token.note
+    console.log('TOOOOOOKEN', note, TOKEN_NOTE, note === TOKEN_NOTE)
     if (note === TOKEN_NOTE) {
       id = token.id
     }

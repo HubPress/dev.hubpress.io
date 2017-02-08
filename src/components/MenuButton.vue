@@ -1,7 +1,6 @@
 <template>
-  <div id="menu-button" class="ui black big launch right attached fixed button"  v-on:click="toggleNavigation">
-    <i class="content icon"></i>
-    <span class="text">Menu</span>
+  <div id="menu-button" class="ui black launch right attached fixed button"  v-on:click="toggleNavigation">
+    <i class="content large icon"></i>
   </div>
 </template>
 
@@ -33,8 +32,9 @@ export default {
     position: fixed;
     top: 0em;
     left: 0px;
-    width: 55px;
-    height: auto;
+    padding-right: 0.75em;
+    /*width: 55px;*/
+    height: 47px;
     white-space: nowrap;
     overflow: hidden;
     -webkit-transition: 0.3s width ease, 0.5s transform ease;
@@ -44,7 +44,7 @@ export default {
     transition: 0.3s width ease, 0.5s transform ease;
 }
 .fixed.launch.button:hover {
-  width: 130px;
+  /*width: 130px;*/
 }
 
 .fixed.launch.button .text {

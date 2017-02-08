@@ -13,6 +13,7 @@ function fire (event, opts = {rootState: {}, currentState: {}, payload: {}}) {
   if (!listeners[event].length) {
     console.info(`No plugin have a callback for the event ${event}`)
     listeners[event].push(opts => {
+      console.log('Default event function', opts)
       return opts
     })
   }

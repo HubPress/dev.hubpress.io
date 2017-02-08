@@ -1,12 +1,45 @@
 <template>
-  <div class="post-editor">
-    <codemirror :code="post.content" :options="editorOption" @changed="codeChange"></codemirror>
+  <div class="post-container">
+    <div class="ui fixed inverted menu">
+        <div class="right menu">
+          <a href="#" class="item">
+            <div class="ui icon" data-tooltip="Need some help?" data-position="bottom right">
+              <i class="help large icon"></i>
+            </div>
+          </a>
+          <a href="#" class="item">
+            <div class="ui icon" data-tooltip="Light mode" data-position="bottom right">
+              <i class="sun large icon"></i>
+            </div>
+          </a>
+          <a href="#" class="item">
+            <div class="ui icon" data-tooltip="Show preview" data-position="bottom right">
+              <i class="unhide large icon"></i>
+            </div>
+          </a>
+          <a href="#" class="item">
+            <div class="ui icon" data-tooltip="Save your post" data-position="bottom right">
+              <i class="save large icon"></i>
+            </div>
+          </a>
+          <a href="#" class="item">
+            <div class="ui icon" data-tooltip="Publish your post" data-position="bottom right">
+              <i class="rocket large icon"></i>
+            </div>
+          </a>
+        </div>
+    </div>
+
+    <div class="post-editor">
+      <codemirror class="container" :code="post.content" :options="editorOption" @changed="codeChange"></codemirror>
+    </div>
   </div>
 </template>
 
 <script>
 
 import asciidocMode from './codemirror/mode/asciidoc'
+import markdownMode from 'codemirror/mode/markdown/markdown'
 import overlay from './codemirror/mode/overlay'
 
 import { POST_GET, POST_CHANGE_CONTENT } from '../constants'
@@ -66,23 +99,44 @@ export default {
 </script>
 
 <style>
-.CodeMirror-scroll {
-  padding: 30px 100px 30px 100px;
-  box-sizing: border-box;
+/*.CodeMirror-scroll {padding: 30px 100px 30px 100px; box-sizing: border-box;}*/
+
+.CodeMirror-sizer {
+    padding-top: 2em;
+    font-size: 1.14285714rem;
+    max-width: 750px !important;
+    line-height: 1.5;
+    display: block;
 }
 
-.CodeMirror-gutter-wrapper {
-  display: none;
+@media only screen and (max-width: 767px) {
+  .CodeMirror-sizer {
+      width: auto !important;
+      margin-left: 1em !important;
+      margin-right: 1em !important;
+  }
 }
 
-.cm-header-1 { font-size: 2em; }
-.cm-header-2 { font-size: 1.75em; }
-.cm-header-3 { font-size: 1.5em; }
-.cm-header-4 { font-size: 1.3em; }
-.cm-header-5 { font-size: 1.2em; }
-.cm-header-6 { font-size: 1.15em; }
+@media only screen and (min-width: 768px) {
+  .CodeMirror-sizer {
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
 
-.post-editor, .CodeMirror {
+.CodeMirror-gutter-wrapper { display: none !important; }
+
+.cm-header { font-size: 1.8em; font-weight: bold;}
+.cm-header-2 { font-size: 1.6em; font-weight: bold;}
+.cm-header-3 { font-size: 1.45em; font-weight: bold;}
+.cm-header-4 { font-size: 1.3em; font-weight: bold;}
+.cm-header-5 { font-size: 1.15em; font-weight: bold;}
+.cm-header-6 { font-size: 1.05em; font-weight: bold;}
+
+.post-editor {
+  padding-top: 40px;
+}
+.post-editor, .CodeMirror, .post-container {
   height: 100%;
   min-height: 100%;
 }

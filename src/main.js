@@ -8,6 +8,7 @@ import stores from './stores'
 import {APPLICATION_INITIALIZE_ROUTES, APPLICATION_INITIALIZE_CONFIG, APPLICATION_INITIALIZE_APP, APPLICATION_INITIALIZE_PLUGINS} from './stores/constants'
 import plugins from './plugins'
 import dashboardPlugin from './plugins/dashboard'
+import settingsPlugin from './plugins/settings'
 import hubpressPlugin from './plugins/hubpress'
 import githubPlugin from './plugins/github'
 import authenticationPlugin, {LoginComponent} from './plugins/authentication'
@@ -23,6 +24,7 @@ plugins.register(
   authenticationPlugin,
   dashboardPlugin,
   hubpressPlugin,
+  settingsPlugin,
   githubPlugin,
   templatePlugin,
   sessionStoragePlugin,
