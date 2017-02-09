@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import _ from 'lodash'
-import applicationStore, {services} from './application'
+// import applicationStore from './application'
+import { initializeStores } from './services'
 
 Vue.use(Vuex)
 
@@ -17,9 +18,9 @@ export default {
       rootState: _.cloneDeep(state),
       currentState: _.cloneDeep(state)
     }
-    return services.initializeStores(opts)
+    return initializeStores(opts)
       .then(opts => {
-        opts.nextState.stores.application = applicationStore
+        // opts.nextState.stores.application = applicationStore
         _.merge(state, opts.nextState)
         const rootStore = {
           state,

@@ -7,8 +7,14 @@
       <a href="/"><b>HubPress</b></a>
     </div>
 
+    <router-link v-on:click.native="toggleMenu" active-class="active" class="item" :to="'/dashboard'" replace>
+      Dashboard
+    </router-link>
     <router-link v-on:click.native="toggleMenu" active-class="active" v-for="navigation in navigations" class="item" :to="'/'+navigation.path" replace>
       {{navigation.label}}
+    </router-link>
+    <router-link v-on:click.native="toggleMenu" active-class="active" class="item" :to="'/settings'" replace>
+      Settings
     </router-link>
 
     <div class="item">

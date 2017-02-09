@@ -529,7 +529,7 @@ function manageCname (config) {
 }
 
 
-export default function githubPlugin (hubpress) {
+export function githubPlugin (hubpress) {
 
   hubpress.on('application:request-config', (opts) => {
     console.info('Github Plugin - application:request-config')

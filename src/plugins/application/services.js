@@ -1,9 +1,5 @@
 import plugins from '../../plugins'
 
-function initializeStores (rooState, state) {
-  return plugins.fire('application:stores', rooState, state)
-}
-
 function initializeRoutes (opts) {
   return plugins.fire('application:routes', opts)
 }
@@ -32,7 +28,6 @@ function initializePlugins (rootState, state) {
 }
 
 export default {
-  initializeStores,
   initializeRoutes,
   initializeApp,
   initializePlugins,

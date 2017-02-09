@@ -7,6 +7,8 @@ import {
 import logic from './logic'
 import Posts from './components/Posts'
 import Post from './components/Post'
+import Settings from './components/Settings'
+import SettingsSocial from './components/SettingsSocial'
 import Vue from 'vue'
 import VueCodeMirror from 'vue-codemirror'
 
@@ -17,7 +19,7 @@ const APPLICATION_INITIALIZE_PLUGINS = 'application:initialize_plugins'
 const HUBPRESS_INITIALIZE = 'hubpress:initialize'
 const AUTHORISATION_AUTHENTICATION_DONE = 'authorisation:authentication_done'
 
-export default function hubpressPlugin (context) {
+export function hubpressPlugin(context) {
   context.on('application:stores', opts => {
     console.info('hubpressPlugin - application:stores')
     console.log('hubpressPlugin - application:stores', opts)
@@ -30,23 +32,28 @@ export default function hubpressPlugin (context) {
       },
       mutations: {
         // Only for this mutation, the nextState is based on the rootState
-        [APPLICATION_INITIALIZE_PLUGINS] (state, nextRootState) {
-          console.log('hubpress-'+APPLICATION_INITIALIZE_PLUGINS, nextRootState)
+        [APPLICATION_INITIALIZE_PLUGINS](state, nextRootState) {
+          console.log('hubpress-' + APPLICATION_INITIALIZE_PLUGINS, nextRootState)
           _.merge(state, nextRootState.hubpress)
         },
-        [HUBPRESS_INITIALIZE] (state, nextState) {
-          console.log('hubpress-'+HUBPRESS_INITIALIZE, nextState)
+        [HUBPRESS_INITIALIZE](state, nextState) {
+          console.log('hubpress-' + HUBPRESS_INITIALIZE, nextState)
           _.merge(state, nextState)
         },
-        [POST_GET] (state, nextState) {
+        [POST_GET](state, nextState) {
           state.post = nextState.post
         },
-        [POST_CHANGE_CONTENT] (state, content) {
+        [POST_CHANGE_CONTENT](state, content) {
           state.post.content = content
         }
       },
       actions: {
-        [AUTHORISATION_AUTHENTICATION_DONE] ({ dispatch, commit, rootState, state }) {
+        [AUTHORISATION_AUTHENTICATION_DONE]({
+          dispatch,
+          commit,
+          rootState,
+          state
+        }) {
           const opts = {
             rootState,
             nextState: state
@@ -55,7 +62,12 @@ export default function hubpressPlugin (context) {
             .then(_ => commit(HUBPRESS_INITIALIZE, opts.nextState))
             .then(_ => console.info('HubPress synchronized'))
         },
-        [POST_GET] ({ dispatch, commit, rootState, state }, postId) {
+        [POST_GET]({
+          dispatch,
+          commit,
+          rootState,
+          state
+        }, postId) {
           console.log(POST_GET, postId)
           const opts = {
             rootState: _.cloneDeep(rootState),
@@ -67,7 +79,12 @@ export default function hubpressPlugin (context) {
           return logic.getLocalPost(opts)
             .then(opts => commit(POST_GET, opts.nextState))
         },
-        [POST_CHANGE_CONTENT] ({ dispatch, commit, rootState, state }, content) {
+        [POST_CHANGE_CONTENT]({
+          dispatch,
+          commit,
+          rootState,
+          state
+        }, content) {
           commit(POST_CHANGE_CONTENT, content)
         }
       },
@@ -82,20 +99,17 @@ export default function hubpressPlugin (context) {
     console.info('hubpressPlugin - application:routes')
     console.log('hubpressPlugin - application:routes', opts)
 
-    opts.nextState.routes.push(
-      {
-        label: 'Posts',
-        name: 'posts',
-        path: 'posts',
-        item: 'Content',
-        component: Posts
-      },
-      {
-        name: 'post',
-        path: 'posts/:id',
-        component: Post
-      }
-    )
+    opts.nextState.routes.push({
+      label: 'Posts',
+      name: 'posts',
+      path: 'posts',
+      item: 'Content',
+      component: Posts
+    }, {
+      name: 'post',
+      path: 'posts/:id',
+      component: Post
+    })
     console.log('hubpressPlugin - application:routes - return', opts)
     return opts
   })
@@ -109,11 +123,24 @@ export default function hubpressPlugin (context) {
     // The event comes from application, so the nextState is a copy of the rootState,
     // To keep consistency, we create a localState in which the nextState is
     // the hubpress state
-    const localOpts = Object.assign({}, opts, {nextState: opts.nextState.hubpress})
+    const localOpts = Object.assign({}, opts, {
+      nextState: opts.nextState.hubpress
+    })
     return logic.initialize(localOpts)
       .then(updatedOpts => {
         // Then we set our localOpts.nextState to the hubpress state
         opts.nextState.hubpress = updatedOpts.nextState
+
+        // A tabs for settings
+        opts.nextState.application.settingsTabs.push({
+          id: 'hubpress',
+          label: 'HubPress',
+          component: Settings
+        }, {
+          id: 'hubpress-social',
+          label: 'Social networks',
+          component: SettingsSocial
+        })
         return opts
       })
   })

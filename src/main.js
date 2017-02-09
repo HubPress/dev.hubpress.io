@@ -6,12 +6,14 @@ import Vue from 'vue'
 import App from './App'
 import stores from './stores'
 import {APPLICATION_INITIALIZE_ROUTES, APPLICATION_INITIALIZE_CONFIG, APPLICATION_INITIALIZE_APP, APPLICATION_INITIALIZE_PLUGINS} from './stores/constants'
+
+// Plugins declaration
 import plugins from './plugins'
-import dashboardPlugin from './plugins/dashboard'
-import settingsPlugin from './plugins/settings'
-import hubpressPlugin from './plugins/hubpress'
-import githubPlugin from './plugins/github'
-import authenticationPlugin, {LoginComponent} from './plugins/authentication'
+import { applicationPlugin } from './plugins/application'
+import { dashboardPlugin } from './plugins/dashboard'
+import { hubpressPlugin } from './plugins/hubpress'
+import { githubPlugin } from './plugins/github'
+import { authenticationPlugin, LoginComponent } from './plugins/authentication'
 import { templatePlugin } from 'hubpress-plugin-template'
 import { sessionStoragePlugin } from 'hubpress-plugin-session-storage'
 import { asciidocPlugin } from 'hubpress-plugin-asciidoc'
@@ -21,10 +23,10 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 plugins.register(
+  applicationPlugin,
   authenticationPlugin,
   dashboardPlugin,
   hubpressPlugin,
-  settingsPlugin,
   githubPlugin,
   templatePlugin,
   sessionStoragePlugin,

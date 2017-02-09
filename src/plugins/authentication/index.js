@@ -7,7 +7,7 @@ import * as Constants from './constants'
 const CORE_LOGIN = 'core:login'
 const APPLICATION_INITIALIZE_APP = 'application:initialize_app'
 
-export default function authenticationPlugin (context) {
+export function authenticationPlugin (context) {
   context.on('application:stores', opts => {
     console.info('authenticationPlugin - application:stores')
     console.log('authenticationPlugin - application:stores', opts)
