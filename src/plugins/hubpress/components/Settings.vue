@@ -3,45 +3,45 @@
   <h4 class="ui dividing header">Informations</h4>
   <div class="field">
     <label>Title</label>
-    <input type="text" name="hubpress-title" placeholder="Title">
+    <input type="text" name="hubpress-title" placeholder="Title" v-bind:value="config.site.title">
   </div>
   <div class="field">
     <label>Description</label>
-    <input type="text" name="hubpress-description" placeholder="Description">
+    <input type="text" name="hubpress-description" placeholder="Description" v-bind:value="config.site.description">
   </div>
   <div class="field">
     <label>Logo</label>
-    <input type="text" name="hubpress-logo" placeholder="Logo">
+    <input type="text" name="hubpress-logo" placeholder="Logo" v-bind:value="config.site.logo">
   </div>
   <div class="field">
     <label>Cover image</label>
-    <input type="text" name="hubpress-cover-image" placeholder="Cover image">
+    <input type="text" name="hubpress-cover-image" placeholder="Cover image" v-bind:value="config.site.cover">
   </div>
 
   <h4 class="ui dividing header">Rendering</h4>
   <div class="field">
     <label>Live preview render delay (ms)</label>
-    <input type="text" name="hubpres-render-delay" placeholder="300">
+    <input type="text" name="hubpress-render-delay" placeholder="300" v-bind:value="config.meta.delay">
   </div>
 
   <h4 class="ui dividing header">Generation</h4>
   <div class="field">
     <label>Theme</label>
-    <input type="text" name="hubpres-theme" placeholder="Theme">
+    <input type="text" name="hubpress-theme" placeholder="Theme" v-bind:value="config.theme.name">
   </div>
   <div class="field">
     <label>Posts per page</label>
-    <input type="text" name="hubpres-posts-per-page" placeholder="Posts per page">
+    <input type="text" name="hubpress-posts-per-page" placeholder="Posts per page" v-bind:value="config.site.postsPerPage">
   </div>
 
   <h4 class="ui dividing header">Services</h4>
   <div class="field">
     <label>Google analytics</label>
-    <input type="text" name="hubpres-ga" placeholder="Google analytics">
+    <input type="text" name="hubpress-ga" placeholder="Google analytics" v-bind:value="config.site.googleAnalytics">
   </div>
   <div class="field">
     <label>Disqus shortname</label>
-    <input type="text" name="hubpres-disqus" placeholder="Disqus shortname">
+    <input type="text" name="hubpress-disqus" placeholder="Disqus shortname" v-bind:value="config.site.disqus">
   </div>
 
 </div>
@@ -49,7 +49,12 @@
 
 <script>
 export default {
-  name: 'hubpress-settings'
+  name: 'hubpress-settings',
+  computed: {
+    config: function () {
+      return this.$store.state.application.config || {meta: {}, site:{}, theme:{}}
+    }
+  }
 }
 </script>
 

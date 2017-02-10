@@ -5,7 +5,7 @@ import Login from './components/Login'
 import * as Constants from './constants'
 
 const CORE_LOGIN = 'core:login'
-const APPLICATION_INITIALIZE_APP = 'application:initialize_app'
+const APPLICATION_INITIALIZE_APP = 'application:initialize-app'
 
 export function authenticationPlugin (context) {
   context.on('application:stores', opts => {
@@ -86,15 +86,16 @@ export function authenticationPlugin (context) {
     return opts
   })
 
-  context.on('application:initialize_app', opts => {
-    console.info('authenticationPlugin - application:initialize_app')
-    console.log('authenticationPlugin - application:initialize_app', opts)
+  context.on('application:initialize-app', opts => {
+    console.info('authenticationPlugin - application:initialize-app')
+    console.log('authenticationPlugin - application:initialize-app', opts)
     return logic.initialize(opts)
       .then(_ => opts)
   })
 
 
     context.on('authentication:authenticate', opts => {
+      console.info('authenticationPlugin - authentication:authenticate')
       console.log('authenticationPlugin - authentication:authenticate', opts, logic)
       return logic.authenticate(opts)
     })

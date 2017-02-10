@@ -2,7 +2,24 @@
   "meta": {
     "username": "demo-hubpress",
     "repositoryName": "demo-hubpress.github.io",
-    "branch": "master"
+    "branch": "master",
+    "delay": "300"
+  },
+  "site": {
+    "title": "Anthonny Quérouil",
+    "description": "Passionate developer :)",
+    "logo": "https://avatars.githubusercontent.com/u/2006548?v=2",
+    "cover": "https://cloud.githubusercontent.com/assets/2006548/12876743/de1c3488-ce06-11e5-82aa-63de890f71be.jpg",
+    "postsPerPage": "10",
+    "googleAnalytics": "UA-48933434-1",
+    "disqus": "anthonnyquerouil"
+  },
+  "socialnetwork": {
+    "email": "anthonny.querouil@gmail.com",
+    "twitter": "https://twitter.com/anthonny_q",
+    "googleplus": "https://plus.google.com/u/0/+AnthonnyQuerouil",
+    "linkedin": "http://fr.linkedin.com/in/anthonnyquerouil/",
+    "github": "https://github.com/anthonny"
   },
   "theme": {
     "name": "Casper"

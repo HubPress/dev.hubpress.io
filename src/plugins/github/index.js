@@ -614,10 +614,10 @@ export function githubPlugin (hubpress) {
     console.log('requestSaveRemotePublishedElements', opts)
 
     const defer = Q.defer()
-    const meta = opts.state.application.config.meta
+    const meta = opts.rootState.application.config.meta
     const repository = githubInstance.getRepo(meta.username, meta.repositoryName)
 
-    repository.writeAll(meta.branch, opts.data.elementsToPublish, (err, commit) => {
+    repository.writeAll(meta.branch, opts.nextState.elementsToPublish, (err, commit) => {
       if (err) {
         defer.reject(err)
       }
@@ -682,12 +682,13 @@ export function githubPlugin (hubpress) {
     return defer.promise
   })
 
-  hubpress.on('requestSaveConfig', (opts) => {
-    console.info('Github Plugin - requestSaveConfig')
-    console.log('requestSaveConfig', opts)
+  hubpress.on('application:request-save-config', (opts) => {
+    console.info('Github Plugin - application:request-save-config')
+    console.log('Github Plugin - application:request-save-config', opts)
 
-    return writeConfig(opts.data.config)
-      .then(sha => manageCname(opts.data.config))
+    const application = opts.nextState.application
+    return writeConfig(application.config)
+      .then(sha => manageCname(application.config))
       .then(sha => {
         return opts
       })

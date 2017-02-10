@@ -15,46 +15,32 @@
       <div class="ui secondary pointing menu">
         <div class="item active" data-tab="application" id="application-tab">Application</div>
         <div class="item" v-for="tab in tabs" v-bind:data-tab="tab.id">{{ tab.label }}</div>
-        <div class="item" v-for="tab in tabs" v-bind:data-tab="tab.id">{{ tab.label }}</div>
-        <div class="item" v-for="tab in tabs" v-bind:data-tab="tab.id">{{ tab.label }}</div>
-        <div class="item" v-for="tab in tabs" v-bind:data-tab="tab.id">{{ tab.label }}</div>
-        <div class="item" v-for="tab in tabs" v-bind:data-tab="tab.id">{{ tab.label }}</div>
-        <div class="item" v-for="tab in tabs" v-bind:data-tab="tab.id">{{ tab.label }}</div>
       </div>
       <div class="ui bottom attached tab segment active" data-tab="application">
         <h4 class="ui dividing header">Domain</h4>
         <div class="field">
           <label>CNAME</label>
-          <input type="text" name="cname" placeholder="CNAME">
+          <input type="text" name="application-cname" placeholder="CNAME" v-bind:value="config.meta.cname">
         </div>
         <h4 class="ui dividing header">Metadatas (read-only)</h4>
         <div class="disabled field">
           <label>GitHub username</label>
-          <input type="text" disabled="" name="github-username" placeholder="Github username">
+          <input type="text" disabled="" name="application-github-username" placeholder="Github username" v-bind:value="config.meta.username">
         </div>
         <div class="disabled field">
           <label>GitHub repository name</label>
-          <input type="text" disabled="" name="github-repository-name" placeholder="GitHub repository name">
+          <input type="text" disabled="" name="application-github-repository-name" placeholder="GitHub repository name" v-bind:value="config.meta.repositoryName">
         </div>
         <div class="disabled field">
           <label>GitHub branch</label>
-          <input type="text" disabled="" name="github-branch" placeholder="GitHub branch">
+          <input type="text" disabled="" name="application-github-branch" placeholder="GitHub branch" v-bind:value="config.meta.branch">
         </div>
         <div class="disabled field">
           <label>Blog URL</label>
-          <input type="text" disabled="" name="blog-url" placeholder="Blog URL">
+          <input type="text" disabled="" name="application-blog-url" placeholder="Blog URL">
         </div>
       </div>
 
-      <div class="ui bottom attached tab segment " v-for="tab in tabs" v-bind:data-tab="tab.id">
-        <component v-bind:is="tab.id"></component>
-      </div>
-      <div class="ui bottom attached tab segment " v-for="tab in tabs" v-bind:data-tab="tab.id">
-        <component v-bind:is="tab.id"></component>
-      </div>
-      <div class="ui bottom attached tab segment " v-for="tab in tabs" v-bind:data-tab="tab.id">
-        <component v-bind:is="tab.id"></component>
-      </div>
       <div class="ui bottom attached tab segment " v-for="tab in tabs" v-bind:data-tab="tab.id">
         <component v-bind:is="tab.id"></component>
       </div>
@@ -67,6 +53,7 @@
 
 <script>
 import $ from 'jquery'
+import {constants} from '../index'
 
 export default {
   name: 'application-settings',
@@ -83,14 +70,16 @@ export default {
     submit: function () {
       console.log('submit')
       const formData = new FormData(document.getElementById('mainForm'))
-      console.log(formData)
-      formData.forEach((key, value) => console.log(value, key))
-      //document.getElementById('mainForm').submit()
+      console.log(formData, JSON.stringify(formData))
+      this.$store.dispatch(constants.APPLICATION_PREPARE_CONFIG, formData)
     }
   },
   computed: {
     tabs: function() {
       return this.$store.state.application.settingsTabs.sort(tab => tab.label)
+    },
+    config: function() {
+      return this.$store.state.application.config || {meta:{}}
     }
   }
 }
@@ -101,8 +90,12 @@ ui.top.attached.tabular.menu tab {
   height: 100%;
 }
 
-.settings-content {
+.settings-container {
   height: 100%;
+  overflow: auto;
+}
+
+.settings-content {
   margin-top: 60px;
 }
 .settings-content .menu .item:hover {

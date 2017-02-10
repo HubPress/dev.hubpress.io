@@ -24,13 +24,11 @@ export default {
     MenuButton,
     MainContainer
   },
-  mounted () {
-    // Initialize App context
-    console.error('I AM MOUNTED!!!')
-  },
   computed: {
     isAuthenticatedAndReady () {
-      return this.$store.state.application.isInitialized && this.$store.state.authentication.isAuthenticated
+      return this.$store.state.application.isInitialized
+        && this.$store.state.authentication.isAuthenticated
+        && this.$route.path !== "/login"
     },
     isInitializing () {
       return !this.$store.state.application.isInitialized

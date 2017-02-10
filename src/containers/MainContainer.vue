@@ -6,6 +6,7 @@
 
 <style scoped>
   .pusher {
-    height: 100%;
+    height: 0px;
+    min-height: 100%;
   }
 </style>
