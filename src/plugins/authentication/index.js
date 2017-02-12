@@ -57,8 +57,8 @@ export function authenticationPlugin (context) {
             currentState: _.cloneDeep(state)
           }
 
-          logic.authenticate(opts)
-          //dispatch(CORE_LOGIN, state)
+          dispatch('application:loading')
+            .then(_ => logic.authenticate(opts))
             .then(opts => {
               console.info('logggg')
               commit(Constants.AUTHORISATION_RECEIVE_LOGIN, opts.nextState)
@@ -67,11 +67,30 @@ export function authenticationPlugin (context) {
               if (state.isAuthenticated) {
                 return dispatch(Constants.AUTHORISATION_AUTHENTICATION_DONE)
               } else {
+                if (state.isTwoFactorCodeRequired) {
+                  return dispatch('application:notify', {
+                    icon: 'unlock',
+                    header: 'Two factor code',
+                    message: 'A code is required to complete your authentication.',
+                    level: 'warning'
+                  })
+                }
                 return _
               }
 
             })
+
+            .then(_ => dispatch('application:loaded'))
             .then(_ => router.push(router.currentRoute.query.redirect || '/'))
+            .catch(_ => {
+              dispatch('application:loaded')
+              .then(_ => dispatch('application:notify', {
+                icon: 'warning circle',
+                header: 'Authentication failed',
+                message: 'A error occured during the authentication.',
+                level: 'error'
+              }))
+            })
           // Call the HubPress
         }
       },

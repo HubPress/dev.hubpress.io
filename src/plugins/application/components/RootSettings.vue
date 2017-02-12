@@ -11,6 +11,13 @@
   </div>
 
   <div class="ui container settings-content">
+
+    <h2 class="ui center aligned icon header">
+      <i class="circular settings icon"></i>
+      Settings
+    </h2>
+
+    <div class="ui divider"></div>
     <form id="mainForm" class="ui form">
       <div class="ui secondary pointing menu">
         <div class="item active" data-tab="application" id="application-tab">Application</div>

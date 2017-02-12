@@ -40,7 +40,11 @@ function saveConfig(opts) {
           opts.nextState.application = _opts.nextState
           return opts
         })
-        .then(opts => plugins.fire('application:save-config-done', opts))
+        //.then(opts => plugins.fire('application:save-config-done', opts))
+}
+
+function saveConfigDone(opts) {
+  return plugins.fire('application:save-config-done', opts)
 }
 
 function initializeApp (rootState, state) {
@@ -57,5 +61,6 @@ export default {
   initializePlugins,
   initializeConfig,
   prepareConfig,
-  saveConfig
+  saveConfig,
+  saveConfigDone
 }

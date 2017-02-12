@@ -36,6 +36,7 @@ plugins.register(
 let router
 stores.initStores().then(_store => {
   console.log('Content of the store after initStores', _store)
+  window.vue_store = _store
   _store.dispatch(APPLICATION_INITIALIZE_ROUTES)
     .then(() => {
       console.log('Routes of the application', _store.state.application.routes)

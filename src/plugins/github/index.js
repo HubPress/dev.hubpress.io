@@ -6,10 +6,12 @@ import Q from 'q'
 import _ from 'lodash'
 import buildUrlsFromConfig from './urls'
 
+const TREE_CHUNK_SIZE = 50
+
 function getRepositoryInfos (repository) {
   let deferred = Q.defer()
 
-  repository.show(function (err, informations) {
+  repository.getDetails(function (err, informations) {
     if (err) {
       deferred.reject(err)
     }
@@ -24,11 +26,14 @@ function getRepositoryInfos (repository) {
 function getAuthorizations (authorization) {
   let deferred = Q.defer()
 
-  authorization.list(function(err, list) {
+  console.log('getAuthorizations', authorization)
+  const options = {}
+  authorization.listAuthorizations(options, function(err, list) {
     if (err) {
       deferred.reject(err)
     }
     else {
+      console.log('getAuthorizations list', list)
       deferred.resolve(list)
     }
   })
@@ -40,10 +45,9 @@ function getAuthorizations (authorization) {
 
 function getUserInformations(user) {
 
-  return function(username) {
+  return function() {
     let deferred = Q.defer()
-
-    user.show(username, function(err, informations) {
+    user.getProfile(function(err, informations) {
       if (err) {
         deferred.reject(err)
       }
@@ -83,7 +87,7 @@ function _searchAndDeleteAuthorization(repositoryName, authorizations, authoriza
   })
 
   if (id !== -1) {
-    authorization.delete(id, function(err, values) {
+    authorization.deleteAuthorization(id, function(err, values) {
       if (err) {
         deferred.reject(err)
       }
@@ -109,12 +113,14 @@ function _createAuthorization(repositoryName, authorization) {
     note: getTokenNote(repositoryName)
   }
 
-
-  authorization.create(definition, function(err, createdToken) {
+  console.log('_createAuthorization', authorization, definition)
+  authorization.createAuthorization(definition, function(err, createdToken) {
     if (err) {
+      console.log('authorization.create', err)
       deferred.reject(err)
     }
     else {
+      console.log('authorization.create token', createdToken)
       deferred.resolve(createdToken)
     }
   })
@@ -151,12 +157,14 @@ function login (opts) {
     .then(getUserInformations(user))
     .then(function(userInformations) {
       _userInformations = userInformations
+      console.log(_userInformations)
       return getAuthorizations(authorization)
     })
     .then(function(authorizations) {
       return _searchAndDeleteAuthorization(meta.repositoryName, authorizations, authorization)
     })
     .then(function() {
+      console.log('go to _createAuthorization')
       return _createAuthorization(meta.repositoryName, authorization)
     })
     .then(function(result) {
@@ -175,18 +183,19 @@ function login (opts) {
       })
     })
     .catch(function(error) {
-      console.error('Github Plugin - login error', error)
+      console.error('Github Plugin - login error', error, error.response)
       var message = {
         type: 'error',
         title: 'Authentication'
       }
       var otpRequired
 
-      if (error.request) {
-        var otp = error.request.getResponseHeader('X-GitHub-OTP') || ''
+      if (error.response) {
+        var otp = error.response.headers && error.response.headers['x-github-otp'] || ''
         otpRequired = otp.split(';')[0] === 'required'
       }
 
+      console.log('otpRequired', otpRequired)
       if (otpRequired) {
         // force sms with a post on auth
         _createAuthorization(meta.repositoryName, authorization)
@@ -220,14 +229,12 @@ function getGithubPostsSha(repository, config) {
 
   let deferred = Q.defer()
 
-  repository.read(config.meta.branch, '', (err, elements) => {
+  repository.getContents(config.meta.branch, '', true, (err, elements) => {
     if (err) {
       deferred.reject(err)
     }
     else {
       let postsSha
-      elements = JSON.parse(elements)
-
       elements.forEach((element) => {
         if (element.name === '_posts'){
           postsSha = element.sha
@@ -251,12 +258,12 @@ function getPostsGithub(repository, config, sha) {
   }
   else {
     let deferred = Q.defer()
-    repository.read(config.meta.branch, '_posts', (err, posts) => {
+    repository.getContents(config.meta.branch, '_posts', true, (err, posts) => {
       if (err) {
         deferred.reject(err)
       }
       else {
-        deferred.resolve(JSON.parse(posts))
+        deferred.resolve(posts)
       }
     })
 
@@ -272,7 +279,7 @@ function markIfPostPublished (config, post) {
   const repository = githubInstance.getRepo(meta.username, meta.repositoryName)
 
   repository.getSha(config.meta.branch, config.urls.getPostGhPath(post.name), (err, sha) => {
-    if (err && err.error !==404) {
+    if (err && err.response && err.response.status !==404) {
       defer.reject(err)
     }
     else {
@@ -302,7 +309,7 @@ function getPostAuthor (config, post, userInformations) {
   const repository = githubInstance.getRepo(meta.username, meta.repositoryName)
 
   console.log('getPostAuthor', post)
-  repository.getCommits({
+  repository.listCommits({
     sha: config.meta.branch,
     path: post.original && post.original.path || post.path
   }, (err, commits) => {
@@ -349,7 +356,7 @@ function readContent(repository, config, posts) {
     let deferred = Q.defer()
     promises.push(deferred.promise)
 
-    repository.read(config.meta.branch, post.path, (err, content) => {
+    repository.getContents(config.meta.branch, post.path, true, (err, content) => {
       if (err) {
         deferred.reject(err)
       }
@@ -394,7 +401,7 @@ function getPosts (state) {
 
 function deleteElement (repository, branch, elementPath) {
   const defer = Q.defer()
-  repository.delete(branch, elementPath, (err, sha) => {
+  repository.deleteFile(branch, elementPath, (err, sha) => {
     if (err) {
       defer.reject(err)
     }
@@ -466,7 +473,7 @@ function writePost(config, post) {
   const postPath = `_posts/${post.name}`
   const commitMessage = `Update ${post.name}`
 	const defer = Q.defer()
-	repository.write(branch, postPath, post.content, commitMessage, (err, sha) => {
+	repository.writeFile(branch, postPath, post.content, commitMessage, (err, sha) => {
 		if (err) {
 			defer.reject(err)
 		}
@@ -490,7 +497,7 @@ function writeConfig (config) {
   const repository = githubInstance.getRepo(meta.username, meta.repositoryName)
   const branch = meta.branch
 
-  repository.write(branch, 'hubpress/config.json', JSON.stringify(config, null, 2), 'Update configuration file', (err, sha) => {
+  repository.writeFile(branch, 'hubpress/config.json', JSON.stringify(config, null, 2), 'Update configuration file', (err, sha) => {
     if (err) {
       defer.reject(err)
     }
@@ -519,10 +526,24 @@ function manageCname (config) {
 
   if (!meta.cname || meta.cname === '') {
     console.info('SettingsService - saveAndPublish delete CNAME')
-    repository.delete(meta.branch, 'CNAME', cb)
+    repository.deleteFile(meta.branch, 'CNAME', cb)
+      .then(sha => {
+        console.log('SHA after delete', sha)
+        defer.resolve(sha)
+      })
+      .catch(err => {
+        if (err.response.status !== 404) {
+          defer.reject(err)
+        } else {
+          defer.resolve()
+        }
+      })
+
   } else {
     console.info('SettingsService - saveAndPublish save CNAME')
-    repository.write(meta.branch, 'CNAME', meta.cname, `Update CNAME with ${meta.cname}`, cb)
+    repository.writeFile(meta.branch, 'CNAME', meta.cname, `Update CNAME with ${meta.cname}`)
+      .then(defer.resolve)
+      .catch(defer.reject)
   }
 
   return defer.promise
@@ -593,19 +614,19 @@ export function githubPlugin (hubpress) {
   hubpress.on('requestSaveRemotePost', (opts) => {
     console.info('Github Plugin - requestSaveRemotePost')
     console.log('requestSaveRemotePost', opts)
-    const config = opts.state.application.config
-    const post = opts.data.post
+    const config = opts.rootState.application.config
+    const post = opts.nextState.post
     // Move if necessary
     return movePostIfNecessary(config, post)
     .then(result => {
       return writePost(config, result.post)
     })
     .then(_post =>{
-      return getPostAuthor(config, _post, opts.state.authentication.userInformations)
+      return getPostAuthor(config, _post, opts.rootState.authentication.userInformations)
     })
     .then(updatedPost => {
-      const data = Object.assign({}, opts.data, {post: updatedPost})
-      return Object.assign({}, opts, {data})
+      opts.nextState.post = updatedPost
+      return opts
     })
   })
 
@@ -613,46 +634,99 @@ export function githubPlugin (hubpress) {
     console.info('Github Plugin - requestSaveRemotePublishedElements')
     console.log('requestSaveRemotePublishedElements', opts)
 
-    const defer = Q.defer()
+    // const defer = Q.defer()
     const meta = opts.rootState.application.config.meta
     const repository = githubInstance.getRepo(meta.username, meta.repositoryName)
 
-    repository.writeAll(meta.branch, opts.nextState.elementsToPublish, (err, commit) => {
-      if (err) {
-        defer.reject(err)
-      }
-      else {
-        repository.write(meta.branch, '.last-sha', commit, 'Update last sha', (err, sha) => {
-          if (err) {
-            console.log('.last-sha', err)
-            defer.reject(err)
-          }
-          else {
-            console.log('.last-sha done')
-            defer.resolve(opts)
-          }
-        })
-      }
-    })
 
-    return defer.promise
+    const promises = []
+    const totalElementsToPublish = opts.nextState.elementsToPublish.length
+    const chunkOfElements = _.chunk(opts.nextState.elementsToPublish, TREE_CHUNK_SIZE)
+
+    console.log('Writeall', opts.nextState.elementsToPublish)
+
+    let rootPromise = Q.defer();
+
+    repository.getBranch(meta.branch, (err, branch) => {
+      if (err) {
+        const deferred = Q.defer()
+        rootPromise = deferred.promise
+        return deferred.reject(err)
+      }
+        let publishedCount = 0
+        const chainPromise = chunkOfElements.reduce((promise, elements) => {
+
+          const callback = (branchLatestCommit) => {
+            console.log('callback', branchLatestCommit)
+            const deferred = Q.defer()
+            const tree = elements.map(element => {
+              return {
+                path: element.path,
+                mode: '100644',
+                type: 'blob',
+                content: element.content
+              }
+            })
+            repository.createTree(tree, branchLatestCommit, (err, branch) => {
+              console.log(err, branch)
+              if (err) {
+                return deferred.reject(err)
+              }
+
+              repository.commit(branchLatestCommit, branch.sha, `Published ${publishedCount + elements.length}/${totalElementsToPublish} elements`, (err, commit) => {
+                console.log('commit', err, commit)
+                if (err) {
+                  return deferred.reject(err)
+                }
+                publishedCount = publishedCount + elements.length
+                repository.updateHead(`heads/${meta.branch}`, commit.sha, false, (err, res) => {
+                  console.log('updateHead',err, res)
+                  if (err) {
+                    return deferred.reject(err)
+                  }
+                  console.log(commit.sha)
+                  deferred.resolve(commit.sha)
+                })
+              })
+            })
+
+            return deferred.promise
+          }
+
+          return promise.then(callback)
+
+        }, Q(branch.commit.sha))
+
+        chainPromise.then(sha => {
+          rootPromise.resolve(opts)
+        })
+        .catch(err => {
+          rootPromise.reject(err)
+        })
+    })
+    return rootPromise.promise
   })
 
   hubpress.on('requestDeleteRemotePost', (opts) => {
     console.info('Github Plugin - requestDeleteRemotePost')
     console.log('requestDeleteRemotePost', opts)
     const defer = Q.defer()
-    const config = opts.state.application.config
+    const config = opts.rootState.application.config
     const meta = config.meta
     const repository = githubInstance.getRepo(meta.username, meta.repositoryName)
-    const elementPath = opts.data.post.original.path
+    const elementPath = opts.nextState.post.original.path
 
 
-    repository.delete(meta.branch, elementPath, (err, sha)=>{
-      if (err) {
+    repository.deleteFile(meta.branch, elementPath, (err, sha)=>{
+      if (err && err.response && err.response.status !==404) {
         defer.reject(err)
       }
       else {
+        defer.resolve(opts)
+      }
+    })
+    .catch(err => {
+      if (err && err.response && err.response.status === 404) {
         defer.resolve(opts)
       }
     })
@@ -664,13 +738,13 @@ export function githubPlugin (hubpress) {
     console.info('Github Plugin - requestDeleteRemotePublishedPost')
     console.log('requestDeleteRemotePublishedPost', opts)
     const defer = Q.defer()
-    const config = opts.state.application.config
+    const config = opts.rootState.application.config
     const meta = config.meta
     const repository = githubInstance.getRepo(meta.username, meta.repositoryName)
-    const elementPath = config.urls.getPostGhPath(opts.data.post.original.name)
+    const elementPath = config.urls.getPostGhPath(opts.nextState.post.original.name)
 
 
-    repository.delete(meta.branch, elementPath, (err, sha)=>{
+    repository.deleteFile(meta.branch, elementPath, (err, sha)=>{
       if (err) {
         defer.reject(err)
       }
@@ -693,5 +767,12 @@ export function githubPlugin (hubpress) {
         return opts
       })
 
+  })
+
+  hubpress.on('receiveRenderingPost', opts => {
+
+      console.info('Github Plugin - receiveRenderingPost')
+      console.log('Github Plugin - receiveRenderingPost', opts)
+    return opts
   })
 }

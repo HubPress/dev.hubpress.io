@@ -3,25 +3,23 @@
     "username": "demo-hubpress",
     "repositoryName": "demo-hubpress.github.io",
     "branch": "master",
-    "delay": "300"
+    "delay": "200"
   },
   "site": {
-    "title": "Anthonny Quérouil",
-    "description": "Passionate developer :)",
-    "logo": "https://avatars.githubusercontent.com/u/2006548?v=2",
-    "cover": "https://cloud.githubusercontent.com/assets/2006548/12876743/de1c3488-ce06-11e5-82aa-63de890f71be.jpg",
+    "title": "BlahCade Podcast",
+    "description": "Digital Pinball, Real Pinball, Movies, Snacks (but mostly Digital Pinball)",
+    "logo": "/images/logo.png",
+    "cover": "/images/cover.jpg",
     "postsPerPage": "10",
-    "googleAnalytics": "UA-48933434-1",
-    "disqus": "anthonnyquerouil"
+    "disqus": "blahcadepodcast"
   },
   "socialnetwork": {
-    "email": "anthonny.querouil@gmail.com",
-    "twitter": "https://twitter.com/anthonny_q",
-    "googleplus": "https://plus.google.com/u/0/+AnthonnyQuerouil",
-    "linkedin": "http://fr.linkedin.com/in/anthonnyquerouil/",
-    "github": "https://github.com/anthonny"
+    "email": "blahblahblahcade@gmail.com",
+    "twitter": "https://twitter.com/blahcade",
+    "googleplus": "https://plus.google.com/111201633898451444599/",
+    "github": "https://github.com/blahcadepodcast/"
   },
   "theme": {
-    "name": "Casper"
+    "name": "uno"
   }
 }

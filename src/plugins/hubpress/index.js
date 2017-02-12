@@ -1,8 +1,14 @@
 import _ from 'lodash'
 import {
   CORE_LOGIN,
+  POST_DELETE,
   POST_GET,
-  POST_CHANGE_CONTENT
+  POST_REMOTE_SAVE,
+  POST_PUBLISH,
+  POST_UNPUBLISH,
+  POST_CHANGE_CONTENT,
+  POSTS_GET,
+  POSTS_SYNCHRONIZE
 } from './constants'
 import logic from './logic'
 import Posts from './components/Posts'
@@ -40,11 +46,45 @@ export function hubpressPlugin(context) {
           console.log('hubpress-' + HUBPRESS_INITIALIZE, nextState)
           _.merge(state, nextState)
         },
+        [POSTS_GET](state, nextState) {
+          console.log(POSTS_GET, nextState)
+          state.posts = nextState.posts
+        },
         [POST_GET](state, nextState) {
+          if (!nextState.post.content) {
+            nextState.post.content = `// = Your Blog title
+// See https://hubpress.gitbooks.io/hubpress-knowledgebase/content/ for information about the parameters.
+// :hp-image: /covers/cover.png
+// :published_at: 2019-01-31
+// :hp-tags: HubPress, Blog, Open_Source,
+// :hp-alt-title: My English Title
+`
+          }
           state.post = nextState.post
         },
-        [POST_CHANGE_CONTENT](state, content) {
-          state.post.content = content
+        [POST_REMOTE_SAVE](state, nextState) {
+          console.log(POST_REMOTE_SAVE, nextState)
+          _.merge(state, nextState)
+        },
+        [POST_PUBLISH](state, nextState) {
+          console.log(POST_PUBLISH, nextState)
+          _.merge(state, nextState)
+        },
+        [POST_UNPUBLISH](state, nextState) {
+          console.log(POST_UNPUBLISH, nextState)
+          _.merge(state, nextState)
+        },
+        [POSTS_SYNCHRONIZE](state, nextState) {
+          console.log(POSTS_SYNCHRONIZE, nextState)
+          _.merge(state, nextState)
+        },
+        [POST_CHANGE_CONTENT](state, nextState) {
+          console.log('Content Changed', nextState)
+          state.post = nextState.post
+        },
+        [POST_DELETE](state, nextState) {
+          console.log('Post deleted', nextState)
+          _.merge(state, nextState)
         }
       },
       actions: {
@@ -55,12 +95,33 @@ export function hubpressPlugin(context) {
           state
         }) {
           const opts = {
-            rootState,
-            nextState: state
+            rootState: _.cloneDeep(rootState),
+            currentState: _.cloneDeep(state)
           }
           return logic.initialize(opts)
-            .then(_ => commit(HUBPRESS_INITIALIZE, opts.nextState))
-            .then(_ => console.info('HubPress synchronized'))
+            .then(opts => commit(HUBPRESS_INITIALIZE, opts.nextState))
+            .then(_ => console.info('HubPress initialized and synchronized'))
+        },
+        [POSTS_SYNCHRONIZE]({
+          dispatch,
+          commit,
+          rootState,
+          state
+        }) {
+          const opts = {
+            rootState: _.cloneDeep(rootState),
+            currentState: _.cloneDeep(state)
+          }
+          return dispatch('application:loading')
+            .then(_ => logic.synchronize(opts))
+            .then(opts => commit(POSTS_SYNCHRONIZE, opts.nextState))
+            .then(_ => dispatch('application:loaded'))
+            .then(_ => dispatch('application:notify', {
+              icon: 'refresh',
+              header: 'Synchronization',
+              message: 'Your content has been synchronized with success.',
+              level: 'success'
+            }))
         },
         [POST_GET]({
           dispatch,
@@ -79,13 +140,137 @@ export function hubpressPlugin(context) {
           return logic.getLocalPost(opts)
             .then(opts => commit(POST_GET, opts.nextState))
         },
+        [POST_DELETE]({
+          dispatch,
+          commit,
+          rootState,
+          state
+        }, postId) {
+          console.log(POST_DELETE, postId)
+          const opts = {
+            rootState: _.cloneDeep(rootState),
+            currentState: _.cloneDeep(state),
+            nextState: _.cloneDeep(state)
+          }
+          opts.nextState.post = {
+            _id: postId
+          }
+
+          return dispatch('application:loading')
+            .then(_ => logic.deletePost(opts))
+            .then(opts => commit(POST_DELETE, opts.nextState))
+            .then(_ => dispatch('application:loaded'))
+            .then(_ => dispatch('application:notify', {
+              icon: 'trash',
+              header: 'Post deleted',
+              message: 'Your post has been deleted with success.',
+              level: 'success'
+            }))
+        },
+        [POST_REMOTE_SAVE]({
+          dispatch,
+          commit,
+          rootState,
+          state
+        }, postId) {
+          console.log(POST_REMOTE_SAVE, postId)
+          const opts = {
+            rootState: _.cloneDeep(rootState),
+            currentState: _.cloneDeep(state)
+          }
+
+          return dispatch('application:loading')
+            .then(_ => logic.remoteSavePost(opts))
+            .then(opts => commit(POST_REMOTE_SAVE, opts.nextState))
+            .then(_ => dispatch('application:loaded'))
+            .then(_ => dispatch('application:notify', {
+              icon: 'save',
+              header: 'Post saved',
+              message: 'Your post has been saved remotely with success.',
+              level: 'success'
+            }))
+        },
+        [POST_PUBLISH]({
+          dispatch,
+          commit,
+          rootState,
+          state
+        }, postId) {
+          console.log(POST_PUBLISH, postId)
+          const opts = {
+            rootState: _.cloneDeep(rootState),
+            currentState: _.cloneDeep(state)
+          }
+
+          return dispatch('application:loading')
+            .then(_ => logic.publishPost(opts))
+            .then(updatedOpts => commit(POST_PUBLISH, updatedOpts.nextState))
+            .then(_ => dispatch('application:loaded'))
+            .then(_ => dispatch('application:notify', {
+              icon: 'rocket',
+              header: 'Post published',
+              message: 'Your post has been published with success.',
+              level: 'success'
+            }))
+        },
+        [POST_UNPUBLISH]({
+          dispatch,
+          commit,
+          rootState,
+          state
+        }, postId) {
+          const opts = {
+            rootState: _.cloneDeep(rootState),
+            currentState: _.cloneDeep(state)
+          }
+          return dispatch('application:loading')
+            .then(_ => logic.unpublishPost(opts))
+            .then(updatedOpts => commit(POST_UNPUBLISH, updatedOpts.nextState))
+            .then(_ => dispatch('application:loaded'))
+            .then(_ => dispatch('application:notify', {
+              icon: 'check circle',
+              header: 'Post unpublished',
+              message: 'Your post has been unpublished with success.',
+              level: 'success'
+            }))
+        },
+        [POSTS_GET]({
+          dispatch,
+          commit,
+          rootState,
+          state
+        }) {
+          console.log(POSTS_GET)
+          const opts = {
+            rootState: _.cloneDeep(rootState),
+            currentState: _.cloneDeep(state)
+          }
+
+          return dispatch('application:loading')
+            .then(_ => logic.getLocalPosts(opts))
+            .then(opts => commit(POSTS_GET, opts.nextState))
+            .then(_ => dispatch('application:loaded'))
+        },
         [POST_CHANGE_CONTENT]({
           dispatch,
           commit,
           rootState,
           state
-        }, content) {
-          commit(POST_CHANGE_CONTENT, content)
+        }, postInfos) {
+
+          // postinfo = {
+          //  _id,
+          //  content
+          //}
+          const opts = {
+            rootState: _.cloneDeep(rootState),
+            currentState: _.cloneDeep(state),
+            payload: {post: postInfos}
+          }
+          return logic.renderAndSavePost(opts)
+            .then(updatedOpts => {
+              commit(POST_CHANGE_CONTENT, updatedOpts.nextState)
+            })
         }
       },
       getters: {}
@@ -117,13 +302,6 @@ export function hubpressPlugin(context) {
   context.on('application:initialize-plugins', opts => {
     console.info('hubpressPlugin - application:initialize-plugins')
     console.log('hubpressPlugin - application:initialize-plugins', opts)
-
-    if (!opts.rootState.authentication.isAuthenticated)
-      return opts
-    // The event comes from application, so the nextState is a copy of the rootState,
-    // To keep consistency, we create a localState in which the nextState is
-    // the hubpress state
-
     // A tabs for settings
     opts.nextState.application.settingsTabs.push({
       id: 'hubpress',
@@ -134,6 +312,12 @@ export function hubpressPlugin(context) {
       label: 'Social networks',
       component: SettingsSocial
     })
+
+    if (!opts.rootState.authentication.isAuthenticated)
+      return opts
+    // The event comes from application, so the nextState is a copy of the rootState,
+    // To keep consistency, we create a localState in which the nextState is
+    // the hubpress state
 
     const localOpts = Object.assign({}, opts, {
       nextState: opts.nextState.hubpress
