@@ -1,3 +1,2 @@
-src/themes
-src/hubpress/scripts/helpers
-src/hubpress/scripts/utils
+build/*.js
+config/*.js

@@ -1,6 +1,7 @@
+.DS_Store
 node_modules/
 dist/
-.sass-cache/
-docs/jsdoc/
-bower_components/
-config-*.json
+npm-debug.log
+test/unit/coverage
+test/e2e/reports
+selenium-debug.log
