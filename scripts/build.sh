@@ -48,6 +48,13 @@ git config user.email "email@local"
 echo "# Checkout master"
 git checkout master
 
+# rm old unecessary files
+rm -Rf hubpress/scripts/vendors 2> /dev/null
+rm -Rf hubpress/scripts/app.js 2> /dev/null
+rm -Rf hubpress/scripts/app.js.map 2> /dev/null
+rm -Rf hubpress/styles 2> /dev/null
+rm -Rf hubpress/static 2> /dev/null
+
 # Copy files
 cp -R ../dist/* .
 cp ../dist/.* .
@@ -59,12 +66,6 @@ echo "# Content of the file hubpress/config.json"
 cat hubpress/config.json
 rm hubpress/config.default.json
 
-# rm old unecessary files
-rm -Rf hubpress/scripts/vendors 2> /dev/null
-rm -Rf hubpress/scripts/app.js 2> /dev/null
-rm -Rf hubpress/scripts/app.js.map 2> /dev/null
-rm -Rf hubpress/styles 2> /dev/null
-
 # Show informations about the git status
 echo "# git remote -v"
 git remote -v
@@ -74,6 +75,7 @@ git status
 # Commit and push
 echo "# Commit and push"
 git add -u .
+git add .
 git commit -m "Travis - Build from ${TRAVIS_BRANCH} with the commit ${TRAVIS_COMMIT}"
 git push $GH_PUSH_URL master > /dev/null 2>&1
 
@@ -84,6 +86,13 @@ git push $GH_PUSH_URL master > /dev/null 2>&1
 echo "# Checkout gh-pages"
 git checkout gh-pages
 git clean -f
+
+# rm old unecessary files
+rm -Rf hubpress/scripts/vendors 2> /dev/null
+rm -Rf hubpress/scripts/app.js 2> /dev/null
+rm -Rf hubpress/scripts/app.js.map 2> /dev/null
+rm -Rf hubpress/styles 2> /dev/null
+rm -Rf hubpress/static 2> /dev/null
 
 # Copy files
 cp -R ../dist/* .
@@ -96,11 +105,6 @@ echo "# Content of the file hubpress/config.json"
 cat hubpress/config.json
 rm hubpress/config.default.json
 
-# rm old unecessary files
-rm -Rf hubpress/scripts/vendors 2> /dev/null
-rm -Rf hubpress/scripts/app.js 2> /dev/null
-rm -Rf hubpress/scripts/app.js.map 2> /dev/null
-rm -Rf hubpress/styles 2> /dev/null
 
 # Show informations about the git status
 echo "# git status"
@@ -109,5 +113,6 @@ git status
 # Commit and push
 echo "# Commit and push"
 git add -u .
+git add .
 git commit -m "Travis - Build from ${TRAVIS_BRANCH} with the commit ${TRAVIS_COMMIT}"
 git push $GH_PUSH_URL gh-pages > /dev/null 2>&1
