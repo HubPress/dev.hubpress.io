@@ -21,7 +21,7 @@
     "hubpress-plugin-rss": "github:hubpress/hubpress-plugin-rss#aef9446",
     "hubpress-plugin-session-storage": "github:hubpress/hubpress-plugin-session-storage#c074923",
     "hubpress-plugin-template": "github:hubpress/hubpress-plugin-template#4a01e8f",
-    "hubpress-plugin-github": "github:hubpress/hubpress-plugin-github#c837f6f",
+    "hubpress-plugin-github": "github:hubpress/hubpress-plugin-github#e4c2bb9",
     "lodash": "^4.17.2",
     "semantic-ui-css": "^2.2.4",
     "vue": "^2.1.0",
