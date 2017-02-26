@@ -18,7 +18,7 @@
     "hubpress-plugin-asciidoc": "github:hubpress/hubpress-plugin-asciidoc#9e6effa",
     "hubpress-plugin-blog": "github:hubpress/hubpress-plugin-blog#1c6010b",
     "hubpress-plugin-pouchdb": "github:hubpress/hubpress-plugin-pouchdb#5de8a2b",
-    "hubpress-plugin-rss": "github:hubpress/hubpress-plugin-rss#aef9446",
+    "hubpress-plugin-rss": "github:hubpress/hubpress-plugin-rss#3329a07",
     "hubpress-plugin-session-storage": "github:hubpress/hubpress-plugin-session-storage#c074923",
     "hubpress-plugin-template": "github:hubpress/hubpress-plugin-template#d12ce73",
     "hubpress-plugin-github": "github:hubpress/hubpress-plugin-github#e4c2bb9",
