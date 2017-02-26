@@ -59,6 +59,12 @@ echo "# Content of the file hubpress/config.json"
 cat hubpress/config.json
 rm hubpress/config.default.json
 
+# rm old unecessary files
+rm -Rf hubpress/scripts/vendors 2> /dev/null
+rm -Rf hubpress/scripts/app.js 2> /dev/null
+rm -Rf hubpress/scripts/app.js.map 2> /dev/null
+rm -Rf hubpress/styles 2> /dev/null
+
 # Show informations about the git status
 echo "# git remote -v"
 git remote -v
@@ -67,7 +73,7 @@ git status
 
 # Commit and push
 echo "# Commit and push"
-git add .
+git add -u .
 git commit -m "Travis - Build from ${TRAVIS_BRANCH} with the commit ${TRAVIS_COMMIT}"
 git push $GH_PUSH_URL master > /dev/null 2>&1
 
@@ -90,12 +96,18 @@ echo "# Content of the file hubpress/config.json"
 cat hubpress/config.json
 rm hubpress/config.default.json
 
+# rm old unecessary files
+rm -Rf hubpress/scripts/vendors 2> /dev/null
+rm -Rf hubpress/scripts/app.js 2> /dev/null
+rm -Rf hubpress/scripts/app.js.map 2> /dev/null
+rm -Rf hubpress/styles 2> /dev/null
+
 # Show informations about the git status
 echo "# git status"
 git status
 
 # Commit and push
 echo "# Commit and push"
-git add .
+git add -u .
 git commit -m "Travis - Build from ${TRAVIS_BRANCH} with the commit ${TRAVIS_COMMIT}"
 git push $GH_PUSH_URL gh-pages > /dev/null 2>&1
