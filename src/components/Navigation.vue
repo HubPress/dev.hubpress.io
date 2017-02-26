@@ -33,6 +33,7 @@
           Team<i class="users icon"></i>
         </router-link>
         <a class="item" href="https://github.com/orgs/HubPress/people" target="_blank">Contributors<i class="heart icon"></i></a>
+        <a class="item" v-bind:href="upgrade" target="_blank">Check for upgrade<i class="checkmark icon"></i></a>
         <div class="item">
           <img class="ui centered logo image" src="http://hubpress.io/img/freeze/logo.png">
           <div class="version">
@@ -74,6 +75,9 @@ export default {
     },
     hubpressVersion: function() {
       return HUBPRESS_VERSION
+    },
+    upgrade: function () {
+      return `https://github.com/${this.$store.state.application.config.meta.username}/${this.$store.state.application.config.meta.repositoryName}/compare/${this.$store.state.application.config.meta.branch}...HubPress:${this.$store.state.application.config.meta.branch}`
     }
   }
 }
