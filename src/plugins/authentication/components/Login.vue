@@ -10,7 +10,7 @@
         </h2>
         <div class="content">
         </div>
-        <form class="ui medium form">
+        <form class="ui medium form" v-on:submit.prevent="login({email, password})">
             <div class="field">
               <div class="ui left icon input">
                 <i class="user icon"></i>
@@ -29,7 +29,7 @@
                 <input type="text" name="twoFactorCode" placeholder="Two factor code" :value="twoFactorCode" @input="updateTwoFactorCode">
               </div>
             </div>
-            <div class="ui fluid large submit button" @click="login({email, password})">Login</div>
+            <button class="ui fluid large submit button" type="submit" name="button">Login</button>
         </form>
         <div class="ui message">
           If you have questions about how to use HubPress, <a href="https://hubpress.gitbooks.io/hubpress-knowledgebase/content/">here is the right place.</a>
