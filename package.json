@@ -16,7 +16,7 @@
     "bluebird": "^3.4.6",
     "hubpress-core-plugins": "github:hubpress/hubpress-core-plugins#0.2.0",
     "hubpress-plugin-asciidoc": "github:hubpress/hubpress-plugin-asciidoc#9e6effa",
-    "hubpress-plugin-blog": "github:hubpress/hubpress-plugin-blog#41df54f",
+    "hubpress-plugin-blog": "github:hubpress/hubpress-plugin-blog#d5c31f4",
     "hubpress-plugin-pouchdb": "github:hubpress/hubpress-plugin-pouchdb#5de8a2b",
     "hubpress-plugin-rss": "github:hubpress/hubpress-plugin-rss#aef9446",
     "hubpress-plugin-session-storage": "github:hubpress/hubpress-plugin-session-storage#c074923",
