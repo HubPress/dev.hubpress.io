@@ -29,7 +29,7 @@
           <label>CNAME</label>
           <input type="text" name="application-cname" placeholder="CNAME" v-bind:value="config.meta.cname">
         </div>
-        <h4 class="ui dividing header">Metadatas (read-only)</h4>
+        <h4 class="ui dividing header">Metadata (set in config.json)</h4>
         <div class="disabled field">
           <label>GitHub username</label>
           <input type="text" disabled="" name="application-github-username" placeholder="Github username" v-bind:value="config.meta.username">
