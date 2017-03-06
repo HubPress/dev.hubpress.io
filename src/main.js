@@ -1,6 +1,12 @@
 window.$ = window.jQuery = require('jquery')
 require('semantic-ui-css/semantic.js')
 
+// Set watch to indefined specifically for FireFox
+// See https://twitter.com/anthonny_q/status/838703142745300992
+if (Object.prototype.watch) {
+  Object.prototype.watch = undefined
+}
+
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import App from './App'
