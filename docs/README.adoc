@@ -8,7 +8,7 @@ toc::[]
 A free, open source tool you can use to build a blog using GitHub Pages and http://asciidoctor.org/docs/user-manual/[AsciiDoc].
 
 == What Is HubPress?
-image::/docs/images/what-is-hubpress.gif[]
+image::https://cloud.githubusercontent.com/assets/2006548/23680524/d7cbf68e-038b-11e7-8465-5c70abd852e1.gif[]
 
 HubPress is a web application that makes it easy for you to maintain a blog. It provides the following features:
 
@@ -21,8 +21,8 @@ HubPress is a web application that makes it easy for you to maintain a blog. It 
 
 Hosting for your blog is provided by GitHub Pages.
 
-Your help with improving every aspect of HubPress is greatly appreciated. 
-Pull Requests are *always* welcome. 
+Your help with improving every aspect of HubPress is greatly appreciated.
+Pull Requests are *always* welcome.
 See https://hubpress.gitbooks.io/hubpress-knowledgebase/content/develop/contribute_pr.html[How do I contribute a PR] on the HubPress Knowledgebase to learn more about contributing.
 
 == Browser compatibility
@@ -37,9 +37,9 @@ Click the Fork icon image:http://hubpress.io/img/fork-icon.png[Fork,80] to creat
 
 === Configure the correct branch
 
-IMPORTANT: The GitHub branch you select is important, and choosing the incorrect one will cause issues with logging onto HubPress for the first time. 
+IMPORTANT: The GitHub branch you select is important, and choosing the incorrect one will cause issues with logging onto HubPress for the first time.
 
-Read the next two sections *carefully* *_before_* choosing which branch and `config.json` file to edit. 
+Read the next two sections *carefully* *_before_* choosing which branch and `config.json` file to edit.
 
 ==== I am not using my GitHub Pages domain for any other project
 
@@ -108,7 +108,7 @@ If your issue is not covered by the Knowledgebase, join https://hubpressio.slack
 Now you have successfully configured HubPress, you can customise it by adding social network information, experiment with different themes, and make your HubPress blog your own.
 
 
-You can find out how to use HubPress by reading the https://hubpress.gitbooks.io/hubpress-knowledgebase/content/[HubPress Knowledgebase], which is hosted by the team at https://gitbook.com[GitBook.com]. 
+You can find out how to use HubPress by reading the https://hubpress.gitbooks.io/hubpress-knowledgebase/content/[HubPress Knowledgebase], which is hosted by the team at https://gitbook.com[GitBook.com].
 
 == The HubPress team
 
@@ -122,7 +122,7 @@ Translations (Japanese) by:
 * https://github.com/hinaloe[hinaloe].
 
 == Supporting the project
- 
-HubPress is powered by :beer:, :coffee: and :pizza:. 
+
+HubPress is powered by :beer:, :coffee: and :pizza:.
 
 Use the donation options in the HubPress Settings menu to say thanks: we really appreciate it.
