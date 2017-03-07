@@ -39,7 +39,7 @@ Click the Fork icon image:http://hubpress.io/img/fork-icon.png[Fork,80] to creat
 
 IMPORTANT: The GitHub branch you select is important, and choosing the incorrect one will cause issues with logging onto HubPress for the first time. 
 
-Read the next two sections carefully *before* choosing which branch and `config.json` file to edit. 
+Read the next two sections *carefully* _*before*_ choosing which branch and `config.json` file to edit. 
 
 ==== I am not using my GitHub Pages domain for any other project
 
@@ -87,6 +87,19 @@ The following parameters are mandatory:
 . The following screen indicates you have correctly configured HubPress
 +
 image:http://hubpress.io/img/home-install.png[Install complete,300]
+
+== Getting First Run Help
+
+If you can't get past the login screen, re-read the instructions above.
+You most likely have configured the wrong branch and will need to fix this before you can begin using HubPress.
+
+IMPORTANT: Misconfiguration is the most common issue for folks when trying to log onto HubPress for the first time.
+
+If you have double-checked the setup procedure, you can move to the next step: support.
+
+First check https://hubpress.gitbooks.io/hubpress-knowledgebase/content/[HubPress Knowledgebase] and use the search function to see if your problem has already been documented as an article.
+
+If your issue is not covered by the Knowledgebase, join hubpressio.slack.com[HubPress Slack] and report the issue in #general.
 
 == How do I start blogging?
 
