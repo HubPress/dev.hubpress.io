@@ -1,6 +1,6 @@
 {
   "name": "hubpress-app",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "A web application to build your Blog on GitHub",
   "author": "Anthonny <anthonny.querouil@gmail.com>",
   "private": true,
