@@ -39,7 +39,7 @@ Click the Fork icon image:http://hubpress.io/img/fork-icon.png[Fork,80] to creat
 
 IMPORTANT: The GitHub branch you select is important, and choosing the incorrect one will cause issues with logging onto HubPress for the first time. 
 
-Read the next two sections *carefully* _*before*_ choosing which branch and `config.json` file to edit. 
+Read the next two sections *carefully* *_before_* choosing which branch and `config.json` file to edit. 
 
 ==== I am not using my GitHub Pages domain for any other project
 
