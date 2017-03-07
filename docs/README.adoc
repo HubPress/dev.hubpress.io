@@ -101,7 +101,7 @@ If you have double-checked the setup procedure, you can move to the next step: s
 
 First check https://hubpress.gitbooks.io/hubpress-knowledgebase/content/[HubPress Knowledgebase] and use the search function to see if your problem has already been documented as an article.
 
-If your issue is not covered by the Knowledgebase, join hubpressio.slack.com[HubPress Slack] and report the issue in #general.
+If your issue is not covered by the Knowledgebase, join https://hubpressio.slack.com[HubPress Slack] and report the issue in #general.
 
 == How do I start blogging?
 
