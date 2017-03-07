@@ -57,9 +57,9 @@ image:http://hubpress.io/img/edit-config.png[Edit config]
 +
 The following parameters are mandatory:
 +
-* `username`, which is your GitHub user name,
-* `repositoryName`, which is the new name of the repository fork, `<username>.github.io`.
-. Commit the changes, and open the GitHub Pages domain:  `https://<username>.github.io/`.
+* `username`, which is your GitHub user name. For example `janesmith`.
+* `repositoryName`, which is the new name of the repository fork using the pattern `janesmith.github.io`.
+. Commit the changes, and open the GitHub Pages domain:  `https://janesmith.github.io/`.
 . The following screen indicates you have correctly configured HubPress
 +
 image:http://hubpress.io/img/home-install.png[Install complete,300]
@@ -67,6 +67,8 @@ image:http://hubpress.io/img/home-install.png[Install complete,300]
 ==== I am using my GitHub Pages domain already, or I want to use a custom domain
 
 If you are already using your want your blog to be available on a custom domain, or you are _already using your GitHub Pages domain_ to host another project, some extra configuration is required.
+
+You need to set your blog up on a sub-domain of your GitHub Pages site.
 
 . In the repository settings, set the default branch to `gh-pages`:
 +
@@ -81,9 +83,9 @@ image:http://hubpress.io/img/edit-config-gh-pages.png[Edit config]
 +
 The following parameters are mandatory:
 +
-* `username`, which is your GitHub user name,
-* `repositoryName`, which is the new name of the repository fork. For example, `<username>.github.io`.
-. Commit the changes, and open the GitHub Pages domain:  `https://<username>.github.io/<repositoryName>/`.
+* `username`, which is your GitHub user name. For example `janesmith`.
+* `repositoryName`, which is the new name of the repository fork. For example, `janesmith.github.io`.
+. Commit the changes, and open the GitHub Pages domain:  `https://janesmith.github.io/<repositoryName>/`.
 . The following screen indicates you have correctly configured HubPress
 +
 image:http://hubpress.io/img/home-install.png[Install complete,300]
