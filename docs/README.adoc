@@ -82,7 +82,7 @@ image:http://hubpress.io/img/edit-config-gh-pages.png[Edit config]
 The following parameters are mandatory:
 +
 * `username`, which is your GitHub user name,
-* `repositoryName`, which is the repository fork. For example, `hubpress.io` if you did not rename it.
+* `repositoryName`, which is the new name of the repository fork. For example, `<username>.github.io`.
 . Commit the changes, and open the GitHub Pages domain:  `https://<username>.github.io/<repositoryName>/`.
 . The following screen indicates you have correctly configured HubPress
 +
