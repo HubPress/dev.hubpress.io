@@ -1,6 +1,6 @@
 {
   "name": "hubpress-app",
-  "version": "0.7.3",
+  "version": "0.8.0",
   "description": "A web application to build your Blog on GitHub",
   "author": "Anthonny <anthonny.querouil@gmail.com>",
   "private": true,
@@ -20,7 +20,7 @@
     "hubpress-plugin-pouchdb": "github:hubpress/hubpress-plugin-pouchdb#5de8a2b",
     "hubpress-plugin-rss": "github:hubpress/hubpress-plugin-rss#66982d8",
     "hubpress-plugin-session-storage": "github:hubpress/hubpress-plugin-session-storage#c074923",
-    "hubpress-plugin-template": "github:hubpress/hubpress-plugin-template#86284ca",
+    "hubpress-plugin-template": "github:hubpress/hubpress-plugin-template#9421a52",
     "hubpress-plugin-github": "github:hubpress/hubpress-plugin-github#071d97c",
     "lodash": "^4.17.2",
     "semantic-ui-css": "^2.2.4",
