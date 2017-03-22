@@ -1,5 +1,6 @@
 export const APPLICATION_INITIALIZE_ROUTES = 'application:initialize-routes'
 export const APPLICATION_INITIALIZE_CONFIG = 'application:initialize-config'
+export const APPLICATION_SAVE_STARTUP_CONFIG = 'application:save-startup-config'
 export const APPLICATION_PREPARE_CONFIG = 'application:prepare-config'
 export const APPLICATION_SAVE_CONFIG = 'application:save-config'
 export const APPLICATION_SAVE_CONFIG_DONE = 'application:save-config-done'

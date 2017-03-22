@@ -1,8 +1,13 @@
 <template>
 
   <div class="ui middle aligned center aligned grid">
-    <div class="column">
+    <div class="column" v-if="requireInitilisation">
+      <div class="ui segment">
+        <component is="initialisation-component"></component>
+      </div>
+    </div>
 
+    <div id="loginForm" class="column" v-if="!requireInitilisation">
       <div class="ui segment">
         <img src="http://hubpress.io/img/freeze/logo.png" class="image">
         <h2 class="ui header">
@@ -46,12 +51,16 @@
 
   export default {
     name: 'login',
+    beforeCreate () {
+      this.$options.components['initialisation-component'] = this.$store.state.application.config.initialisationConfigComponent
+    },
     computed: {
       ...mapState({
         email: state => state.authentication.credentials.email,
         password: state => state.authentication.credentials.password,
         twoFactorCode: state => state.authentication.credentials.twoFactorCode,
-        isTwoFactorCodeRequired: state => state.authentication.isTwoFactorCodeRequired
+        isTwoFactorCodeRequired: state => state.authentication.isTwoFactorCodeRequired,
+        requireInitilisation: state => state.application.requireInitilisation
       })
     },
     methods: {
@@ -77,7 +86,11 @@
     background-color: #DADADA;
   }
 
-  .column {
+  #loginForm.column {
     max-width: 450px;
+  }
+
+  .column {
+    max-width: 750px;
   }
 </style>

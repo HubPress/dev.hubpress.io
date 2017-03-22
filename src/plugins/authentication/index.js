@@ -5,6 +5,7 @@ import * as Constants from './constants'
 
 const CORE_LOGIN = 'core:login'
 const APPLICATION_INITIALIZE_APP = 'application:initialize-app'
+const APPLICATION_SAVE_CONFIG = 'application:save-config'
 
 export function authenticationPlugin (context) {
   context.on('application:stores', opts => {
@@ -61,7 +62,11 @@ export function authenticationPlugin (context) {
             })
             .then(_ => {
               if (state.isAuthenticated) {
-                return dispatch(Constants.AUTHORISATION_AUTHENTICATION_DONE)
+                const doNotEmitConfigDone = true
+                return dispatch(APPLICATION_SAVE_CONFIG, doNotEmitConfigDone)
+                  .then(_ => {
+                    dispatch(Constants.AUTHORISATION_AUTHENTICATION_DONE)
+                  })
               } else {
                 if (state.isTwoFactorCodeRequired) {
                   return dispatch('application:notify', {

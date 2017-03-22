@@ -2,6 +2,7 @@ import services from './services'
 import {
   APPLICATION_INITIALIZE_APP,
   APPLICATION_INITIALIZE_CONFIG,
+  APPLICATION_SAVE_STARTUP_CONFIG,
   APPLICATION_PREPARE_CONFIG,
   APPLICATION_SAVE_CONFIG,
   APPLICATION_SAVE_CONFIG_DONE,
@@ -40,6 +41,7 @@ export function applicationPlugin(context) {
         isInitialized: false,
         isFetching: false,
         isLoading: false,
+        requireInitilisation: false,
         notification: {
           icon: 'save',
           header: 'My Header',
@@ -64,6 +66,9 @@ export function applicationPlugin(context) {
           _.merge(state, nextState)
         },
         [APPLICATION_PREPARE_CONFIG](state, nextState) {
+          _.merge(state, nextState)
+        },
+        [APPLICATION_SAVE_STARTUP_CONFIG](state, nextState) {
           _.merge(state, nextState)
         },
         [APPLICATION_SAVE_CONFIG](state, nextRootState) {
@@ -165,12 +170,35 @@ export function applicationPlugin(context) {
               return dispatch(APPLICATION_SAVE_CONFIG)
             })
         },
+        [APPLICATION_SAVE_STARTUP_CONFIG]({
+          dispatch,
+          commit,
+          rootState,
+          state
+        }, formValues) {
+          const opts = {
+            rootState: _.cloneDeep(rootState),
+            currentState: _.cloneDeep(state),
+            nextState: _.cloneDeep(state)
+          }
+
+          opts.nextState.config.meta.username = formValues.username
+          opts.nextState.config.meta.repositoryName = formValues.repositoryName
+          opts.nextState.config.meta.branch = formValues.branch
+          opts.nextState.config.meta.cname = formValues.cname
+          opts.nextState.requireInitilisation = false
+
+          return services.startUpConfig(opts)
+            .then(opts => {
+              commit(APPLICATION_SAVE_STARTUP_CONFIG, opts.nextState)
+            })
+        },
         [APPLICATION_SAVE_CONFIG]({
           dispatch,
           commit,
           rootState,
           state
-        }) {
+        }, doNotEmitSaveConfigDone) {
           const opts = {
             rootState: _.cloneDeep(rootState),
             currentState: _.cloneDeep(rootState)
@@ -178,7 +206,9 @@ export function applicationPlugin(context) {
           return services.saveConfig(opts)
             .then((opts) => {
               commit(APPLICATION_SAVE_CONFIG, opts.nextState)
-              return dispatch(APPLICATION_SAVE_CONFIG_DONE)
+              if (!doNotEmitSaveConfigDone) {
+                return dispatch(APPLICATION_SAVE_CONFIG_DONE)
+              }
             })
         },
         [APPLICATION_SAVE_CONFIG_DONE]({

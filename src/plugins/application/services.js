@@ -24,6 +24,11 @@ function initializeConfig (opts) {
     .then(fireReceiveConfig)
 }
 
+function startUpConfig(opts) {
+  console.log('application - startUpConfig', opts)
+  return fireReceiveConfig(opts)
+}
+
 function prepareConfig (opts) {
   return plugins.fire('application:prepare-config', opts)
 }
@@ -60,6 +65,7 @@ export default {
   initializeApp,
   initializePlugins,
   initializeConfig,
+  startUpConfig,
   prepareConfig,
   saveConfig,
   saveConfigDone
