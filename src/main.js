@@ -11,7 +11,12 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import App from './App'
 import stores from './stores'
-import {APPLICATION_INITIALIZE_ROUTES, APPLICATION_INITIALIZE_CONFIG, APPLICATION_INITIALIZE_APP, APPLICATION_INITIALIZE_PLUGINS} from './stores/constants'
+import {
+  APPLICATION_INITIALIZE_ROUTES,
+  APPLICATION_INITIALIZE_CONFIG,
+  APPLICATION_INITIALIZE_APP,
+  APPLICATION_INITIALIZE_PLUGINS,
+} from './stores/constants'
 
 // Plugins declaration
 import plugins from 'hubpress-core-plugins'
@@ -38,13 +43,14 @@ plugins.register(
   sessionStoragePlugin,
   asciidocPlugin,
   pouchDbPlugin,
-  rssPlugin
+  rssPlugin,
 )
 let router
 stores.initStores().then(_store => {
   console.log('Content of the store after initStores', _store)
   window.vue_store = _store
-  _store.dispatch(APPLICATION_INITIALIZE_ROUTES)
+  _store
+    .dispatch(APPLICATION_INITIALIZE_ROUTES)
     .then(() => {
       console.log('Routes of the application', _store.state.application.routes)
       // Routing logic
@@ -52,22 +58,22 @@ stores.initStores().then(_store => {
         routes: [
           {
             path: '/login',
-            component: LoginComponent
+            component: LoginComponent,
           },
           {
             path: '/',
-            component: {template: '<router-view></router-view>'},
+            component: { template: '<router-view></router-view>' },
             redirect: '/posts',
             meta: {
-              auth: true
+              auth: true,
             },
-            children: _store.state.application.routes
-          }
+            children: _store.state.application.routes,
+          },
         ],
         mode: 'hash',
-        scrollBehavior: function (to, from, savedPosition) {
+        scrollBehavior: function(to, from, savedPosition) {
           return savedPosition || { x: 0, y: 0 }
-        }
+        },
       })
 
       router.beforeEach((to, from, next) => {
@@ -77,7 +83,7 @@ stores.initStores().then(_store => {
           if (!_store.state.authentication.isAuthenticated) {
             next({
               path: '/login',
-              query: { redirect: to.fullPath }
+              query: { redirect: to.fullPath },
             })
           } else {
             next()
@@ -94,7 +100,7 @@ stores.initStores().then(_store => {
         template: '<App/>',
         store: _store,
         components: { App },
-        strict: true
+        strict: true,
       })
     })
     .then(_ => _store.dispatch(APPLICATION_INITIALIZE_CONFIG))

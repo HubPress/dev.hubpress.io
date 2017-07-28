@@ -6,4 +6,5 @@ export const LOGIN_UPDATE_TFC = 'login:updateTwoFactorCode'
 export const AUTHORISATION_REQUEST_LOGIN = 'authorisation:request-login'
 export const AUTHORISATION_RECEIVE_LOGIN = 'authorisation:receive-login'
 export const AUTHORISATION_FAILURE_LOGIN = 'authorisation:failure-login'
-export const AUTHORISATION_AUTHENTICATION_DONE = 'authorisation:authentication-done'
+export const AUTHORISATION_AUTHENTICATION_DONE =
+  'authorisation:authentication-done'

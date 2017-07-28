@@ -46,38 +46,46 @@
 </template>
 
 <script>
-  import { mapState } from 'vuex'
-  import { LOGIN_SUBMIT, LOGIN_UPDATE_EMAIL, LOGIN_UPDATE_PASSWORD, LOGIN_UPDATE_TFC } from '../constants'
+import { mapState } from 'vuex'
+import {
+  LOGIN_SUBMIT,
+  LOGIN_UPDATE_EMAIL,
+  LOGIN_UPDATE_PASSWORD,
+  LOGIN_UPDATE_TFC,
+} from '../constants'
 
-  export default {
-    name: 'login',
-    beforeCreate () {
-      this.$options.components['initialisation-component'] = this.$store.state.application.config.initialisationConfigComponent
+export default {
+  name: 'login',
+  beforeCreate() {
+    this.$options.components[
+      'initialisation-component'
+    ] = this.$store.state.application.config.initialisationConfigComponent
+  },
+  computed: {
+    ...mapState({
+      email: state => state.authentication.credentials.email,
+      password: state => state.authentication.credentials.password,
+      twoFactorCode: state => state.authentication.credentials.twoFactorCode,
+      isTwoFactorCodeRequired: state =>
+        state.authentication.isTwoFactorCodeRequired,
+      requireInitilisation: state => state.application.requireInitilisation,
+    }),
+  },
+  methods: {
+    updateEmail(e) {
+      this.$store.commit(LOGIN_UPDATE_EMAIL, e.target.value)
     },
-    computed: {
-      ...mapState({
-        email: state => state.authentication.credentials.email,
-        password: state => state.authentication.credentials.password,
-        twoFactorCode: state => state.authentication.credentials.twoFactorCode,
-        isTwoFactorCodeRequired: state => state.authentication.isTwoFactorCodeRequired,
-        requireInitilisation: state => state.application.requireInitilisation
-      })
+    updatePassword(e) {
+      this.$store.commit(LOGIN_UPDATE_PASSWORD, e.target.value)
     },
-    methods: {
-      updateEmail (e) {
-        this.$store.commit(LOGIN_UPDATE_EMAIL, e.target.value)
-      },
-      updatePassword (e) {
-        this.$store.commit(LOGIN_UPDATE_PASSWORD, e.target.value)
-      },
-      updateTwoFactorCode (e) {
-        this.$store.commit(LOGIN_UPDATE_TFC, e.target.value)
-      },
-      login () {
-        this.$store.dispatch(LOGIN_SUBMIT, this.$router)
-      }
-    }
-  }
+    updateTwoFactorCode(e) {
+      this.$store.commit(LOGIN_UPDATE_TFC, e.target.value)
+    },
+    login() {
+      this.$store.dispatch(LOGIN_SUBMIT, this.$router)
+    },
+  },
+}
 </script>
 
 <style scoped>

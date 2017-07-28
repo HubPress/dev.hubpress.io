@@ -11,23 +11,23 @@ import {
   APPLICATION_NOTIFY,
   APPLICATION_CLOSE_NOTIFICATION,
   APPLICATION_LOADING,
-  APPLICATION_LOADED
+  APPLICATION_LOADED,
 } from '../../stores/constants'
 import RootSettings from './components/RootSettings'
 
 export const constants = {
-  APPLICATION_PREPARE_CONFIG
+  APPLICATION_PREPARE_CONFIG,
 }
 
 export function applicationPlugin(context) {
-  context.on('application:routes', (opts) => {
+  context.on('application:routes', opts => {
     console.info('applicationPlugin - application:routes')
     console.log('applicationPlugin - application:routes', opts)
 
     opts.nextState.routes.push({
       path: 'settings',
       name: 'settings',
-      component: RootSettings
+      component: RootSettings,
     })
     console.log('applicationPlugin - application:routes - return', opts)
     return opts
@@ -47,10 +47,10 @@ export function applicationPlugin(context) {
           header: 'My Header',
           message: 'A message',
           level: 'default',
-          isVisible: false
+          isVisible: false,
         },
         routes: [],
-        settingsTabs: []
+        settingsTabs: [],
       },
       mutations: {
         [APPLICATION_INITIALIZE_APP](state, nextRootState) {
@@ -89,97 +89,73 @@ export function applicationPlugin(context) {
         },
         [APPLICATION_LOADED](state, notification) {
           state.isLoading = false
-        }
+        },
       },
       actions: {
-        [APPLICATION_INITIALIZE_ROUTES]({
-          commit,
-          rootState,
-          state
-        }) {
-          const opts = {
-            rootState: _.cloneDeep(rootState),
-            currentState: _.cloneDeep(state)
-          }
-          return services.initializeRoutes(opts)
-            .then((opts) => {
-              commit(APPLICATION_INITIALIZE_ROUTES, opts.nextState)
-            })
-        },
-        [APPLICATION_INITIALIZE_CONFIG]({
-          commit,
-          rootState,
-          state
-        }) {
-          const opts = {
-            rootState: _.cloneDeep(rootState),
-            currentState: _.cloneDeep(state)
-          }
-          return services.initializeConfig(opts)
-            .then(opts => {
-              commit(APPLICATION_INITIALIZE_CONFIG, opts.nextState)
-            })
-        },
-        [APPLICATION_INITIALIZE_APP]({
-          commit,
-          rootState,
-          state
-        }) {
-          const opts = {
-            rootState: _.cloneDeep(rootState),
-            currentState: _.cloneDeep(rootState)
-          }
-          return services.initializeApp(opts)
-            .then((opts) => {
-              commit(APPLICATION_INITIALIZE_APP, opts.nextState)
-            })
-        },
-        [APPLICATION_INITIALIZE_PLUGINS]({
-          commit,
-          rootState,
-          state
-        }) {
-          const opts = {
-            rootState: _.cloneDeep(rootState),
-            currentState: _.cloneDeep(rootState)
-          }
-          return services.initializePlugins(opts)
-            .then((opts) => {
-              opts.nextState.application.isInitialized = true
-              commit(APPLICATION_INITIALIZE_PLUGINS, opts.nextState)
-            })
-        },
-        [APPLICATION_PREPARE_CONFIG]({
-          dispatch,
-          commit,
-          rootState,
-          state
-        }, formData) {
+        [APPLICATION_INITIALIZE_ROUTES]({ commit, rootState, state }) {
           const opts = {
             rootState: _.cloneDeep(rootState),
             currentState: _.cloneDeep(state),
-            payload: {formData}
+          }
+          return services.initializeRoutes(opts).then(opts => {
+            commit(APPLICATION_INITIALIZE_ROUTES, opts.nextState)
+          })
+        },
+        [APPLICATION_INITIALIZE_CONFIG]({ commit, rootState, state }) {
+          const opts = {
+            rootState: _.cloneDeep(rootState),
+            currentState: _.cloneDeep(state),
+          }
+          return services.initializeConfig(opts).then(opts => {
+            commit(APPLICATION_INITIALIZE_CONFIG, opts.nextState)
+          })
+        },
+        [APPLICATION_INITIALIZE_APP]({ commit, rootState, state }) {
+          const opts = {
+            rootState: _.cloneDeep(rootState),
+            currentState: _.cloneDeep(rootState),
+          }
+          return services.initializeApp(opts).then(opts => {
+            commit(APPLICATION_INITIALIZE_APP, opts.nextState)
+          })
+        },
+        [APPLICATION_INITIALIZE_PLUGINS]({ commit, rootState, state }) {
+          const opts = {
+            rootState: _.cloneDeep(rootState),
+            currentState: _.cloneDeep(rootState),
+          }
+          return services.initializePlugins(opts).then(opts => {
+            opts.nextState.application.isInitialized = true
+            commit(APPLICATION_INITIALIZE_PLUGINS, opts.nextState)
+          })
+        },
+        [APPLICATION_PREPARE_CONFIG](
+          { dispatch, commit, rootState, state },
+          formData,
+        ) {
+          const opts = {
+            rootState: _.cloneDeep(rootState),
+            currentState: _.cloneDeep(state),
+            payload: { formData },
           }
           opts.currentState.isLoading = true
           return dispatch('application:loading')
             .then(_ => services.prepareConfig(opts))
-            .then((opts) => {
+            .then(opts => {
               // Now the nextState.config contains data to save in the config file
               commit(APPLICATION_PREPARE_CONFIG, opts.nextState)
               // Go to save the config
               return dispatch(APPLICATION_SAVE_CONFIG)
             })
         },
-        [APPLICATION_SAVE_STARTUP_CONFIG]({
-          dispatch,
-          commit,
-          rootState,
-          state
-        }, formValues) {
+        [APPLICATION_SAVE_STARTUP_CONFIG](
+          { dispatch, commit, rootState, state },
+          formValues,
+        ) {
           const opts = {
             rootState: _.cloneDeep(rootState),
             currentState: _.cloneDeep(state),
-            nextState: _.cloneDeep(state)
+            nextState: _.cloneDeep(state),
           }
 
           opts.nextState.config.meta.username = formValues.username
@@ -188,89 +164,72 @@ export function applicationPlugin(context) {
           opts.nextState.config.meta.cname = formValues.cname
           opts.nextState.requireInitilisation = false
 
-          return services.startUpConfig(opts)
+          return services.startUpConfig(opts).then(opts => {
+            commit(APPLICATION_SAVE_STARTUP_CONFIG, opts.nextState)
+          })
+        },
+        [APPLICATION_SAVE_CONFIG](
+          { dispatch, commit, rootState, state },
+          doNotEmitSaveConfigDone,
+        ) {
+          const opts = {
+            rootState: _.cloneDeep(rootState),
+            currentState: _.cloneDeep(rootState),
+          }
+          return services.saveConfig(opts).then(opts => {
+            commit(APPLICATION_SAVE_CONFIG, opts.nextState)
+            if (!doNotEmitSaveConfigDone) {
+              return dispatch(APPLICATION_SAVE_CONFIG_DONE)
+            }
+          })
+        },
+        [APPLICATION_SAVE_CONFIG_DONE]({ dispatch, commit, rootState, state }) {
+          const opts = {
+            rootState: _.cloneDeep(rootState),
+            currentState: _.cloneDeep(rootState),
+          }
+          return services
+            .saveConfigDone(opts)
             .then(opts => {
-              commit(APPLICATION_SAVE_STARTUP_CONFIG, opts.nextState)
-            })
-        },
-        [APPLICATION_SAVE_CONFIG]({
-          dispatch,
-          commit,
-          rootState,
-          state
-        }, doNotEmitSaveConfigDone) {
-          const opts = {
-            rootState: _.cloneDeep(rootState),
-            currentState: _.cloneDeep(rootState)
-          }
-          return services.saveConfig(opts)
-            .then((opts) => {
-              commit(APPLICATION_SAVE_CONFIG, opts.nextState)
-              if (!doNotEmitSaveConfigDone) {
-                return dispatch(APPLICATION_SAVE_CONFIG_DONE)
-              }
-            })
-        },
-        [APPLICATION_SAVE_CONFIG_DONE]({
-          dispatch,
-          commit,
-          rootState,
-          state
-        }) {
-          const opts = {
-            rootState: _.cloneDeep(rootState),
-            currentState: _.cloneDeep(rootState)
-          }
-          return services.saveConfigDone(opts)
-            .then((opts) => {
               commit(APPLICATION_SAVE_CONFIG_DONE, opts.nextState)
             })
             .then(_ => dispatch('application:loaded'))
-            .then(_ => dispatch('application:notify', {
-              icon: 'save',
-              header: 'Settings saved',
-              message: 'Your settings have been saved and your blog was rebuild with success. ',
-              level: 'success'
-            }))
+            .then(_ =>
+              dispatch('application:notify', {
+                icon: 'save',
+                header: 'Settings saved',
+                message:
+                  'Your settings have been saved and your blog was rebuild with success. ',
+                level: 'success',
+              }),
+            )
         },
-        [APPLICATION_NOTIFY]({
-          dispatch,
-          commit,
-          rootState,
-          state
-        }, notification) {
+        [APPLICATION_NOTIFY](
+          { dispatch, commit, rootState, state },
+          notification,
+        ) {
           commit(APPLICATION_NOTIFY, notification)
         },
         [APPLICATION_CLOSE_NOTIFICATION]({
           dispatch,
           commit,
           rootState,
-          state
+          state,
         }) {
           commit(APPLICATION_CLOSE_NOTIFICATION)
         },
-        [APPLICATION_LOADING]({
-          dispatch,
-          commit,
-          rootState,
-          state
-        }) {
+        [APPLICATION_LOADING]({ dispatch, commit, rootState, state }) {
           commit(APPLICATION_LOADING)
         },
-        [APPLICATION_LOADED]({
-          dispatch,
-          commit,
-          rootState,
-          state
-        }) {
+        [APPLICATION_LOADED]({ dispatch, commit, rootState, state }) {
           commit(APPLICATION_LOADED)
-        }
+        },
       },
       getters: {
         navigations: state => {
           return state.routes.filter(route => route.label)
-        }
-      }
+        },
+      },
     }
 
     opts.nextState.stores.application = application
@@ -282,7 +241,9 @@ export function applicationPlugin(context) {
     console.info('applicationPlugin - application:prepare-config')
     console.log('applicationPlugin - application:prepare-config', opts)
 
-    opts.nextState.config.meta.cname = opts.payload.formData.get('application-cname')
+    opts.nextState.config.meta.cname = opts.payload.formData.get(
+      'application-cname',
+    )
 
     console.log('applicationPlugin - application:prepare-config - return', opts)
     return opts

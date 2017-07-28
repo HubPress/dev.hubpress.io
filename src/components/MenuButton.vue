@@ -10,12 +10,11 @@ import $ from 'jquery'
 export default {
   name: 'menuButton',
   methods: {
-    toggleNavigation () {
+    toggleNavigation() {
       $('.ui.sidebar').sidebar('toggle')
-    }
-  }
+    },
+  },
 }
-
 </script>
 
 <style scoped>

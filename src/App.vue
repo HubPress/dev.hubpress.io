@@ -35,7 +35,7 @@ export default {
   components: {
     Navigation,
     MenuButton,
-    MainContainer
+    MainContainer,
   },
   mounted: function() {
     this.$store.watch(
@@ -51,40 +51,39 @@ export default {
             }
           }, 4000)
 
-          $('.message .close')
-            .on('click', () => this.closeNotification())
+          $('.message .close').on('click', () => this.closeNotification())
         } else {
-          $('.message .close')
-            .off('click')
+          $('.message .close').off('click')
         }
-
-      }
+      },
     )
   },
   methods: {
     closeNotification() {
       this.$store.dispatch('application:close-notification')
-    }
+    },
   },
   computed: {
-    isAuthenticatedAndReady () {
-      return this.$store.state.application.isInitialized
-        && this.$store.state.authentication.isAuthenticated
-        && this.$route.path !== "/login"
+    isAuthenticatedAndReady() {
+      return (
+        this.$store.state.application.isInitialized &&
+        this.$store.state.authentication.isAuthenticated &&
+        this.$route.path !== '/login'
+      )
     },
-    isInitializing () {
+    isInitializing() {
       return !this.$store.state.application.isInitialized
     },
-    isInitialized () {
+    isInitialized() {
       return this.$store.state.application.isInitialized
     },
-    isLoading () {
+    isLoading() {
       return this.$store.state.application.isLoading
     },
     notification() {
       return this.$store.state.application.notification
-    }
-  }
+    },
+  },
 }
 </script>
 

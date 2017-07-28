@@ -50,38 +50,40 @@ import $ from 'jquery'
 
 export default {
   name: 'navigation',
-  mounted: function () {
+  mounted: function() {
     $('#app .ui.sidebar')
       .sidebar({
-        context: $('#app')
+        context: $('#app'),
       })
       .sidebar('setting', 'transition', 'overlay')
   },
   methods: {
-    toggleMenu: function () {
+    toggleMenu: function() {
       $('.ui.sidebar').sidebar('toggle')
-    }
+    },
   },
   computed: {
-    navigations: function () {
+    navigations: function() {
       // reduce by item
       // this.$store.getters.navigations.reduce((memo, navigation) => {
       //   memo[navigation.label]
       // }, [])
       return this.$store.getters.navigations
     },
-    currentUser: function () {
+    currentUser: function() {
       return this.$store.state.authentication.userInformations
     },
     hubpressVersion: function() {
       return HUBPRESS_VERSION
     },
-    upgrade: function () {
-      return `https://github.com/${this.$store.state.application.config.meta.username}/${this.$store.state.application.config.meta.repositoryName}/compare/${this.$store.state.application.config.meta.branch}...HubPress:${this.$store.state.application.config.meta.branch}`
-    }
-  }
+    upgrade: function() {
+      return `https://github.com/${this.$store.state.application.config.meta
+        .username}/${this.$store.state.application.config.meta
+        .repositoryName}/compare/${this.$store.state.application.config.meta
+        .branch}...HubPress:${this.$store.state.application.config.meta.branch}`
+    },
+  },
 }
-
 </script>
 
 <style scoped>

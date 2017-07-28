@@ -60,11 +60,11 @@
 
 <script>
 import $ from 'jquery'
-import {constants} from '../index'
+import { constants } from '../index'
 
 export default {
   name: 'application-settings',
-  beforeCreate () {
+  beforeCreate() {
     this.$store.state.application.settingsTabs.forEach(tab => {
       this.$options.components[tab.id] = tab.component
     })
@@ -73,19 +73,19 @@ export default {
     $('.settings-content .menu .item').tab()
   },
   methods: {
-    submit: function () {
+    submit: function() {
       const formData = new FormData(document.getElementById('mainForm'))
       this.$store.dispatch(constants.APPLICATION_PREPARE_CONFIG, formData)
-    }
+    },
   },
   computed: {
     tabs: function() {
       return this.$store.state.application.settingsTabs.sort(tab => tab.label)
     },
     config: function() {
-      return this.$store.state.application.config || {meta:{}}
-    }
-  }
+      return this.$store.state.application.config || { meta: {} }
+    },
+  },
 }
 </script>
 
