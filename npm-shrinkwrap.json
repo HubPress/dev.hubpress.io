@@ -245,6 +245,13 @@
       "integrity": "sha1-iYUI2iIm84DfkEcoRWhJwVAaSw0=",
       "dev": true
     },
+    "asciidoctor.js": {
+      "version": "github:anthonny/asciidoctor.js#ae313bbb77e7ae5dc37d4c2b44df2ca07bbb9121",
+      "requires": {
+        "opal-npm-wrapper": "https://registry.npmjs.org/opal-npm-wrapper/-/opal-npm-wrapper-0.9.2.tgz",
+        "xmlhttprequest": "https://registry.npmjs.org/xmlhttprequest/-/xmlhttprequest-1.7.0.tgz"
+      }
+    },
     "asn1": {
       "version": "https://registry.npmjs.org/asn1/-/asn1-0.2.3.tgz",
       "integrity": "sha1-2sh4dxPJlmhJ/IGAd36+nB3fO4Y="
@@ -4514,7 +4521,7 @@
       }
     },
     "github-api": {
-      "version": "github:anthonny/github#fac5e03e0263e67e6a1989f5f7510a6bb057a080",
+      "version": "github:anthonny/github#f753805f836d36f261012d96eedadde25c3211b6",
       "requires": {
         "axios": "0.15.3",
         "debug": "https://registry.npmjs.org/debug/-/debug-2.6.3.tgz",
@@ -4890,6 +4897,12 @@
         "lodash": "https://registry.npmjs.org/lodash/-/lodash-4.17.4.tgz"
       }
     },
+    "hubpress-core-slugify": {
+      "version": "github:hubpress/hubpress-core-slugify#cfe920c13a2ddb5ed4fcdfeb3aff68e0740309d9",
+      "requires": {
+        "string": "https://registry.npmjs.org/string/-/string-3.3.3.tgz"
+      }
+    },
     "hubpress-plugin-asciidoc": {
       "version": "github:hubpress/hubpress-plugin-asciidoc#593c2c78026b9c1be1de4357aa53a4b7fccd3045",
       "requires": {
@@ -4937,6 +4950,15 @@
         "q": "https://registry.npmjs.org/q/-/q-1.5.0.tgz"
       },
       "dependencies": {
+        "github-api": {
+          "version": "github:anthonny/github#fac5e03e0263e67e6a1989f5f7510a6bb057a080",
+          "requires": {
+            "axios": "0.15.3",
+            "debug": "https://registry.npmjs.org/debug/-/debug-2.6.3.tgz",
+            "js-base64": "https://registry.npmjs.org/js-base64/-/js-base64-2.1.9.tgz",
+            "utf8": "2.1.2"
+          }
+        },
         "hubpress-core-slugify": {
           "version": "github:hubpress/hubpress-core-slugify#cfe920c13a2ddb5ed4fcdfeb3aff68e0740309d9",
           "requires": {
