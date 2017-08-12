@@ -1,5 +1,4 @@
 let Handlebars = require('handlebars')
-
 ;(function(handlebars) {
   'use strict'
 

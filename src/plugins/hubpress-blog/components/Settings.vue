@@ -51,16 +51,16 @@
 export default {
   name: 'hubpress-settings',
   computed: {
-    meta: function () {
+    meta: function() {
       return this.$store.state.application.config.meta || {}
     },
-    site: function () {
+    site: function() {
       return this.$store.state.application.config.site || {}
     },
-    theme: function () {
+    theme: function() {
       return this.$store.state.application.config.theme || {}
-    }
-  }
+    },
+  },
 }
 </script>
 

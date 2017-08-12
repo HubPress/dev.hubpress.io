@@ -185,7 +185,7 @@ import {
   POST_CHANGE_CONTENT,
   POST_REMOTE_SAVE,
   POST_PUBLISH,
-  POST_UNPUBLISH
+  POST_UNPUBLISH,
 } from '../constants'
 
 export default {
@@ -206,50 +206,53 @@ export default {
         lineWrapping: true,
         fixedGutter: true,
         // sublime、emacs、vim三种键位模式，支持你的不同操作习惯
-        keyMap: "sublime",
+        keyMap: 'sublime',
         // 按键映射，比如Ctrl键映射autocomplete，autocomplete是hint代码提示事件
         extraKeys: {
-          "Ctrl": "autocomplete"
+          Ctrl: 'autocomplete',
         },
         // 代码折叠
         foldGutter: true,
-        gutters: ["CodeMirror-linenumbers"],
+        gutters: ['CodeMirror-linenumbers'],
         // 选中文本自动高亮，及高亮方式
         styleSelectedText: true,
         highlightSelectionMatches: {
           showToken: /\w/,
-          annotateScrollbar: true
+          annotateScrollbar: true,
         },
         // more codemirror config...
         // 如果有hint方面的配置，也应该出现在这里
-      }
+      },
     }
   },
   methods: {
     contentChange: function(updatedContent) {
-      if (this.post.content === updatedContent)
-        return
+      if (this.post.content === updatedContent) return
 
-      const delay = this.$store.state.application.config.meta.delay ? this.$store.state.application.config.meta.delay : 200
+      const delay = this.$store.state.application.config.meta.delay
+        ? this.$store.state.application.config.meta.delay
+        : 200
 
       if (this.timeout) {
-        window.clearTimeout(this.timeout);
+        window.clearTimeout(this.timeout)
       }
 
       this.timeout = window.setTimeout(() => {
         this.$store.dispatch(POST_CHANGE_CONTENT, {
           _id: this.post._id,
-          content: updatedContent
+          content: updatedContent,
         })
-      }, delay ? delay : 200);
+      }, delay ? delay : 200)
     },
     showAsciidocHelp: function() {
-      $('#asciidoc-help')
-        .modal('show');
+      $('#asciidoc-help').modal('show')
     },
     switchLight: function() {
       this.isDark = !this.isDark
-      this.$refs.codeEditor.editor.setOption('theme', this.isDark ? 'zenburn':'base16-light')
+      this.$refs.codeEditor.editor.setOption(
+        'theme',
+        this.isDark ? 'zenburn' : 'base16-light',
+      )
     },
     switchPreview: function() {
       this.isPreviewVisible = !this.isPreviewVisible
@@ -270,19 +273,17 @@ export default {
     },
     unpublish: function() {
       this.$store.dispatch(POST_UNPUBLISH, this.post._id)
-    }
+    },
   },
   beforeMount: function() {
     this.$store.dispatch(POST_GET, this.$route.params.id)
   },
   mounted: function() {
-    $('.ui.dropdown.item.themes')
-      .dropdown()
+    $('.ui.dropdown.item.themes').dropdown()
 
-    $('#asciidoc-help')
-      .modal({
-        closable: true
-      })
+    $('#asciidoc-help').modal({
+      closable: true,
+    })
   },
   beforeUpdate: function() {
     if (!this.content) {
@@ -297,23 +298,25 @@ export default {
       return this.$store.state.hubpress.post
     },
     previewLabel: function() {
-      return this.isPreviewVisible? 'Hide preview' : 'Show preview'
+      return this.isPreviewVisible ? 'Hide preview' : 'Show preview'
     },
     lightLabel: function() {
       return this.isDark ? 'Light mode' : 'Dark mode'
     },
     publishLabel: function() {
-      return this.$store.state.hubpress.post.published ? 'Unpublish post' : 'Publish post'
+      return this.$store.state.hubpress.post.published
+        ? 'Unpublish post'
+        : 'Publish post'
     },
     isRemoteActionVisible: function() {
       return !!this.$store.state.hubpress.post.title
-    }
+    },
   },
   beforeCreate: () => {},
   created: function() {},
   components: {
-    Preview
-  }
+    Preview,
+  },
 }
 </script>
 

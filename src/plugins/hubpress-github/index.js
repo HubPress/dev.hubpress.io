@@ -676,6 +676,7 @@ export function githubPlugin(context) {
       let publishedCount = 0
       const chainPromise = chunkOfElements.reduce((promise, elements) => {
         const callback = branchLatestCommit => {
+          //  console.error('YOLO', branchLatestCommit)
           const deferred = Q.defer()
           const tree = elements.map(element => {
             return {

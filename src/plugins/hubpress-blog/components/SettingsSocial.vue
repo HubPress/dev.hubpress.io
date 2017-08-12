@@ -74,10 +74,10 @@
 export default {
   name: 'hubpress-settings-social',
   computed: {
-    social: function () {
+    social: function() {
       return this.$store.state.application.config.socialnetwork || {}
-    }
-  }
+    },
+  },
 }
 </script>
 

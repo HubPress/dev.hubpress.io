@@ -54,18 +54,16 @@ export default {
       username: '',
       repositoryName: 'hubpress.io',
       branch: 'master',
-      cname: undefined
+      cname: undefined,
     }
   },
   mounted: function() {
-    $('div.dropdown')
-      .dropdown()
-    ;
+    $('div.dropdown').dropdown()
   },
   computed: {
     isValid() {
       return this.username.trim() != '' && this.repositoryName.trim() != ''
-    }
+    },
   },
   methods: {
     submit() {
@@ -73,11 +71,11 @@ export default {
         username: this.username,
         repositoryName: this.repositoryName,
         branch: this.branch,
-        cname: this.cname
+        cname: this.cname,
       }
       this.$store.dispatch(APPLICATION_SAVE_STARTUP_CONFIG, payload)
-    }
-  }
+    },
+  },
 }
 </script>
 

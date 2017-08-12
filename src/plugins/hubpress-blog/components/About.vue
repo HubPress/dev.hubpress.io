@@ -94,9 +94,7 @@
 </div>
 </template>
 
-<script type="text/javascript">
-
-</script>
+<script type="text/javascript"></script>
 
 <style>
 .about-content {

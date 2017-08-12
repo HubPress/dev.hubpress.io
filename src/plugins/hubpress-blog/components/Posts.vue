@@ -90,18 +90,14 @@
 <script>
 import moment from 'moment'
 import uuid from 'node-uuid'
-import {
-  POSTS_GET,
-  POSTS_SYNCHRONIZE,
-  POST_DELETE
-} from '../constants'
+import { POSTS_GET, POSTS_SYNCHRONIZE, POST_DELETE } from '../constants'
 
 export default {
   name: 'posts',
   data: function() {
     return {
       postToDelete: {},
-      filterValue: ''
+      filterValue: '',
     }
   },
   beforeCreate: () => {},
@@ -112,25 +108,26 @@ export default {
     $('.ui.basic.modal').remove()
   },
   mounted: function() {
-    $('.ui.basic.modal')
-      .modal({
-        closable  : false,
-        onDeny    : () => {},
-        onApprove : () => {
-          this.$store.dispatch(POST_DELETE, this.postToDelete._id)
-        }
-      })
+    $('.ui.basic.modal').modal({
+      closable: false,
+      onDeny: () => {},
+      onApprove: () => {
+        this.$store.dispatch(POST_DELETE, this.postToDelete._id)
+      },
+    })
   },
   methods: {
     status: function(post) {
-      return !!post.published && `Published` || 'Draft';
+      return (!!post.published && `Published`) || 'Draft'
     },
     publishedAt: function(post) {
-      return !!post.published && moment(post.published_at).fromNow() || '';
+      return (!!post.published && moment(post.published_at).fromNow()) || ''
     },
     postCoverUrl: function(post) {
       let image = post.image || 'http://hubpress.io/img/logo.png'
-      image = image.startsWith('http') ? image : `${post.attributes.$$smap.imagesdir}/${post.image}`
+      image = image.startsWith('http')
+        ? image
+        : `${post.attributes.$$smap.imagesdir}/${post.image}`
       return image
     },
     getPostStatusColor: function(post) {
@@ -143,19 +140,17 @@ export default {
         return 'green'
       }
     },
-    displayConfirmMessage: function (post) {
+    displayConfirmMessage: function(post) {
       this.postToDelete = post
-      $('.ui.basic.modal')
-        .modal('show')
-      ;
+      $('.ui.basic.modal').modal('show')
     },
     navigateToPost: function(post) {
       // named route
-      this.$router.push({ name: 'post', params: { id: post._id }})
+      this.$router.push({ name: 'post', params: { id: post._id } })
     },
     newPost: function() {
       // Create a new post
-      this.$router.push({ name: 'post', params: { id: uuid.v4() }})
+      this.$router.push({ name: 'post', params: { id: uuid.v4() } })
     },
     getPostTags: function(post) {
       return post.tags || []
@@ -165,21 +160,24 @@ export default {
     },
     synchronize: function() {
       this.$store.dispatch(POSTS_SYNCHRONIZE)
-    }
-
+    },
   },
   computed: {
     posts: function() {
       const filter = this.filterValue.trim()
-      if (filter === '')
-        return this.$store.state.hubpress.posts
+      if (filter === '') return this.$store.state.hubpress.posts
 
       return this.$store.state.hubpress.posts.filter(post => {
-        return (post.title.toLowerCase().indexOf(filter.toLowerCase()) >= 0) ||
-          (post.tags && post.tags.filter(tag => tag.toLowerCase().indexOf(filter.toLowerCase()) >=0).length)
+        return (
+          post.title.toLowerCase().indexOf(filter.toLowerCase()) >= 0 ||
+          (post.tags &&
+            post.tags.filter(
+              tag => tag.toLowerCase().indexOf(filter.toLowerCase()) >= 0,
+            ).length)
+        )
       })
-    }
-  }
+    },
+  },
 }
 </script>
 
