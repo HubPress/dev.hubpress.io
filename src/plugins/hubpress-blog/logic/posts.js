@@ -36,6 +36,8 @@ function renderAndSavePost(opts) {
 }
 
 function remoteSavePost(opts) {
+  // Clean elementsToPublish
+  opts.currentState.elementsToPublish = []
   return fires
     .fireRequestLocalPost(opts)
     .then(updatedOpts => fires.fireReceiveLocalPost(updatedOpts))
@@ -46,6 +48,8 @@ function remoteSavePost(opts) {
 }
 
 function publishPost(opts) {
+  // Clean elementsToPublish
+  opts.currentState.elementsToPublish = []
   return (
     fires
       .fireRequestLocalPost(opts)
@@ -96,6 +100,8 @@ function publishPost(opts) {
 }
 
 function unpublishPost(opts) {
+  // Clean elementsToPublish
+  opts.currentState.elementsToPublish = []
   return (
     fires
       .fireRequestLocalPost(opts)
