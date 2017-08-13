@@ -24,6 +24,17 @@ function applyScript(hasChanged) {
     }
   }
 
+  // Add mathjax
+  if (!window.MathJax) {
+    const tag = document.createElement('script')
+    tag.src = `https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML`
+    document.getElementsByTagName('head')[0].appendChild(tag)
+  }
+
+  // MathJax
+  if (window.MathJax) window.MathJax.Hub.Queue(['Typeset', MathJax.Hub])
+
+  // Instagram
   if (window.instgrm) window.instgrm.Embeds.process()
 }
 
