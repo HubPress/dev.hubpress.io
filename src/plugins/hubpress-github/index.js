@@ -710,7 +710,7 @@ export function githubPlugin(context) {
                     if (err) {
                       return deferred.reject(err)
                     }
-                    deferred.resolve(commit.sha)
+                    deferred.resolve(res.sha)
                   },
                 )
               },
