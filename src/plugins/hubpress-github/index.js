@@ -4,10 +4,12 @@ import slugify from 'hubpress-core-slugify'
 import Github from 'github-api'
 import Q from 'q'
 import _ from 'lodash'
+import moment from 'moment'
 import buildUrlsFromConfig from './urls'
 import InitConfig from './components/InitConfig'
 
 const TREE_CHUNK_SIZE = 50
+let lastCachedCommit = null
 
 function getRepositoryInfos(repository) {
   let deferred = Q.defer()
@@ -479,6 +481,8 @@ function writePost(config, post) {
         post.original.url = config.urls.getPostUrl(post.original.name)
         post.original.path = '_posts/' + post.original.name
         post.original.sha = sha
+        lastCachedCommit = sha.commit
+        console.info('Update lastCacheCommit', lastCachedCommit)
         defer.resolve(post)
       }
     },
@@ -503,6 +507,8 @@ function writeConfig(config) {
       if (err) {
         defer.reject(err)
       } else {
+        lastCachedCommit = sha.commit
+        console.info('Update lastCacheCommit', lastCachedCommit)
         defer.resolve(sha)
       }
     },
@@ -551,6 +557,8 @@ function manageCname(config) {
         if (err) {
           defer.reject(err)
         } else {
+          lastCachedCommit = sha.commit
+          console.info('Update lastCacheCommit', lastCachedCommit)
           defer.resolve(sha)
         }
       },
@@ -558,6 +566,19 @@ function manageCname(config) {
   }
 
   return defer.promise
+}
+
+function getLatestCommitSha(branchCommit, lastCachedCommit) {
+  console.error(branchCommit, lastCachedCommit)
+  if (!lastCachedCommit) return branchCommit.sha
+
+  const momentBranchCommit = moment(branchCommit.committer.date)
+  const momentLastCachedCommit = moment(lastCachedCommit.committer.date)
+
+  if (momentLastCachedCommit.isAfter(momentBranchCommit))
+    return lastCachedCommit.sha
+
+  return branchCommit.sha
 }
 
 export function githubPlugin(context) {
@@ -674,54 +695,66 @@ export function githubPlugin(context) {
         return deferred.reject(err)
       }
       let publishedCount = 0
-      const chainPromise = chunkOfElements.reduce((promise, elements) => {
-        const callback = branchLatestCommit => {
-          //  console.error('YOLO', branchLatestCommit)
-          const deferred = Q.defer()
-          const tree = elements.map(element => {
-            return {
-              path: element.path,
-              mode: '100644',
-              type: 'blob',
-              content: element.content,
-            }
-          })
-          repository.createTree(tree, branchLatestCommit, (err, branch) => {
-            if (err) {
-              return deferred.reject(err)
-            }
+      const chainPromise = chunkOfElements.reduce(
+        (promise, elements) => {
+          const callback = branchLatestCommit => {
+            //  console.error('YOLO', branchLatestCommit)
+            const deferred = Q.defer()
+            const tree = elements.map(element => {
+              return {
+                path: element.path,
+                mode: '100644',
+                type: 'blob',
+                content: element.content,
+              }
+            })
+            repository.createTree(tree, branchLatestCommit, (err, branch) => {
+              if (err) {
+                return deferred.reject(err)
+              }
 
-            repository.commit(
-              branchLatestCommit,
-              branch.sha,
-              `Published ${publishedCount +
-                elements.length}/${totalElementsToPublish} elements`,
-              (err, commit) => {
-                if (err) {
-                  return deferred.reject(err)
-                }
-                publishedCount = publishedCount + elements.length
-                repository.updateHead(
-                  `heads/${meta.branch}`,
-                  commit.sha,
-                  false,
-                  (err, res) => {
-                    console.log('updateHead', err, res)
-                    if (err) {
-                      return deferred.reject(err)
-                    }
-                    deferred.resolve(res.sha)
-                  },
-                )
-              },
-            )
-          })
+              repository.commit(
+                branchLatestCommit,
+                branch.sha,
+                `Published ${publishedCount +
+                  elements.length}/${totalElementsToPublish} elements`,
+                (err, commit) => {
+                  if (err) {
+                    return deferred.reject(err)
+                  }
+                  publishedCount = publishedCount + elements.length
+                  lastCachedCommit = commit
+                  repository.updateHead(
+                    `heads/${meta.branch}`,
+                    commit.sha,
+                    false,
+                    (err, res) => {
+                      console.log('updateHead', err, res)
+                      if (err) {
+                        return deferred.reject(err)
+                      }
+                      deferred.resolve(commit.sha)
+                    },
+                  )
+                },
+              )
+            })
 
-          return deferred.promise
-        }
+            return deferred.promise
+          }
 
-        return promise.then(callback)
-      }, Q(branch.commit.sha))
+          return promise.then(callback)
+        },
+        Q(
+          getLatestCommitSha(
+            {
+              committer: branch.commit.commit.committer,
+              sha: branch.commit.sha,
+            },
+            lastCachedCommit,
+          ),
+        ),
+      )
 
       chainPromise
         .then(sha => {
