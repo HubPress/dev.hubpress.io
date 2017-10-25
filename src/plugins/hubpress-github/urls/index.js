@@ -10,7 +10,7 @@ function getHubpressUrl(meta, windowLocation) {
     windowLocation.host === `${meta.username}.github.io` ||
     windowLocation.host === `${meta.username}.github.com`
   ) {
-    if (meta.branch !== 'master') {
+    if (meta.branch !== 'master' || windowLocation.host !== meta.repositoryName) {
       url = url + '/' + meta.repositoryName
     }
   } else {
@@ -30,7 +30,7 @@ function getSiteUrl(meta, addProtocol) {
   } else {
     url =
       (addProtocol === false ? '' : 'https:') + `//${meta.username}.github.io`
-    if (meta.branch !== 'master') {
+    if (meta.branch !== 'master' || windowLocation.host !== meta.repositoryName) {
       url = url + '/' + meta.repositoryName
     }
   }
