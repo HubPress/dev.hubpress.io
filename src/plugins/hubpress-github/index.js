@@ -403,6 +403,8 @@ function deleteElement(repository, branch, elementPath) {
     if (err) {
       defer.reject(err)
     } else {
+      console.error(sha)
+      lastCachedCommit = sha.commit
       defer.resolve(sha)
     }
   })
@@ -698,7 +700,6 @@ export function githubPlugin(context) {
       const chainPromise = chunkOfElements.reduce(
         (promise, elements) => {
           const callback = branchLatestCommit => {
-            //  console.error('YOLO', branchLatestCommit)
             const deferred = Q.defer()
             const tree = elements.map(element => {
               return {
@@ -784,6 +785,8 @@ export function githubPlugin(context) {
         if (err && err.response && err.response.status !== 404) {
           defer.reject(err)
         } else {
+          console.error('requestDeleteRemotePost', sha)
+          lastCachedCommit = sha.commit
           defer.resolve(opts)
         }
       })
@@ -814,6 +817,8 @@ export function githubPlugin(context) {
       if (err) {
         defer.reject(err)
       } else {
+        console.error('requestDeleteRemotePublishedPost', sha)
+        lastCachedCommit = sha.commit
         defer.resolve(opts)
       }
     })
