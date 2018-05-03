@@ -1,0 +1,10 @@
+{
+  "meta": {
+    "username": "HubPress",
+    "repositoryName": "dev.hubpress.io",
+    "branch": "gh-pages"
+  },
+  "theme": {
+    "name": "Casper"
+  }
+}
