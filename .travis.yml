@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-  - "6"
+  - "8"
 branches:
   only:
     - development
@@ -11,7 +11,7 @@ before_script:
 script:
   - node -v
   - npm -v
-  - npm run build
+  - npm run generate
 env:
   global:
     - secure: "TSc0JROnl2RXBrIyflVS95zt+kRYk4SPD1xGvDx4Jg5Eu+8u6Q1KmMV7ahXGnJy4dSU3ynzJVonlWsUqQpr9DMoofFtOak9ET9NpsBTT2q0084Lyw98LmGDnVuPhBO7leEWxs3XsvZWRedYRpQQG9RP4ns/WckxFlnJF4CO4Tyo="
