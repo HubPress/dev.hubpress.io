@@ -1,0 +1,10 @@
+{
+  "meta": {
+    "username": "put your username here",
+    "repositoryName": "put your repository name here",
+    "branch": "master"
+  },
+  "theme": {
+    "name": "Casper"
+  }
+}
