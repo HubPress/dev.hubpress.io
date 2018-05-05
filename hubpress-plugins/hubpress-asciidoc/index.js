@@ -4,8 +4,7 @@ import moment from 'moment'
 import slugify from 'hubpress-core-slugify' //'./utils/slugify'
 
 const asciidoctor = asciiDoctorLib(false, window.XMLHttpRequest)
-const opal = asciidoctor.Opal
-const processor = asciidoctor.Asciidoctor(true)
+// const asciidoctor = asciidoctor(true)
 
 function splitMore(asciidocContent) {
   let parts = asciidocContent.split('pass::[more]')
@@ -16,7 +15,7 @@ function splitMore(asciidocContent) {
 }
 
 function convert(config, _asciidocContent) {
-  const options = opal.hash({
+  const options = {
     doctype: 'article',
     backend: 'html5',
     //base_dir: opts.state.application.config.urls.site,
@@ -27,17 +26,17 @@ function convert(config, _asciidocContent) {
       `imagesdir=${config.urls.site}/images`,
       'icons=font',
     ],
-  })
+  }
   const gistRx = /gist::([0-9]*)\[(lines=[0-9]*\.\.[0-9]*)?,?(type=([\w.]*))?,?(file=([\w.]*))?\]/g
   const asciidocContent = _asciidocContent.replace(
     gistRx,
     '[source,$4]\n----\ninclude::https://gist.githubusercontent.com/raw/$1/$6[$2]\n----\n',
   )
   let parts = splitMore(asciidocContent)
-  let excerpt = processor.$load(parts.excerpt, options)
-  let doc = processor.$load(parts.full, options)
+  let excerpt = asciidoctor.load(parts.excerpt, options)
+  let doc = asciidoctor.load(parts.full, options)
   let value = {
-    attributes: _.pick(doc.attributes, ['$$smap']),
+    attributes: doc.getAttributes(),
     excerpt: excerpt.$convert(),
     html: doc.$convert(),
   }
@@ -47,8 +46,8 @@ function convert(config, _asciidocContent) {
 function extractTags(attributes) {
   const tagAttribute = 'hp-tags'
   return (
-    attributes.$$smap[tagAttribute] &&
-    attributes.$$smap[tagAttribute]
+    attributes[tagAttribute] &&
+    attributes[tagAttribute]
       .split(',')
       .map(v => v.trim())
       .filter(v => v !== '')
@@ -82,9 +81,9 @@ export function asciidocPlugin(context) {
         'sha',
       )
 
-      _post.title = original.title = original.attributes.$$smap['doctitle']
-      _post.image = original.image = original.attributes.$$smap['hp-image']
-      _post.type = original.type = original.attributes.$$smap['hp-type']
+      _post.title = original.title = original.attributes['doctitle']
+      _post.image = original.image = original.attributes['hp-image']
+      _post.type = original.type = original.attributes['hp-type']
       _post.tags = original.tags = extractTags(original.attributes)
       _post.url = original.url = getContentUrl(config, _post.type, original.name)
 
@@ -112,15 +111,15 @@ export function asciidocPlugin(context) {
     )
     opts.nextState.post = Object.assign({}, opts.nextState.post, refreshedPost)
 
-    opts.nextState.post.title = refreshedPost.attributes.$$smap['doctitle']
-    opts.nextState.post.image = refreshedPost.attributes.$$smap['hp-image']
-    opts.nextState.post.type = refreshedPost.attributes.$$smap['hp-type']
+    opts.nextState.post.title = refreshedPost.attributes['doctitle']
+    opts.nextState.post.image = refreshedPost.attributes['hp-image']
+    opts.nextState.post.type = refreshedPost.attributes['hp-type']
     opts.nextState.post.tags = extractTags(refreshedPost.attributes)
     opts.nextState.post.published_at =
-      refreshedPost.attributes.$$smap['published_at'] ||
+      refreshedPost.attributes['published_at'] ||
       opts.nextState.post.published_at ||
       moment().format('YYYY-MM-DD')
-    let altTitle = refreshedPost.attributes.$$smap['hp-alt-title']
+    let altTitle = refreshedPost.attributes['hp-alt-title']
     if (!opts.nextState.post.type || opts.nextState.post.type === 'post') {
       opts.nextState.post.name =
         slugify(

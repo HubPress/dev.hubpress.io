@@ -1,11 +1,11 @@
 {
-  "name": "nuxt-ts-hubpress",
+  "name": "hubpress-app",
   "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@nuxtjs/axios": "^5.0.0",
     "@nuxtjs/router": "^1.0.1",
-    "asciidoctor.js": "github:anthonny/asciidoctor.js#fix-opal",
+    "asciidoctor.js": "^1.5.6",
     "bluebird": "^3.5.1",
     "downsize": "0.0.8",
     "github-api": "github:anthonny/github#f753805",
