@@ -68,6 +68,14 @@ function fireReceiveLocalPublishedPosts(opts) {
   return plugins.fire('receiveLocalPublishedPosts', opts)
 }
 
+function fireRequestLocalPublishedPages(opts) {
+  return plugins.fire('requestLocalPublishedPages', opts)
+}
+
+function fireReceiveLocalPublishedPages(opts) {
+  return plugins.fire('receiveLocalPublishedPages', opts)
+}
+
 // Rendering
 function fireRequestRenderingDocuments(opts) {
   return plugins.fire('hubpress:request-rendering-documents', opts)
@@ -199,6 +207,14 @@ function fireReceiveGenerateAuthors(opts) {
   return plugins.fire('receiveGenerateAuthors', opts)
 }
 
+function fireRequestGeneratePages(opts) {
+  return plugins.fire('requestGeneratePages', opts)
+}
+
+function fireReceiveGeneratePages(opts) {
+  return plugins.fire('receiveGeneratePages', opts)
+}
+
 function fireRequestSaveRemotePublishedElements(opts) {
   return plugins.fire('requestSaveRemotePublishedElements', opts)
 }
@@ -254,6 +270,8 @@ export default {
   fireReceivePublishPost,
   fireRequestLocalPublishedPosts,
   fireReceiveLocalPublishedPosts,
+  fireRequestLocalPublishedPages,
+  fireReceiveLocalPublishedPages,
   fireRequestSelectedPost,
   fireReceiveSelectedPost,
   fireRequestAuthentication,
@@ -270,6 +288,8 @@ export default {
   fireReceiveGenerateTags,
   fireRequestGenerateAuthors,
   fireReceiveGenerateAuthors,
+  fireRequestGeneratePages,
+  fireReceiveGeneratePages,
   fireRequestSaveRemotePublishedElements,
   fireReceiveSaveRemotePublishedElements,
   fireRequestDeleteRemotePublishedPost,

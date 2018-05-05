@@ -12,9 +12,19 @@
           <i class="large icon" v-bind:class="{ 'sun': isDark, 'moon': !isDark }"></i>
         </div>
       </a>
-      <a href="#" class="item" v-on:click.stop.prevent="switchPreview()">
+      <a href="#" class="item html-preview" v-on:click.stop.prevent="switchPreview(false)">
         <div class="ui icon" v-bind:data-tooltip="previewLabel" data-position="bottom right">
-          <i class="large icon" v-bind:class="{'unhide':!isPreviewVisible, 'hide':isPreviewVisible}"></i>
+          <i class="large icon" v-bind:class="{'unhide':!isPreviewVisible || isIFrame, 'hide':isPreviewVisible && !isIFrame}"></i>
+        </div>
+      </a>
+      <a href="#" class="item" v-on:click.stop.prevent="switchPreview(true)">
+        <div class="ui icon" v-bind:data-tooltip="previewLabelIFrame" data-position="bottom right">
+          <i class="large icon globe"></i>
+        </div>
+      </a>
+      <a href="#" v-if="isPreviewVisible" class="item preview-resize" v-on:click.stop.prevent="switchPreviewSize()">
+        <div class="ui icon" v-bind:data-tooltip="resizeLabel" data-position="bottom right">
+          <i class="large icon" v-bind:class="{'expand':!isFullScreen, 'compress':isFullScreen}"></i>
         </div>
       </a>
       <a href="#" class="item" v-if="isRemoteActionVisible" v-on:click.stop.prevent="remoteSave()">
@@ -106,12 +116,12 @@
     <div class="ui grid" v-bind:class="{ 'dark': isDark, 'light': !isDark }">
       <div class="row">
 
-      <div id="asciidoc-content" class="column" v-bind:class="{'sixteen wide mobile height wide computer is-preview-visible': isPreviewVisible, 'sixteen wide': !isPreviewVisible}">
+      <div id="asciidoc-content" class="column" v-bind:class="{'sixteen wide mobile height wide computer is-preview-visible': isPreviewVisible, 'sixteen wide': !isPreviewVisible, 'is-hidden': isFullScreen}">
         <codemirror ref="codeEditor" class="container" :code="content" :options="editorOption" @input="contentChange"></codemirror>
 
       </div>
-      <div id="asciidoc-preview" class="column" v-bind:class="{'sixteen wide mobile height wide computer is-preview-visible': isPreviewVisible}" v-if="isPreviewVisible">
-        <preview :post="post"></preview>
+      <div id="asciidoc-preview" class="column" v-bind:class="{'sixteen wide mobile height wide computer is-preview-visible': isPreviewVisible, 'is-iframe': isIFrame, 'is-fullscreen': isFullScreen}" v-if="isPreviewVisible">
+        <preview :post="post" :iframe="isIFrame"></preview>
       </div>
     </div>
     </div>
@@ -199,6 +209,8 @@ export default {
       timeout: undefined,
       isDark: true,
       isPreviewVisible: false,
+      isIFrame: false,
+      isFullScreen: false,
       editorOption: {
         // 下面所有配置同Codemirror配置，均为可选
         tabSize: 4,
@@ -257,8 +269,36 @@ export default {
         this.isDark ? 'zenburn' : 'base16-light',
       )
     },
-    switchPreview: function() {
-      this.isPreviewVisible = !this.isPreviewVisible
+    switchPreview: function(isIFrame) {
+
+      if (!this.isPreviewVisible) {
+        if (isIFrame) {
+          this.$store.dispatch(POST_CHANGE_CONTENT, {
+            _id: this.post._id,
+            content: this.post.content,
+          })
+        }
+        this.isIFrame = isIFrame
+        this.isPreviewVisible = !this.isPreviewVisible
+        this.isFullScreen = false
+      } else {
+        if (this.isIFrame !== isIFrame) {
+          this.isIFrame = isIFrame
+          if (isIFrame) {
+          this.$store.dispatch(POST_CHANGE_CONTENT, {
+            _id: this.post._id,
+            content: this.post.content,
+          })
+        }
+        } else {
+          this.isIFrame = false
+          this.isFullScreen = false
+          this.isPreviewVisible = !this.isPreviewVisible
+        }
+      }
+    },
+    switchPreviewSize: function() {
+      this.isFullScreen = !this.isFullScreen
     },
     remoteSave: function() {
       if (this.post.published) {
@@ -301,7 +341,13 @@ export default {
       return this.$store.state.hubpress.post
     },
     previewLabel: function() {
-      return this.isPreviewVisible ? 'Hide preview' : 'Show preview'
+      return this.isPreviewVisible ? 'Hide fast preview' : 'Show fast preview'
+    },
+    previewLabelIFrame: function() {
+      return this.isPreviewVisible ? 'Hide real preview' : 'Show real preview'
+    },
+    resizeLabel: function() {
+      return this.isFullScreen ? 'Compact the preview' : 'Expand the preview'
     },
     lightLabel: function() {
       return this.isDark ? 'Light mode' : 'Dark mode'
@@ -342,6 +388,15 @@ export default {
     width: auto !important;
     margin-left: 1em !important;
     margin-right: 1em !important;
+  }
+  .item.html-preview {
+    display: none !important;
+  }
+}
+
+@media only screen and (max-width: 992px) {
+  .item.preview-resize {
+    display: none !important;
   }
 }
 
@@ -448,6 +503,10 @@ export default {
   min-height: calc(100vh - 47px);
 }
 
+#asciidoc-content.is-hidden {
+  display: none;
+}
+
 #asciidoc-preview {
   overflow-y: auto;
   padding-top: 2em;
@@ -455,10 +514,21 @@ export default {
   font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
   word-wrap: break-word;
 }
+#asciidoc-preview.is-iframe {
+  padding: 0;
+}
 
 #asciidoc-preview > div {
   max-width: 750px !important;
   margin: auto auto;
+}
+#asciidoc-preview.is-iframe > div {
+  min-width: 100%;
+  margin: auto auto;
+}
+
+#asciidoc-preview.is-fullscreen {
+  width: 100% !important;
 }
 
 #asciidoc-preview > div .ui.header {

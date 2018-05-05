@@ -21,6 +21,12 @@ function refreshAfterSavedConfig(opts) {
       .then(_opts => fires.fireReceiveGenerateTags(_opts))
       .then(_opts => fires.fireRequestGenerateAuthors(_opts))
       .then(_opts => fires.fireReceiveGenerateAuthors(_opts))
+      // Generate pages
+      // Get publishedPages to rebuild all content
+      .then(_opts => fires.fireRequestLocalPublishedPages(_opts))
+      .then(_opts => fires.fireReceiveLocalPublishedPages(_opts))
+      .then(_opts => fires.fireRequestGeneratePages(_opts))
+      .then(_opts => fires.fireReceiveGeneratePages(_opts))
       .then(_opts => {
         console.timeEnd('Build content')
         return _opts

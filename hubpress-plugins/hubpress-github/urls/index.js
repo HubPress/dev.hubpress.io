@@ -46,7 +46,7 @@ function getContentUrl(name, type) {
     url = name.replace(
       /([\w-]*)\.adoc/,
       '/$1.html',
-    ) 
+    )
   }
   return url
 }
@@ -65,6 +65,14 @@ function getContentGhPath(name, type) {
   return url
 }
 
+function getContentType(name) {
+  if (name.match(/([\d]{4})-([\d]{2})-([\d]{2})-([\w-]*)\.adoc/)) {
+    return 'post'
+  }
+
+  return 'page'
+}
+
 export default function buildUrlsFromConfig(config) {
   return {
     site: getSiteUrl(config.meta),
@@ -73,6 +81,7 @@ export default function buildUrlsFromConfig(config) {
     images: getSiteUrl(config.meta) + '/images',
     getContentUrl,
     getContentGhPath,
+    getContentType,
     getPostUrl: postName =>
       postName.replace(
         /([\d]{4})-([\d]{2})-([\d]{2})-([\w-]*)\.adoc/,

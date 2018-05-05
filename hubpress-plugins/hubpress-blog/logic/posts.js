@@ -31,6 +31,20 @@ function renderAndSavePost(opts) {
 
       return updatedOpts
     })
+    .then(updatedOpts => {
+      const original = updatedOpts.nextState.post.original
+      updatedOpts.nextState.post.original = updatedOpts.nextState.post
+
+      return fires.fireRequestGeneratePost(updatedOpts)
+        .then(updatedOpts => fires.fireReceiveGeneratePost(updatedOpts))
+        .then(updatedOpts => {
+          const elementToPublish = updatedOpts.nextState.elementsToPublish[0] || {}
+          updatedOpts.nextState.post.publishedContent = elementToPublish.content
+          updatedOpts.nextState.post.original = original
+          return updatedOpts
+        })
+    })
+
 }
 
 function remoteSavePost(opts) {

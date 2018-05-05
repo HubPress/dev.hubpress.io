@@ -1,7 +1,12 @@
 <template lang="html">
-  <div class="">
-    <h1 class="ui header">{{post.title}}</h1>
-    <div id="html-rendering" v-html="post.html">
+  <div>
+    <div class="html-rendering" v-if="!iframe">
+      <h1 class="ui header">{{post.title}}</h1>
+      <div id="html-content" class="content" v-html="post.html"></div>
+    </div>
+
+    <div class="iframe-rendering" v-if="iframe">
+      <iframe class="published-preview" :srcdoc="post.publishedContent" frameborder="0"></iframe>
     </div>
   </div>
 </template>
@@ -10,7 +15,7 @@
 function applyScript(hasChanged) {
   if (!hasChanged) return
 
-  let element = document.getElementById('html-rendering')
+  let element = document.getElementById('html-content')
   let scripts = element.getElementsByTagName('script')
   let addedScripts = []
   for (let i = 0; i < scripts.length; i++) {
@@ -40,15 +45,26 @@ function applyScript(hasChanged) {
 
 export default {
   name: 'preview',
-  props: ['post'],
+  props: ['post', 'iframe'],
   mounted: function() {
+    if (this.iframe) {
+      return
+    }
     applyScript(this.post.content && this.post.content.trim().length)
   },
   updated: function(val1, val2) {
+    if (this.iframe) {
+      return
+    }
     applyScript(true)
   },
 }
 </script>
 
 <style lang="css">
+  .html-rendering, .published-preview {
+    min-width: 100%;
+  height: calc(100vh - 47px);
+  min-height: calc(100vh - 47px);
+  }
 </style>

@@ -4,6 +4,7 @@ import _ from 'lodash'
 import { generateIndex } from './indexGenerator'
 import { generatePost } from './postGenerator'
 import { generatePosts } from './postsGenerator'
+import { generatePages } from './pagesGenerator'
 import { generateTags } from './tagsGenerator'
 import { generateAuthors } from './authorsGenerator'
 import Builder from 'hubpress-plugin-builder-ghost'
@@ -166,6 +167,14 @@ export function templatePlugin(context) {
     console.log('templatePlugin - requestGeneratePosts', opts)
     const updatedOpts = generatePosts(opts)
     console.log('templatePlugin - requestGeneratePosts return', updatedOpts)
+    return updatedOpts
+  })
+
+  context.on('requestGeneratePages', opts => {
+    console.info('templatePlugin - requestGeneratePages')
+    console.log('templatePlugin - requestGeneratePages', opts)
+    const updatedOpts = generatePages(opts)
+    console.log('templatePlugin - requestGeneratePages return', updatedOpts)
     return updatedOpts
   })
 

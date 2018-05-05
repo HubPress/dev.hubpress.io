@@ -265,11 +265,11 @@ function markIfPostPublished(config, post) {
   const defer = Q.defer()
   const meta = config.meta
   const repository = githubInstance.getRepo(meta.username, meta.repositoryName)
-
+  const type = config.urls.getContentType(post.name)
   repository.getSha(
     config.meta.branch,
     // TODO Test si ca marche
-    config.urls.getContentGhPath(post.name, post.type),
+    config.urls.getContentGhPath(post.name, type),
     (err, sha) => {
       if (err && err.response && err.response.status !== 404) {
         defer.reject(err)
@@ -543,7 +543,7 @@ function manageCname(config) {
         console.log('SHA after delete', sha)
         defer.resolve(sha)
       })
-      .catch(err => {        
+      .catch(err => {
         if (err.response.status !== 404) {
           defer.reject(err)
         } else {

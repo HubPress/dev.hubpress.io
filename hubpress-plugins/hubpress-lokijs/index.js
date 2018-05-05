@@ -9,9 +9,9 @@ export function lokijsPlugin(hubpress) {
     hubpress.on('hubpress:request-local-synchronization', opts => {
         console.info('lokijsPlugin - hubpress:request-local-synchronization')
         console.log('lokijsPlugin - hubpress:request-local-synchronization', opts)
-        
+
         const contentCollection = db.getCollection('content')
-        
+
         const posts = opts.nextState.posts || []
         opts.nextState.posts = posts.map(post => {
             post.type = post.type || 'post'
@@ -43,7 +43,7 @@ export function lokijsPlugin(hubpress) {
             db.saveDatabase()
             return returnedPost
         })
-        
+
 
         return opts
     })
@@ -138,7 +138,6 @@ export function lokijsPlugin(hubpress) {
             _id: opts.nextState.post._id
         })
         if (currentSavedPost) {
-            console.log(currentSavedPost, 'ggggg')
             const mergedPost = Object.assign(currentSavedPost, opts.nextState.post)
             mergedPost.type = opts.nextState.post.type || currentSavedPost.type || 'post'
             opts.nextState.post = contentCollection.update(mergedPost)
@@ -164,6 +163,23 @@ export function lokijsPlugin(hubpress) {
         })
         .data()
         opts.nextState.publishedPosts = publishedPosts
+        return opts
+    })
+    hubpress.on('requestLocalPublishedPages', opts => {
+        console.info('lokijsPlugin - requestLocalPublishedPages')
+        console.log('lokijsPlugin - requestLocalPublishedPages', opts)
+        const contentCollection = db.getCollection('content')
+        const publishedPages = contentCollection.chain()
+        .find({
+            'original.name': {$ne: null},
+            published: { $eq: 1 },
+            type: { $eq: 'page' }
+        })
+        .simplesort('name', {
+            desc: true
+        })
+        .data()
+        opts.nextState.publishedPages = publishedPages
         return opts
     })
     hubpress.on('requestDeleteLocalPost', opts => {
