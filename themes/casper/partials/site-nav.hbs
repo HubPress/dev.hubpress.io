@@ -19,6 +19,9 @@
             {{#if @blog.twitter}}
                 <a class="social-link social-link-tw" href="{{ @blog.twitter}}" target="_blank" rel="noopener">{{> "icons/twitter"}}</a>
             {{/if}}
+            {{#if @blog.github}}
+                <a class="social-link social-link-github" href="{{ @blog.github}}" target="_blank" rel="noopener">{{> "icons/github"}}</a>
+            {{/if}}
         </div>
         {{#if @labs.subscribers}}
             <a class="subscribe-button" href="#subscribe">Subscribe</a>
