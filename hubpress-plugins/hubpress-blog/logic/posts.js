@@ -34,7 +34,8 @@ function renderAndSavePost(opts) {
     .then(updatedOpts => {
       const original = updatedOpts.nextState.post.original
       updatedOpts.nextState.post.original = updatedOpts.nextState.post
-
+      updatedOpts.nextState.post.original.author = updatedOpts.nextState.post.original.author ||
+        updatedOpts.rootState.authentication.userInformations
       return fires.fireRequestGeneratePost(updatedOpts)
         .then(updatedOpts => fires.fireReceiveGeneratePost(updatedOpts))
         .then(updatedOpts => {
