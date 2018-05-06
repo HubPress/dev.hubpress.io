@@ -398,6 +398,12 @@ export function hubpressPlugin(context) {
     opts.nextState.config.socialnetwork.stackoverflow = opts.payload.formData.get(
       'social-stackoverflow',
     )
+    opts.nextState.config.socialnetwork.paypalme = opts.payload.formData.get(
+      'social-paypalme',
+    )
+    opts.nextState.config.socialnetwork.opencollective = opts.payload.formData.get(
+      'social-opencollective',
+    )
 
     // Navigation
     opts.nextState.config.navigation = []

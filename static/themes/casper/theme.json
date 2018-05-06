@@ -14,6 +14,8 @@
     "icons/rss": "partials/icons/rss.hbs",
     "icons/twitter": "partials/icons/twitter.hbs",
     "icons/github": "partials/icons/github.hbs",
+    "icons/paypalme": "partials/icons/paypalme.hbs",
+    "icons/opencollective": "partials/icons/opencollective.hbs",
     "icons/website": "partials/icons/website.hbs",
     "author": "author.hbs",
     "default": "default.hbs",
