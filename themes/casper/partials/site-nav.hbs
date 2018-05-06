@@ -22,6 +22,12 @@
             {{#if @blog.github}}
                 <a class="social-link social-link-github" href="{{ @blog.github}}" target="_blank" rel="noopener">{{> "icons/github"}}</a>
             {{/if}}
+            {{#if @blog.paypalme}}
+                <a class="social-link social-link-paypalme" href="{{ @blog.paypalme}}" target="_blank" rel="noopener">{{> "icons/paypalme"}}</a>
+            {{/if}}
+            {{#if @blog.opencollective}}
+                <a class="social-link social-link-opencollective" href="{{ @blog.opencollective}}" target="_blank" rel="noopener">{{> "icons/opencollective"}}</a>
+            {{/if}}
         </div>
         {{#if @labs.subscribers}}
             <a class="subscribe-button" href="#subscribe">Subscribe</a>
