@@ -19,6 +19,7 @@
     "icons/website": "partials/icons/website.hbs",
     "author": "author.hbs",
     "default": "default.hbs",
+    "home": "home.hbs",
     "index": "index.hbs",
     "page": "page.hbs",
     "post": "post.hbs",
