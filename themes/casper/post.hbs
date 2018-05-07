@@ -26,7 +26,7 @@ into the {body} of the default.hbs template --}}
                 </section>
                 <h1 class="post-full-title">{{title}}</h1>
             </header>
-            
+
             {{#if feature_image}}
             <figure class="post-full-image" style="background-image: url({{feature_image}})">
             </figure>
@@ -60,6 +60,7 @@ into the {body} of the default.hbs template --}}
 
             </footer>
 
+            {{#if @blog.disqus}}
             <section class="post-comments">
                 <div id="disqus_thread"></div>
                 <script type="text/javascript">
@@ -74,6 +75,7 @@ into the {body} of the default.hbs template --}}
                 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
                 <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
             </section>
+            {{/if}}
 
 
         </article>
