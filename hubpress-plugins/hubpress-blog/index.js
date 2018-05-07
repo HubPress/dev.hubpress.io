@@ -353,6 +353,9 @@ export function hubpressPlugin(context) {
     opts.nextState.config.site.postsPerPage = opts.payload.formData.get(
       'hubpress-posts-per-page',
     )
+    opts.nextState.config.site.blogPath = opts.payload.formData.get(
+      'hubpress-blog-path',
+    )
     opts.nextState.config.site.googleAnalytics = opts.payload.formData.get(
       'hubpress-ga',
     )

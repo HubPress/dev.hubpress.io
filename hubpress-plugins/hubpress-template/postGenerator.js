@@ -40,7 +40,14 @@ export function generatePost (opts, post) {
   postData.status = 'published';
   postData.feature_image = postData.image
 
-  const htmlContent = Builder.template(modifiedPost.type || 'post',{
+  const template = modifiedPost.name === 'index.adoc' ? 'home' : modifiedPost.type || 'post'
+
+  // If template Tag is not available, do not process
+  if (!Builder.isTemplateAvailable(template)) {
+    return opts;
+  }
+
+  const htmlContent = Builder.template(template,{
       context: modifiedPost.type || 'post',
       // site: config.site,
       // theme: theme,
@@ -59,7 +66,7 @@ export function generatePost (opts, post) {
     title: modifiedPost.title,
     image: modifiedPost.image,
     name:modifiedPost.name,
-    path:config.urls.getContentGhPath(modifiedPost.name, modifiedPost.type ),
+    path: config.urls.getContentGhPath(modifiedPost.name, modifiedPost.type),
     url:config.urls.getContentGhPath(modifiedPost.name, modifiedPost.type),
     content:htmlContent,
     message: `Publish ${modifiedPost.name}`,

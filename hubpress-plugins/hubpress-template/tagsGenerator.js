@@ -15,7 +15,7 @@ export function generateTags (opts) {
   }
 
 
-  if (opts.nextState.post && !opts.nextState.post.tags && !opts.nextState.tags ) {
+  if (opts.nextState.post && opts.nextState.post.name && !opts.nextState.post.tags && !opts.nextState.tags ) {
     return opts;
   }
 

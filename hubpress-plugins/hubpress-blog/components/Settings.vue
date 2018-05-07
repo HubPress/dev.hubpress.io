@@ -33,6 +33,10 @@
     <label>Posts per page</label>
     <input type="text" name="hubpress-posts-per-page" placeholder="Posts per page" v-bind:value="site.postsPerPage">
   </div>
+  <div class="field">
+    <label>Blog path (the pagination of your posts will be available under this path). You must create a page with a the title "index"</label>
+    <input type="text" name="hubpress-blog-path" placeholder="Blog path (default: '', ex: 'blog/')" v-bind:value="site.blogPath">
+  </div>
 
   <h4 class="ui dividing header">Services</h4>
   <div class="field">

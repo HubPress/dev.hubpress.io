@@ -5,6 +5,6 @@ export function generateIndex(opts) {
     opts,
     posts: opts.nextState.publishedPosts,
     template: 'index',
-    path: '',
+    path: opts.rootState.application.config.site.blogPath || '',
   })
 }
