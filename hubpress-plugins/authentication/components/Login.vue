@@ -10,7 +10,7 @@
 
       <div id="loginForm" class="column" v-if="!requireInitilisation">
         <div class="ui segment">
-          <img src="https://hubpress.github.io/img/freeze/logo.png" class="image">
+          <img src="https://hubpress.github.io/images/logo.png" class="image">
           <h2 class="ui header">
             Welcome!
           </h2>

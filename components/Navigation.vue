@@ -19,7 +19,7 @@
         </router-link>
       </div>
     </div>
-    
+
     <router-link v-on:click.native="toggleMenu" active-class="active" class="item" :to="'/settings'" replace>
       Settings
     </router-link>
@@ -28,7 +28,7 @@
       <div class="header">Help us</div>
       <div class="menu">
         <a class="item" href="https://hubpress.gitbooks.io/contributing-to-hubpress/content/" target="_blank">Contribute<i class="smile icon"></i></a>
-        <a class="item" href="https://gratipay.com/hubpress/" target="_blank">Donation Gratipay<i class="payment icon"></i></a>
+        <a class="item" href="https://opencollective.com/hubpressio/" target="_blank">Donation OpenCollective<i class="payment icon"></i></a>
         <a class="item" href="https://www.paypal.me/anthonny/5" target="_blank">Donation PayPal<i class="paypal icon"></i></a>
       </div>
     </div>
@@ -41,7 +41,7 @@
         <a class="item" href="https://github.com/orgs/HubPress/people" target="_blank">Contributors<i class="heart icon"></i></a>
         <a class="item" v-bind:href="upgrade" target="_blank">Check for upgrade<i class="checkmark icon"></i></a>
         <div class="item">
-          <img class="ui centered logo image" src="https://hubpress.github.io/img/freeze/logo.png">
+          <img class="ui centered logo image" src="https://hubpress.github.io/images/logo.png">
           <div class="version">
             v{{ hubpressVersion }}
           </div>
