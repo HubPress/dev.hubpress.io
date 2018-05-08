@@ -42,7 +42,7 @@ export  function createRouter(info) {
             routes: []
         },
     }
-    
+
     const updatedOpts = plugins.fireSync('application:routes', opts);
     const routerOptions = {
         base: '/hubpress/',
@@ -59,7 +59,7 @@ export  function createRouter(info) {
             {
                 path: '/',
                 component: { template: '<router-view></router-view>' },
-                redirect: '/dashboard',
+                redirect: '/content',
                 meta: {
                     auth: true,
                 },
@@ -97,5 +97,5 @@ export  function createRouter(info) {
 
     return router
 
-    
+
 }

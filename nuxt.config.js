@@ -22,7 +22,7 @@ const host =
 module.exports = {
   mode: 'spa',
   env: {
-    hubpressVersion: '1.0.0',
+    hubpressVersion: '0.9.0',
     baseUrl:
       process.env.BASE_URL ||
       `http://${host}:${port}`
