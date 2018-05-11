@@ -128,9 +128,11 @@ export default {
     },
     postCoverUrl: function(post) {
       let image = post.image || 'https://hubpress.github.io/img/logo.png'
+      const defaultImageDir = `${this.$store.state.application.config.urls.site}/images`
+      const imageDir = post.attributes && post.attributes.imagesdir || defaultImageDir
       image = image.startsWith('http')
         ? image
-        : `${post.attributes.$$smap.imagesdir}/${post.image}`
+        : `${imageDir}/${post.image}`
       return image
     },
     getPostStatusColor: function(post) {
