@@ -1,0 +1,20 @@
+plugins
+---- hubpress-blog
+        --- url:
+            --- post: _posts/yyyy-mm-dd-title.adoc
+            --- page: _posts/title.adoc
+            pourrait devenir:
+            --- post: contents/post/yyyy-mm-dd-title.adoc
+            --- page: contents/page/title.adoc
+        --- collection:
+            hubpress-blog
+---- hubpress-deck
+        --- url:
+            --- deck: contents/deck/title.adoc
+        --- collection:
+            hubpress-deck
+---- hubpress-ecommerce
+        --- url:
+            --- product: contents/product/title.adoc
+        --- collection:
+            hubpress-ecommerce

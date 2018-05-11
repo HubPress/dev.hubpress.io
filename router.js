@@ -18,6 +18,7 @@ import { asciidocPlugin } from '~/hubpress-plugins/hubpress-asciidoc'
 import { pouchDbPlugin } from '~/hubpress-plugins/hubpress-pouchdb'
 import { lokijsPlugin } from '~/hubpress-plugins/hubpress-lokijs'
 import { rssPlugin } from '~/hubpress-plugins/hubpress-rss'
+import { deckPlugin } from '~/hubpress-plugins/hubpress-deck'
 
 console.log('Router')
 Vue.use(Router)
@@ -33,6 +34,7 @@ plugins.register(
     // pouchDbPlugin,
     lokijsPlugin,
     rssPlugin,
+    deckPlugin,
 )
 console.log('Registered plugins', plugins.list())
 

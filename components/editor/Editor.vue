@@ -1,57 +1,251 @@
 <template>
-  <div class="post-container">
-    <editor
-      :id="id"
-      :document="post"
-      @editor-change-content="editorChangeContent"
-      @editor-remote-save="editorRemoteSave"
-      @editor-publish="editorPublish"
-    />
+<div class="editor-container">
+  <div class="ui fixed inverted menu">
+    <div class="right menu">
+      <a href="#" class="item" v-on:click.stop.prevent="showAsciidocHelp()">
+        <div class="ui icon" data-tooltip="Need some help?" data-position="bottom right">
+          <i class="help large icon"></i>
+        </div>
+      </a>
+      <a href="#" class="item" v-on:click.stop.prevent="switchLight()">
+        <div class="ui icon" v-bind:data-tooltip="lightLabel" data-position="bottom right">
+          <i class="large icon" v-bind:class="{ 'sun': isDark, 'moon': !isDark }"></i>
+        </div>
+      </a>
+      <a href="#" class="item html-preview" v-on:click.stop.prevent="switchPreview(false)">
+        <div class="ui icon" v-bind:data-tooltip="previewLabel" data-position="bottom right">
+          <i class="large icon" v-bind:class="{'unhide':!isPreviewVisible || isIFrame, 'hide':isPreviewVisible && !isIFrame}"></i>
+        </div>
+      </a>
+      <a href="#" class="item" v-on:click.stop.prevent="switchPreview(true)">
+        <div class="ui icon" v-bind:data-tooltip="previewLabelIFrame" data-position="bottom right">
+          <i class="large icon globe"></i>
+        </div>
+      </a>
+      <a href="#" v-if="isPreviewVisible" class="item preview-resize" v-on:click.stop.prevent="switchPreviewSize()">
+        <div class="ui icon" v-bind:data-tooltip="resizeLabel" data-position="bottom right">
+          <i class="large icon" v-bind:class="{'expand':!isFullScreen, 'compress':isFullScreen}"></i>
+        </div>
+      </a>
+      <a href="#" class="item" v-if="isRemoteActionVisible" v-on:click.stop.prevent="remoteSave()">
+        <div class="ui icon" data-tooltip="Save your post remotely" data-position="bottom right">
+          <i class="save large icon"></i>
+        </div>
+      </a>
+      <a href="#" class="item" v-if="isRemoteActionVisible" v-on:click.stop.prevent="publish()">
+        <div class="ui icon" v-bind:data-tooltip="publishLabel" data-position="bottom right">
+          <i class="icons">
+            <i class="cloud large icon" v-bind:class="{'download': isPostPublished, 'upload': !isPostPublished}"></i>
+          </i>
+        </div>
+      </a>
+    </div>
   </div>
+
+  <div id="asciidoc-help" class="ui modal">
+    <i class="close icon"></i>
+    <div class="header">
+      Asciidoc syntax help
+    </div>
+    <div class="content">
+      <table class="ui table">
+        <thead>
+          <tr>
+            <th class="heigth wide">Result</th>
+            <th class="heigth wide">Asciidoc</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>H1</td>
+            <td>= Title</td>
+          </tr>
+          <tr>
+            <td>H2</td>
+            <td>== Title</td>
+          </tr>
+          <tr>
+            <td>H3</td>
+            <td>=== Title</td>
+          </tr>
+          <tr>
+            <td><strong>Bold</strong></td>
+            <td>*content*</td>
+          </tr>
+          <tr>
+            <td><i>Emphasize</i></td>
+            <td>_content_</td>
+          </tr>
+          <tr>
+            <td><a href="#">Link</a></td>
+            <td>http://asciidoctor.org[Asciidoctor]</td>
+          </tr>
+          <tr>
+            <td>Image Block</td>
+            <td>image::sunset.jpg[]</td>
+          </tr>
+          <tr>
+            <td>Image Inline</td>
+            <td>Click image:icons/pause.png[title="Pause"] when you need a break.</td>
+          </tr>
+          <tr>
+            <td>Video</td>
+            <td>video::video_file.mp4[]</td>
+          </tr>
+          <tr>
+            <td>Unordered list</td>
+            <td>* item</td>
+          </tr>
+          <tr>
+            <td>Ordered list</td>
+            <td>. item</td>
+          </tr>
+          <tr>
+            <td><code>Inline code</code></td>
+            <td>`code`</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>
+        More informations about the Asciidoc syntax here: <a href="http://asciidoctor.org/docs/asciidoc-syntax-quick-reference/" target="_blank">AsciiDoc Syntax Quick Reference</a>
+      </p>
+    </div>
+  </div>
+
+  <div class="post-editor">
+    <div class="ui grid" v-bind:class="{ 'dark': isDark, 'light': !isDark }">
+      <div class="row">
+
+      <div id="asciidoc-content" class="column" v-bind:class="{'sixteen wide mobile height wide computer is-preview-visible': isPreviewVisible, 'sixteen wide': !isPreviewVisible, 'is-hidden': isFullScreen}">
+        <codemirror ref="codeEditor" class="container" :code="content" :options="editorOption" @input="contentChange"></codemirror>
+      </div>
+      <div id="asciidoc-preview" class="column" v-bind:class="{'sixteen wide mobile height wide computer is-preview-visible': isPreviewVisible, 'is-iframe': isIFrame, 'is-fullscreen': isFullScreen}" v-if="isPreviewVisible">
+        <preview :document="document" :iframe="isIFrame"></preview>
+      </div>
+    </div>
+    </div>
+  </div>
+</div>
 </template>
 
 <script>
-import Editor from '~/components/editor/Editor'
+import asciidocMode from './codemirror/mode/asciidoc'
+import overlay from './codemirror/mode/overlay'
+import Preview from './Preview'
 
-import {
-  POST_GET,
-  POST_CHANGE_CONTENT,
-  POST_REMOTE_SAVE,
-  POST_PUBLISH,
-  POST_UNPUBLISH,
-} from '../constants'
-
+import 'codemirror/keymap/sublime'
+import 'codemirror/lib/codemirror.css'
 
 export default {
-  name: 'posts',
+  name: 'editor',
+  props: {
+    id: String,
+    document: Object,
+    delay: Number,
+  },
   data() {
     return {
+      isDark: true,
+      isPreviewVisible: false,
+      isIFrame: false,
+      isFullScreen: false,
       content: undefined,
-      timeout: undefined,
+      editorOption: {
+        // 下面所有配置同Codemirror配置，均为可选
+        tabSize: 4,
+        mode: 'asciidoc',
+        theme: 'zenburn',
+        lineNumbers: false,
+        line: true,
+        lineWrapping: true,
+        fixedGutter: true,
+        // sublime、emacs、vim三种键位模式，支持你的不同操作习惯
+        keyMap: 'sublime',
+        // 按键映射，比如Ctrl键映射autocomplete，autocomplete是hint代码提示事件
+        extraKeys: {
+          Ctrl: 'autocomplete',
+        },
+        // 代码折叠
+        foldGutter: true,
+        gutters: ['CodeMirror-linenumbers'],
+        // 选中文本自动高亮，及高亮方式
+        styleSelectedText: true,
+        highlightSelectionMatches: {
+          showToken: /\w/,
+          annotateScrollbar: true,
+        },
+        // more codemirror config...
+        // 如果有hint方面的配置，也应该出现在这里
+      },
     }
   },
   methods: {
-    editorChangeContent: function(payload) {
-      this.$store.dispatch(POST_CHANGE_CONTENT, payload)
+    contentChange: function(updatedContent) {
+      if (this.document.content === updatedContent) return
+
+      const delay = this.delay
+        ? this.delay
+        : 200
+
+      if (this.timeout) {
+        window.clearTimeout(this.timeout)
+      }
+
+      this.timeout = window.setTimeout(() => {
+        this.$emit('editor-change-content', {
+          _id: this.document._id,
+          content: updatedContent,
+        })
+      }, delay ? delay : 200)
     },
-    editorRemoteSave: function(id) {
-      console.log('plop')
-      if (this.post.published) {
-        this.$store.dispatch(POST_PUBLISH, id)
+    showAsciidocHelp: function() {
+      $('#asciidoc-help').modal('show')
+    },
+    switchLight: function() {
+      this.isDark = !this.isDark
+      this.$refs.codeEditor.codemirror.setOption(
+        'theme',
+        this.isDark ? 'zenburn' : 'base16-light',
+      )
+    },
+    switchPreview: function(isIFrame) {
+
+      if (!this.isPreviewVisible) {
+        if (isIFrame) {
+          this.$emit('editor-change-content', {
+            _id: this.document._id,
+            content: this.document.content,
+          })
+        }
+        this.isIFrame = isIFrame
+        this.isPreviewVisible = !this.isPreviewVisible
+        this.isFullScreen = false
       } else {
-        this.$store.dispatch(POST_REMOTE_SAVE, id)
+        if (this.isIFrame !== isIFrame) {
+          this.isIFrame = isIFrame
+          if (isIFrame) {
+            this.$emit('editor-change-content', {
+            _id: this.document._id,
+            content: this.document.content,
+          })
+        }
+        } else {
+          this.isIFrame = false
+          this.isFullScreen = false
+          this.isPreviewVisible = !this.isPreviewVisible
+        }
       }
     },
-    editorPublish: function(id) {
-      if (this.post.published) {
-        this.$store.dispatch(POST_UNPUBLISH, id)
-      } else {
-        this.$store.dispatch(POST_PUBLISH, id)
-      }
+    switchPreviewSize: function() {
+      this.isFullScreen = !this.isFullScreen
+    },
+    remoteSave: function() {
+      console.log('plip')
+      this.$emit('editor-remote-save', this.document._id)
+    },
+    publish: function() {
+      this.$emit('editor-publish', this.document._id)
     }
-  },
-  beforeMount: function() {
-    this.$store.dispatch(POST_GET, this.$route.params.id)
   },
   mounted: function() {
     $('.ui.dropdown.item.themes').dropdown()
@@ -61,17 +255,11 @@ export default {
     })
   },
   beforeUpdate: function() {
-    if (!this.content || this.content !== this.post.content) {
-      this.content = this.post.content
+    if (!this.content || this.content !== this.document.content) {
+      this.content = this.document.content
     }
   },
   computed: {
-    id: function() {
-      return this.$route.params.id
-    },
-    post: function() {
-      return this.$store.state.hubpress.post
-    },
     previewLabel: function() {
       return this.isPreviewVisible ? 'Hide fast preview' : 'Show fast preview'
     },
@@ -85,21 +273,21 @@ export default {
       return this.isDark ? 'Light mode' : 'Dark mode'
     },
     publishLabel: function() {
-      return this.$store.state.hubpress.post.published
+      return this.document.published
         ? 'Unpublish post'
         : 'Publish post'
     },
     isRemoteActionVisible: function() {
-      return !!this.$store.state.hubpress.post.title
+      return !!this.document.title
     },
     isPostPublished: function() {
-      return !!this.post.published
+      return !!this.document.published
     }
   },
   beforeCreate: () => {},
   created: function() {},
   components: {
-    Editor
+    Preview,
   },
 }
 </script>
@@ -181,7 +369,7 @@ export default {
 .post-editor .ui.grid,
 .post-editor .ui.grid .column,
 .CodeMirror,
-.post-container {
+.editor-container {
   height: 100%;
   min-height: 100%;
 }

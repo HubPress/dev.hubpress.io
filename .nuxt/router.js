@@ -18,6 +18,7 @@ import { asciidocPlugin } from '~/hubpress-plugins/hubpress-asciidoc'
 import { pouchDbPlugin } from '~/hubpress-plugins/hubpress-pouchdb'
 import { lokijsPlugin } from '~/hubpress-plugins/hubpress-lokijs'
 import { rssPlugin } from '~/hubpress-plugins/hubpress-rss'
+import { deckPlugin } from '~/hubpress-plugins/hubpress-deck'
 
 console.log('Router')
 Vue.use(Router)
@@ -33,6 +34,7 @@ plugins.register(
     // pouchDbPlugin,
     lokijsPlugin,
     rssPlugin,
+    deckPlugin,
 )
 console.log('Registered plugins', plugins.list())
 
@@ -42,7 +44,7 @@ export  function createRouter(info) {
             routes: []
         },
     }
-    
+
     const updatedOpts = plugins.fireSync('application:routes', opts);
     const routerOptions = {
         base: '/hubpress/',
@@ -59,7 +61,7 @@ export  function createRouter(info) {
             {
                 path: '/',
                 component: { template: '<router-view></router-view>' },
-                redirect: '/dashboard',
+                redirect: '/content',
                 meta: {
                     auth: true,
                 },
@@ -97,5 +99,5 @@ export  function createRouter(info) {
 
     return router
 
-    
+
 }

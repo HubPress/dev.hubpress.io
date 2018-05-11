@@ -8,7 +8,7 @@
     "asciidoctor.js": "^1.5.6",
     "bluebird": "^3.5.1",
     "downsize": "0.0.8",
-    "github-api": "github:anthonny/github#1c9f02a",
+    "github-api": "github:anthonny/github#master",
     "handlebars": "^4.0.11",
     "hubpress-core-plugins": "github:hubpress/hubpress-core-plugins#8ad2f94",
     "hubpress-core-slugify": "github:hubpress/hubpress-core-slugify#cfe920c",
