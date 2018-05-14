@@ -51,7 +51,24 @@ function getContentUrl(name, type) {
   return url
 }
 
-function getContentGhPath(name, type) {
+function getGhAdocPath(name, type) {
+  let url
+  if (type === 'page' || type === 'post') {
+    url = name.replace(
+      /([\w-]*)\.adoc/,
+      '_posts/$1.adoc'
+    )
+  }
+  else if (type === 'deck') {
+    url = name.replace(
+      /([\w-]*)\.adoc/,
+      'contents/deck/$1.adoc'
+    )
+  }
+  return url
+}
+
+function getGhHtmlPathFromAdoc(name, type) {
   let url = name.replace(
     /([\d]{4})-([\d]{2})-([\d]{2})-([\w-]*)\.adoc/,
     '$1/$2/$3/$4.html'
@@ -62,6 +79,13 @@ function getContentGhPath(name, type) {
       '$1.html'
     )
   }
+  else if (type === 'deck') {
+    url = name.replace(
+      /([\w-]*)\.adoc/,
+      'decks/$1/index.html'
+    )
+  }
+  console.log('getGhHtmlPathFromAdoc', name, type, url)
   return url
 }
 
@@ -80,7 +104,8 @@ export default function buildUrlsFromConfig(config) {
     theme: getSiteUrl(config.meta, false) + `/themes/${config.theme.name}`,
     images: getSiteUrl(config.meta) + '/images',
     getContentUrl,
-    getContentGhPath,
+    getGhAdocPath,
+    getGhHtmlPathFromAdoc,
     getContentType,
     getPostUrl: postName =>
       postName.replace(

@@ -66,8 +66,8 @@ export function generatePost (opts, post) {
     title: modifiedPost.title,
     image: modifiedPost.image,
     name:modifiedPost.name,
-    path: config.urls.getContentGhPath(modifiedPost.name, modifiedPost.type),
-    url:config.urls.getContentGhPath(modifiedPost.name, modifiedPost.type),
+    path: config.urls.getGhHtmlPathFromAdoc(modifiedPost.name, modifiedPost.type),
+    url:config.urls.getGhHtmlPathFromAdoc(modifiedPost.name, modifiedPost.type),
     content:htmlContent,
     message: `Publish ${modifiedPost.name}`,
     published_at: modifiedPost.published_at

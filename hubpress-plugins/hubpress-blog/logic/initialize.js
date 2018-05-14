@@ -6,10 +6,11 @@ function initialize(opts) {
     .fireRequestTheme(opts)
     .then(updatedOpts => fires.fireReceiveTheme(updatedOpts))
     .then(updatedOpts => {
-      if (localStorage.getItem('hubpress:sync'))
+      if (localStorage.getItem('hubpress:sync')) {
         return fires
           .fireRequestLocalPosts(updatedOpts)
           .then(_updatedOpts => fires.fireReceiveLocalPosts(_updatedOpts))
+      }
 
       return synchronize(updatedOpts)
     })
@@ -19,7 +20,10 @@ function synchronize(opts) {
   return fires
     .fireRequestRemoteSynchronization(opts)
     .then(updatedOpts => fires.fireReceiveRemoteSynchronization(updatedOpts))
-    .then(updatedOpts => fires.fireRequestRenderingDocuments(updatedOpts))
+    .then(updatedOpts => {
+      updatedOpts.payload.documents = updatedOpts.nextState.posts
+      return fires.fireRequestRenderingDocuments(updatedOpts)
+    })
     .then(updatedOpts => fires.fireReceiveRenderingDocuments(updatedOpts))
     .then(updatedOpts => fires.fireRequestLocalSynchronization(updatedOpts))
     .then(updatedOpts => fires.fireReceiveLocalSynchronization(updatedOpts))

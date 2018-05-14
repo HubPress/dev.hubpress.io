@@ -26,15 +26,6 @@ function fireReceiveTheme(opts) {
   return plugins.fire('hubpress:receive-theme', opts)
 }
 
-// SavedAuth
-function fireRequestSavedAuth(opts) {
-  return plugins.fire('requestSavedAuth', opts)
-}
-
-function fireReceiveSavedAuth(opts) {
-  return plugins.fire('receiveSavedAuth', opts)
-}
-
 // Remote Synchronization
 function fireRequestRemoteSynchronization(opts) {
   return plugins.fire('hubpress:request-remote-synchronization', opts)
@@ -246,8 +237,6 @@ export default {
   fireReceiveSaveConfig,
   fireRequestTheme,
   fireReceiveTheme,
-  fireRequestSavedAuth,
-  fireReceiveSavedAuth,
   fireRequestRemoteSynchronization,
   fireReceiveRemoteSynchronization,
   fireRequestRenderingDocuments,

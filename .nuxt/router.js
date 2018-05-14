@@ -10,7 +10,7 @@ import { initializeStores } from '~/hubpress-plugins/services'
 import { applicationPlugin } from '~/hubpress-plugins/application'
 import { authenticationPlugin, LoginComponent } from '~/hubpress-plugins/authentication'
 import { dashboardPlugin } from '~/hubpress-plugins/dashboard'
-import { hubpressPlugin } from '~/hubpress-plugins/hubpress-blog'
+import { blogPlugin } from '~/hubpress-plugins/hubpress-blog'
 import { githubPlugin } from '~/hubpress-plugins/hubpress-github'
 import { templatePlugin } from '~/hubpress-plugins/hubpress-template'
 import { sessionStoragePlugin } from '~/hubpress-plugins/hubpress-session-storage'
@@ -26,7 +26,7 @@ plugins.register(
     applicationPlugin,
     authenticationPlugin,
     dashboardPlugin,
-    hubpressPlugin,
+    blogPlugin,
     githubPlugin,
     templatePlugin,
     sessionStoragePlugin,
@@ -36,7 +36,8 @@ plugins.register(
     rssPlugin,
     deckPlugin,
 )
-console.log('Registered plugins', plugins.list())
+const registeredPlugins = plugins.list()
+console.log('Registered plugins', registeredPlugins)
 
 export  function createRouter(info) {
     const opts = {

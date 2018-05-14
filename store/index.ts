@@ -22,6 +22,9 @@ const initStore = () =>  {
     currentState: {
       stores: []
     },
+    payload: {
+      plugins: plugins.list(),
+    }
   }
   if (store) {
     return store

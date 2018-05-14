@@ -7,6 +7,7 @@ import _ from 'lodash'
 import moment from 'moment'
 import buildUrlsFromConfig from './urls'
 import InitConfig from './components/InitConfig'
+import logic from './logic'
 
 const TREE_CHUNK_SIZE = 50
 let lastCachedCommit = null
@@ -269,7 +270,7 @@ function markIfPostPublished(config, post) {
   repository.getSha(
     config.meta.branch,
     // TODO Test si ca marche
-    config.urls.getContentGhPath(post.name, type),
+    config.urls.getGhHtmlPathFromAdoc(post.name, type),
     (err, sha) => {
       if (err && err.response && err.response.status !== 404) {
         defer.reject(err)
@@ -417,6 +418,7 @@ function deletePost(repository, branch, elementPath) {
   return deleteElement(repository, branch, elementPath)
 }
 
+// Deprecated prefere moveDocumentIfNecessary
 function movePostIfNecessary(config, post) {
   const meta = config.meta
   const repository = githubInstance.getRepo(meta.username, meta.repositoryName)
@@ -441,7 +443,7 @@ function movePostIfNecessary(config, post) {
           defer.resolve({ post: post, sha: sha })
         } else {
           // Remove the post published with the old name
-          let oldPublishedPostPath = config.urls.getContentGhPath(
+          let oldPublishedPostPath = config.urls.getGhHtmlPathFromAdoc(
             post.original.name,
             post.original.type
           )
@@ -463,6 +465,8 @@ function movePostIfNecessary(config, post) {
 
   return returnedPromise
 }
+
+
 
 function writePost(config, post) {
   console.log('Write post', config, post)
@@ -641,6 +645,7 @@ export function githubPlugin(context) {
     if (!opts.rootState.authentication.isAuthenticated) {
       return opts
     }
+
     return getPosts(opts.rootState).then(posts => {
       opts.nextState = Object.assign({}, opts.nextState, { posts })
       return opts
@@ -811,7 +816,7 @@ export function githubPlugin(context) {
       meta.username,
       meta.repositoryName,
     )
-    const elementPath = config.urls.getContentGhPath(
+    const elementPath = config.urls.getGhHtmlPathFromAdoc(
       opts.nextState.post.original.name,
       opts.nextState.post.original.type
     )
@@ -862,5 +867,100 @@ export function githubPlugin(context) {
     opts.nextState.application.config.initialisationConfigComponent = InitConfig
 
     return opts
+  })
+
+  // decks
+  context.on('deck:request-remote-synchronization', opts => {
+    console.info('githubPlugin - deck:request-remote-synchronization')
+    console.log('githubPlugin - deck:request-remote-synchronization', opts)
+
+    if (!opts.rootState.authentication.isAuthenticated) {
+      return opts
+    }
+
+    return logic.synchronizeAndGetContentsFromTypes(githubInstance, opts)
+      .then(contentsByType => {
+        opts.nextState = {
+          ...opts.nextState,
+          ...contentsByType
+        }
+        return opts
+      })
+  })
+
+  context.on('deck:request-save-remote-deck', opts => {
+    console.info('githubPlugin - deck:request-save-remote-deck')
+    console.log('githubPlugin - deck:request-save-remote-deck', opts)
+    const configuration = opts.rootState.application.config
+    const document = opts.payload.deck
+
+    return logic.saveDocument(githubInstance, opts)
+    .then(updatedDeck => {
+      opts.nextState.deck = updatedDeck
+      return opts
+    })
+  })
+
+  context.on('deck:request-delete-remote-deck', opts => {
+    console.info('githubPlugin - deck:request-delete-remote-deck')
+    console.log('githubPlugin - deck:request-delete-remote-deck', opts)
+    const defer = Q.defer()
+    const config = opts.rootState.application.config
+    const meta = config.meta
+    const repository = githubInstance.getRepo(
+      meta.username,
+      meta.repositoryName,
+    )
+    const elementPath = opts.payload.deck.original.path
+
+    repository
+      .deleteFile(meta.branch, elementPath, (err, sha) => {
+        if (err && err.response && err.response.status !== 404) {
+          defer.reject(err)
+        } else {
+          console.error('deck:request-delete-remote-deck', sha)
+          lastCachedCommit = sha.commit
+          defer.resolve(opts)
+        }
+      })
+      .catch(err => {
+        if (err && err.response && err.response.status === 404) {
+          defer.resolve(opts)
+        }
+      })
+
+    return defer.promise
+  })
+
+  context.on('deck:request-delete-remote-published-deck', opts => {
+    console.info('githubPlugin - deck:request-delete-remote-published-deck')
+    console.log('githubPlugin - deck:request-delete-remote-published-deck', opts)
+    const defer = Q.defer()
+    const config = opts.rootState.application.config
+    const meta = config.meta
+    const repository = githubInstance.getRepo(
+      meta.username,
+      meta.repositoryName,
+    )
+    const document = opts.payload.deck
+
+    const elementPath = config.urls.getGhHtmlPathFromAdoc(
+      opts.nextState.deck.original.name,
+
+      // FIXME it is not normal that the original.type is undefined
+      opts.nextState.deck.original.type || opts.nextState.deck.type
+    )
+
+    repository.deleteFile(meta.branch, elementPath, (err, sha) => {
+      if (err) {
+        defer.reject(err)
+      } else {
+        console.error('deck:request-delete-remote-published-deck', sha)
+        lastCachedCommit = sha.commit
+        defer.resolve(opts)
+      }
+    })
+
+    return defer.promise
   })
 }

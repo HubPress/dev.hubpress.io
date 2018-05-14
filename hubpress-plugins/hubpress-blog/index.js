@@ -27,10 +27,10 @@ const APPLICATION_INITIALIZE_PLUGINS = 'application:initialize-plugins'
 const HUBPRESS_INITIALIZE = 'hubpress:initialize'
 const AUTHORISATION_AUTHENTICATION_DONE = 'authorisation:authentication-done'
 
-export function hubpressPlugin(context) {
+export function blogPlugin(context) {
   context.on('application:stores', opts => {
-    console.info('hubpressPlugin - application:stores')
-    console.log('hubpressPlugin - application:stores', opts)
+    console.info('blogPlugin - application:stores')
+    console.log('blogPlugin - application:stores', opts)
 
     const hubpress = {
       state: {
@@ -104,6 +104,9 @@ export function hubpressPlugin(context) {
           const opts = {
             rootState: _.cloneDeep(rootState),
             currentState: _.cloneDeep(state),
+            payload: {
+              contentTypes: ['post', 'page']
+            }
           }
           return logic
             .initialize(opts)
@@ -114,6 +117,9 @@ export function hubpressPlugin(context) {
           const opts = {
             rootState: _.cloneDeep(rootState),
             currentState: _.cloneDeep(state),
+            payload: {
+              contentTypes: ['post', 'page']
+            }
           }
           return dispatch('application:loading')
             .then(_ => logic.synchronize(opts))
@@ -258,13 +264,13 @@ export function hubpressPlugin(context) {
       getters: {},
     }
     opts.nextState.stores.hubpress = hubpress
-    console.log('hubpressPlugin - application:stores - return', opts)
+    console.log('blogPlugin - application:stores - return', opts)
     return opts
   })
 
   context.on('application:routes', opts => {
-    console.info('hubpressPlugin - application:routes')
-    console.log('hubpressPlugin - application:routes', opts)
+    console.info('blogPlugin - application:routes')
+    console.log('blogPlugin - application:routes', opts)
 
     opts.nextState.routes.push({
       id: 'hubpress-blog',
@@ -289,13 +295,13 @@ export function hubpressPlugin(context) {
         }
       ]
     })
-    console.log('hubpressPlugin - application:routes - return', opts)
+    console.log('blogPlugin - application:routes - return', opts)
     return opts
   })
 
   context.on('application:initialize-plugins', opts => {
-    console.info('hubpressPlugin - application:initialize-plugins')
-    console.log('hubpressPlugin - application:initialize-plugins', opts)
+    console.info('blogPlugin - application:initialize-plugins')
+    console.log('blogPlugin - application:initialize-plugins', opts)
     // A tabs for settings
     opts.nextState.application.settingsTabs.push(
       {
@@ -321,7 +327,11 @@ export function hubpressPlugin(context) {
     // the hubpress state
 
     const localOpts = Object.assign({}, opts, {
+      currentState: opts.nextState.hubpress,
       nextState: opts.nextState.hubpress,
+      payload: {
+        contentTypes: ['post', 'page']
+      }
     })
     return logic.initialize(localOpts).then(updatedOpts => {
       // Then we set our localOpts.nextState to the hubpress state
@@ -331,8 +341,8 @@ export function hubpressPlugin(context) {
   })
 
   context.on('application:prepare-config', opts => {
-    console.info('hubpressPlugin - application:prepare-config')
-    console.log('hubpressPlugin - application:prepare-config', opts)
+    console.info('blogPlugin - application:prepare-config')
+    console.log('blogPlugin - application:prepare-config', opts)
 
     // Config site
 
@@ -425,13 +435,13 @@ export function hubpressPlugin(context) {
         }
      }
 
-    console.log('hubpressPlugin - application:prepare-config - return', opts)
+    console.log('blogPlugin - application:prepare-config - return', opts)
     return opts
   })
 
   context.on('application:save-config-done', opts => {
-    console.info('hubpressPlugin - application:save-config-done')
-    console.log('hubpressPlugin - application:save-config-done', opts)
+    console.info('blogPlugin - application:save-config-done')
+    console.log('blogPlugin - application:save-config-done', opts)
 
     const localOpts = Object.assign({}, opts, {
       nextState: opts.nextState.hubpress,
@@ -441,7 +451,11 @@ export function hubpressPlugin(context) {
       opts.nextState.hubpress = updatedOpts.nextState
       return opts
     })
-    console.log('hubpressPlugin - application:save-config-done - return', opts)
+    console.log('blogPlugin - application:save-config-done - return', opts)
     return opts
   })
+
+  return {
+    contentTypes: ['post', 'page']
+  }
 }

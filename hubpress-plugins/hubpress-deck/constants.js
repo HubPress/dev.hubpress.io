@@ -1,0 +1,8 @@
+export const DECK_DELETE = 'deck:delete'
+export const DECK_GET = 'deck:get'
+export const DECK_REMOTE_SAVE = 'deck:remote-save'
+export const DECK_PUBLISH = 'deck:publish'
+export const DECK_UNPUBLISH = 'deck:unpublish'
+export const DECKS_GET = 'decks:get'
+export const DECK_CHANGE_CONTENT = 'deck:change-content'
+export const DECKS_SYNCHRONIZE = 'decks:synchronize'

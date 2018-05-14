@@ -56,6 +56,7 @@ export function applicationPlugin(context) {
           isVisible: false,
         },
         routes: [],
+        plugins: opts.payload.plugins || {},
         settingsTabs: [],
       },
       mutations: {
@@ -272,7 +273,20 @@ export function applicationPlugin(context) {
     return opts
   })
 
-  return {
-    getName: () => 'applicationPlugin'
-  }
+  context.on('application:initialize-plugins', opts => {
+    console.info('applicationPlugin - application:initialize-plugins')
+    console.log('applicationPlugin - application:initialize-plugins', opts)
+
+    opts.nextState.application.contentTypes = opts.nextState.application.plugins.map(
+      plugin => {
+        return plugin.contentTypes || []
+      }
+    ).reduce((memo, value) => {
+      return [...memo, ...value]
+    }, [])
+
+    console.log('applicationPlugin - application:initialize-plugins - return', opts)
+    return opts
+  })
+
 }

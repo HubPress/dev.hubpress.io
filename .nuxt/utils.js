@@ -120,7 +120,7 @@ export async function setContext(app, context) {
       payload: context.payload,
       error: context.error,
       base: '/',
-      env: {"hubpressVersion":"0.9.1","baseUrl":"http://localhost:3000"}
+      env: {"hubpressVersion":"0.9.2","baseUrl":"http://localhost:3000"}
     }
     // Only set once
     if (context.req) app.context.req = context.req

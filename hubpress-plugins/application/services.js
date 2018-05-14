@@ -56,12 +56,12 @@ function saveConfigDone(opts) {
   return plugins.fire('application:save-config-done', opts)
 }
 
-function initializeApp(rootState, state) {
-  return plugins.fire('application:initialize-app', rootState, state)
+function initializeApp(opts, state) {
+  return plugins.fire('application:initialize-app', opts)
 }
 
-function initializePlugins(rootState, state) {
-  return plugins.fire('application:initialize-plugins', rootState, state)
+function initializePlugins(opts, state) {
+  return plugins.fire('application:initialize-plugins', opts)
 }
 
 export default {

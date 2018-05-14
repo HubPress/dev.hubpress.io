@@ -18,3 +18,9 @@ plugins
             --- product: contents/product/title.adoc
         --- collection:
             hubpress-ecommerce
+
+
+contents/
+  page
+  post
+  deck

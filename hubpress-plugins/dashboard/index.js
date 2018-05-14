@@ -20,7 +20,4 @@ export function dashboardPlugin(context) {
     return opts
   })
 
-  return {
-    getName: () => 'dashboardPlugin'
-  }
 }

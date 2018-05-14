@@ -12,7 +12,7 @@
           <i class="large icon" v-bind:class="{ 'sun': isDark, 'moon': !isDark }"></i>
         </div>
       </a>
-      <a href="#" class="item html-preview" v-on:click.stop.prevent="switchPreview(false)">
+      <a href="#" class="item html-preview" v-if="!hideSimplePreview" v-on:click.stop.prevent="switchPreview(false)">
         <div class="ui icon" v-bind:data-tooltip="previewLabel" data-position="bottom right">
           <i class="large icon" v-bind:class="{'unhide':!isPreviewVisible || isIFrame, 'hide':isPreviewVisible && !isIFrame}"></i>
         </div>
@@ -20,6 +20,11 @@
       <a href="#" class="item" v-on:click.stop.prevent="switchPreview(true)">
         <div class="ui icon" v-bind:data-tooltip="previewLabelIFrame" data-position="bottom right">
           <i class="large icon globe"></i>
+        </div>
+      </a>
+      <a href="#" v-if="isPreviewVisible" class="item html-preview" v-on:click.stop.prevent="external()">
+        <div class="ui icon" v-bind:data-tooltip="previewLabel" data-position="bottom right">
+          <i class="large icon external alternate"></i>
         </div>
       </a>
       <a href="#" v-if="isPreviewVisible" class="item preview-resize" v-on:click.stop.prevent="switchPreviewSize()">
@@ -142,6 +147,7 @@ export default {
     id: String,
     document: Object,
     delay: Number,
+    hideSimplePreview: Boolean,
   },
   data() {
     return {
@@ -180,6 +186,11 @@ export default {
     }
   },
   methods: {
+    external: function() {
+      const newWindow = window.open(this.document.publishedContent, this.document.title, 'height=600, width=800, scrollbars=auto, resizable=no, location=no, status=no, menubar=no, toolbar=no, titlebar=no, directories=no');
+      newWindow.document.write(this.document.publishedContent);
+      newWindow.document.close();
+    },
     contentChange: function(updatedContent) {
       if (this.document.content === updatedContent) return
 
@@ -195,6 +206,7 @@ export default {
         this.$emit('editor-change-content', {
           _id: this.document._id,
           content: updatedContent,
+          isPreviewVisible: this.isPreviewVisible
         })
       }, delay ? delay : 200)
     },
@@ -212,13 +224,14 @@ export default {
 
       if (!this.isPreviewVisible) {
         if (isIFrame) {
+          this.isPreviewVisible = !this.isPreviewVisible
           this.$emit('editor-change-content', {
             _id: this.document._id,
             content: this.document.content,
+            isPreviewVisible: this.isPreviewVisible
           })
         }
         this.isIFrame = isIFrame
-        this.isPreviewVisible = !this.isPreviewVisible
         this.isFullScreen = false
       } else {
         if (this.isIFrame !== isIFrame) {
@@ -227,6 +240,7 @@ export default {
             this.$emit('editor-change-content', {
             _id: this.document._id,
             content: this.document.content,
+            isPreviewVisible: this.isPreviewVisible
           })
         }
         } else {

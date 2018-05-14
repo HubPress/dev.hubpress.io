@@ -132,10 +132,6 @@ export function authenticationPlugin(context) {
     )
     return logic.authenticate(opts)
   })
-
-  return {
-    getName: () => 'authenticationPlugin'
-  }
 }
 
 export const LoginComponent = Login

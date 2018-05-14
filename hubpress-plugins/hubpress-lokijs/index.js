@@ -47,6 +47,49 @@ export function lokijsPlugin(hubpress) {
 
         return opts
     })
+
+    hubpress.on('deck:request-local-synchronization', opts => {
+        console.info('lokijsPlugin - deck:request-local-synchronization')
+        console.log('lokijsPlugin - deck:request-local-synchronization', opts)
+
+        const contentCollection = db.getCollection('content')
+
+        const documents = opts.payload.documents || []
+        opts.nextState.decks = documents.map(document => {
+            document.type = document.type || opts.payload.defaultType
+            const savedContent = contentCollection.findOne({
+                'original.name': document.name
+            })
+            let returnedDocument
+            if (!savedContent) {
+                console.log(`lokijsPlugin - ${document.type} not found`, document.name)
+                document._id = uuid.v4()
+                returnedDocument = contentCollection.insert(document)
+            } else {
+                console.log(`lokijsPlugin - ${document.type} found`, document.name)
+                if (
+                    (savedContent.original &&
+                        savedContent.original.content !== document.content) ||
+                    savedContent.published !== document.published
+                ) {
+                    console.log(`lokijsPlugin - ${document.type} have changed`, document.name)
+                    document.$loki = savedContent.$loki
+                    document.meta = savedContent.meta
+                    returnedDocument = contentCollection.update(document)
+                }
+                else {
+                    console.log(`lokijsPlugin - ${document.type} have not changed`, document.name)
+                    returnedDocument = savedContent
+                }
+            }
+            db.saveDatabase()
+            return returnedDocument
+        })
+
+
+        return opts
+    })
+
     hubpress.on('application:receive-config', opts => {
         console.info('lokijsPlugin - application:receive-config')
         console.log('lokijsPlugin - application:receive-config', opts)
@@ -66,7 +109,7 @@ export function lokijsPlugin(hubpress) {
         db.loadDatabase()
         if (!db.getCollection('content')) {
             db.addCollection('content', {
-                unique: ['name']
+                unique: ['name', 'type']
             })
         }
         window.lokiDb = db
@@ -79,7 +122,9 @@ export function lokijsPlugin(hubpress) {
         const contentCollection = db.getCollection('content')
         const savedPosts = contentCollection.chain()
         .find({
-            // type: 'post'
+            type: {
+              $in: ['post', 'page']
+            }
         })
         .simplesort('name', {
             desc: true
@@ -89,6 +134,24 @@ export function lokijsPlugin(hubpress) {
         opts.nextState.posts = savedPosts
         return opts
     })
+
+    hubpress.on('deck:request-local-decks', opts => {
+      console.info('lokijsPlugin - deck:request-local-decks')
+      console.log('lokijsPlugin - deck:request-local-decks', opts)
+      const contentCollection = db.getCollection('content')
+      const savedDecks = contentCollection.chain()
+      .find({
+          type: 'deck'
+      })
+      .simplesort('name', {
+          desc: true
+      })
+      .data()
+
+      opts.nextState.decks = savedDecks
+      return opts
+  })
+
     hubpress.on('requestSelectedPost', opts => {
         console.info('lokijsPlugin - requestSelectedPost')
         console.log('lokijsPlugin - requestSelectedPost', opts)
@@ -113,6 +176,24 @@ export function lokijsPlugin(hubpress) {
         } else {
             opts.nextState.post = {
                 _id: opts.nextState.post._id,
+            }
+        }
+
+        return opts
+    })
+    hubpress.on('deck:request-local-deck', opts => {
+        console.info('lokijsPlugin - deck:request-local-deck')
+        console.log('lokijsPlugin - deck:request-local-deck', opts)
+        const contentCollection = db.getCollection('content')
+        const selectedPost = contentCollection.findOne({
+            _id: opts.payload.deck._id
+        })
+
+        if (selectedPost) {
+            opts.nextState.deck = selectedPost
+        } else {
+            opts.nextState.deck = {
+                _id: opts.payload.deck._id,
             }
         }
 
@@ -143,6 +224,38 @@ export function lokijsPlugin(hubpress) {
             opts.nextState.post = contentCollection.update(mergedPost)
         } else {
             opts.nextState.post = contentCollection.insert(opts.nextState.post)
+        }
+        db.saveDatabase()
+
+        return opts
+    })
+
+    hubpress.on('deck:request-save-local-deck', opts => {
+        console.info('lokijsPlugin - deck:request-save-local-deck')
+        console.log('lokijsPlugin - deck:request-save-local-deck', opts)
+        const contentCollection = db.getCollection('content')
+
+        const existingPostWithName = contentCollection.findOne({
+            _id: {
+                $ne: opts.payload.deck._id
+            },
+            name: opts.payload.deck.name,
+        })
+
+        if (existingPostWithName) {
+            throw new Error(
+                `${opts.payload.deck.type} with the name ${opts.payload.deck.name} already exist`,
+            )
+        }
+        const currentSavedDocument = contentCollection.findOne({
+            _id: opts.payload.deck._id
+        })
+        if (currentSavedDocument) {
+            const mergedDocument = Object.assign(currentSavedDocument, opts.payload.deck)
+            mergedDocument.type = opts.nextState.deck.type || currentSavedDocument.type || 'deck'
+            opts.nextState.deck = contentCollection.update(mergedDocument)
+        } else {
+            opts.nextState.deck = contentCollection.insert(opts.payload.deck)
         }
         db.saveDatabase()
 
@@ -193,8 +306,15 @@ export function lokijsPlugin(hubpress) {
 
         return opts
     })
+    hubpress.on('deck:request-delete-local-deck', opts => {
+        console.info('lokijsPlugin - deck:request-delete-local-deck')
+        console.log('lokijsPlugin - deck:request-delete-local-deck', opts)
+        const contentCollection = db.getCollection('content')
+        contentCollection.findAndRemove({
+            _id: opts.payload.deck._id
+        })
+        db.saveDatabase()
 
-    return {
-        getName: () => 'lokijsPlugin'
-    }
+        return opts
+    })
 }
