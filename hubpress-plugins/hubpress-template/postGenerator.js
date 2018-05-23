@@ -40,7 +40,8 @@ export function generatePost (opts, post) {
   postData.status = 'published';
   postData.feature_image = postData.image
 
-  const template = modifiedPost.name === 'index.adoc' ? 'home' : modifiedPost.type || 'post'
+  const payloadTemplate = opts.payload && opts.payload.template
+  const template = modifiedPost.name === 'index.adoc' ? 'home' : payloadTemplate || modifiedPost.type || 'post'
 
   // If template Tag is not available, do not process
   if (!Builder.isTemplateAvailable(template)) {

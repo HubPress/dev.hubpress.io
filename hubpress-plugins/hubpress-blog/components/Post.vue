@@ -2,7 +2,10 @@
   <div class="post-container">
     <editor
       :id="id"
-      :document="post"
+      :content="post.content"
+      :published-content="post.publishedContent"
+      :published="!!post.published"
+      :title="post.title"
       @editor-change-content="editorChangeContent"
       @editor-remote-save="editorRemoteSave"
       @editor-publish="editorPublish"

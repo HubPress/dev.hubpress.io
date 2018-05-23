@@ -125,7 +125,14 @@
         <codemirror ref="codeEditor" class="container" :code="content" :options="editorOption" @input="contentChange"></codemirror>
       </div>
       <div id="asciidoc-preview" class="column" v-bind:class="{'sixteen wide mobile height wide computer is-preview-visible': isPreviewVisible, 'is-iframe': isIFrame, 'is-fullscreen': isFullScreen}" v-if="isPreviewVisible">
-        <preview :document="document" :iframe="isIFrame"></preview>
+        <preview
+          :title="title"
+          :html="html"
+          :published-content="publishedContent"
+          :display-iframe="isIFrame"
+          :templates="templates"
+          @preview-change-template="onChangeTemplate"
+        ></preview>
       </div>
     </div>
     </div>
@@ -146,8 +153,14 @@ export default {
   props: {
     id: String,
     document: Object,
+    content: String,
+    html: String,
+    publishedContent: String,
+    published: Boolean,
+    title: String,
     delay: Number,
     hideSimplePreview: Boolean,
+    templates: Array,
   },
   data() {
     return {
@@ -187,12 +200,12 @@ export default {
   },
   methods: {
     external: function() {
-      const newWindow = window.open(this.document.publishedContent, this.document.title, 'height=600, width=800, scrollbars=auto, resizable=no, location=no, status=no, menubar=no, toolbar=no, titlebar=no, directories=no');
-      newWindow.document.write(this.document.publishedContent);
+      const newWindow = window.open(this.publishedContent, this.title, 'height=600, width=800, scrollbars=auto, resizable=no, location=no, status=no, menubar=no, toolbar=no, titlebar=no, directories=no');
+      newWindow.document.write(this.publishedContent);
       newWindow.document.close();
     },
     contentChange: function(updatedContent) {
-      if (this.document.content === updatedContent) return
+      if (this.content === updatedContent) return
 
       const delay = this.delay
         ? this.delay
@@ -204,7 +217,7 @@ export default {
 
       this.timeout = window.setTimeout(() => {
         this.$emit('editor-change-content', {
-          _id: this.document._id,
+          _id: this.id,
           content: updatedContent,
           isPreviewVisible: this.isPreviewVisible
         })
@@ -223,11 +236,11 @@ export default {
     switchPreview: function(isIFrame) {
 
       if (!this.isPreviewVisible) {
+        this.isPreviewVisible = !this.isPreviewVisible
         if (isIFrame) {
-          this.isPreviewVisible = !this.isPreviewVisible
           this.$emit('editor-change-content', {
-            _id: this.document._id,
-            content: this.document.content,
+            _id: this.id,
+            content: this.content,
             isPreviewVisible: this.isPreviewVisible
           })
         }
@@ -238,8 +251,8 @@ export default {
           this.isIFrame = isIFrame
           if (isIFrame) {
             this.$emit('editor-change-content', {
-            _id: this.document._id,
-            content: this.document.content,
+            _id: this.id,
+            content: this.content,
             isPreviewVisible: this.isPreviewVisible
           })
         }
@@ -255,10 +268,13 @@ export default {
     },
     remoteSave: function() {
       console.log('plip')
-      this.$emit('editor-remote-save', this.document._id)
+      this.$emit('editor-remote-save', this.id)
     },
     publish: function() {
-      this.$emit('editor-publish', this.document._id)
+      this.$emit('editor-publish', this.id)
+    },
+    onChangeTemplate: function(selectedTemplate) {
+      this.$emit('preview-change-template', selectedTemplate)
     }
   },
   mounted: function() {
@@ -269,8 +285,8 @@ export default {
     })
   },
   beforeUpdate: function() {
-    if (!this.content || this.content !== this.document.content) {
-      this.content = this.document.content
+    if (!this.content || this.content !== this.content) {
+      this.content = this.content
     }
   },
   computed: {
@@ -287,16 +303,41 @@ export default {
       return this.isDark ? 'Light mode' : 'Dark mode'
     },
     publishLabel: function() {
-      return this.document.published
+      return this.published
         ? 'Unpublish post'
         : 'Publish post'
     },
     isRemoteActionVisible: function() {
-      return !!this.document.title
+      return !!this.title
     },
     isPostPublished: function() {
-      return !!this.document.published
-    }
+      return !!this.published
+    },
+    // templates: function() {
+
+    //   // TODO Put this out of the editor component
+    //   const templates = (this.attributes['hp-deckonf'] || '')
+    //     .split(',')
+    //     .map(template => template.trim())
+    //     .filter(template => template !== '')
+    //     .map(template => {
+    //       const conferenceAttributes = template.split('/')
+    //       const conference = {
+    //         name: conferenceAttributes[0],
+    //         year: conferenceAttributes[1] || 'latest'
+    //       }
+    //       return {
+    //         label: template,
+    //         path: `https://deckonf.io/templates/conferences/${conference.name}/${conference.year}/revealjs/style.css`
+    //       }
+    //     })
+
+    //   templates.unshift({
+    //     label: 'default',
+    //     path: `${this.attributes['revealjsdir']}/css/theme/${this.attributes['revealjs_theme'] || 'black'}.css`
+    //   })
+    //   return templates
+    // }
   },
   beforeCreate: () => {},
   created: function() {},

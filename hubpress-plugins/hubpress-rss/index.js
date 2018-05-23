@@ -7,7 +7,7 @@ export function rssPlugin(hubpress) {
 
     const site = opts.rootState.application.config.site || {}
     const siteUrl = opts.rootState.application.config.urls.site || ''
-    const posts = opts.nextState.publishedPosts || []
+    const posts = opts.nextState.publishedPosts.filter(post => post.type === 'post') || []
 
     /* lets create an rss feed */
     const feed = new RSS({

@@ -68,7 +68,7 @@ function getGhAdocPath(name, type) {
   return url
 }
 
-function getGhHtmlPathFromAdoc(name, type) {
+function getGhHtmlPathFromAdoc(name, type, subdirectory = '') {
   let url = name.replace(
     /([\d]{4})-([\d]{2})-([\d]{2})-([\w-]*)\.adoc/,
     '$1/$2/$3/$4.html'
@@ -81,12 +81,16 @@ function getGhHtmlPathFromAdoc(name, type) {
   }
   else if (type === 'deck') {
     url = name.replace(
-      /([\w-]*)\.adoc/,
-      'decks/$1/index.html'
+      /([\w-\/]*)\.adoc/,
+      `decks/$1${subdirectory}/index.html`
     )
   }
   console.log('getGhHtmlPathFromAdoc', name, type, url)
   return url
+}
+
+function getHtmlPathFromAdoc(name, type, subdirectory = '') {
+  return '/' + getGhHtmlPathFromAdoc(name, type, subdirectory)
 }
 
 function getContentType(name) {
@@ -106,6 +110,7 @@ export default function buildUrlsFromConfig(config) {
     getContentUrl,
     getGhAdocPath,
     getGhHtmlPathFromAdoc,
+    getHtmlPathFromAdoc,
     getContentType,
     getPostUrl: postName =>
       postName.replace(

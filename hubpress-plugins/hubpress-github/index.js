@@ -944,12 +944,14 @@ export function githubPlugin(context) {
     )
     const document = opts.payload.deck
 
-    const elementPath = config.urls.getGhHtmlPathFromAdoc(
+    let elementPath = config.urls.getGhHtmlPathFromAdoc(
       opts.nextState.deck.original.name,
 
       // FIXME it is not normal that the original.type is undefined
       opts.nextState.deck.original.type || opts.nextState.deck.type
     )
+
+    // TODO We need to iterate on all the hp-deckonf of the original to be sure to delete everything
 
     repository.deleteFile(meta.branch, elementPath, (err, sha) => {
       if (err) {

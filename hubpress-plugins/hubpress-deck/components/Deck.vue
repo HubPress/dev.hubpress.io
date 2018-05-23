@@ -2,11 +2,16 @@
   <div class="deck-container">
     <editor
       :id="id"
-      :document="deck"
+      :content="deck.content"
+      :published-content="publishedHtml"
+      :published="!!deck.published"
+      :title="deck.title"
+      :templates="templates"
       :hide-simple-preview=true
       @editor-change-content="editorChangeContent"
       @editor-remote-save="editorRemoteSave"
       @editor-publish="editorPublish"
+      @preview-change-template="onChangeTemplate"
     />
   </div>
 </template>
@@ -30,11 +35,16 @@ export default {
     return {
       content: undefined,
       timeout: undefined,
+      selectedTemplate: 'default',
+      publishedHtml: ''
     }
   },
   methods: {
     editorChangeContent: function(payload) {
       this.$store.dispatch(DECK_CHANGE_CONTENT, payload)
+        .then(_ => {
+          this.publishedHtml = this.applyTemplateChange(this.getSelectedTemplate(this.selectedTemplate), this.deck.publishedContent)
+        })
     },
     editorRemoteSave: function(id) {
       console.log('plop')
@@ -62,7 +72,26 @@ export default {
           content: this.deck.content
         })
       }
-    }
+    },
+    applyTemplateChange: function(selectedTemplate, content) {
+
+      return content.replace('$$revealjs_customtheme$$', selectedTemplate.path)
+    },
+    onChangeTemplate: function(selectedTemplate) {
+      this.selectedTemplate = selectedTemplate
+      this.publishedHtml = this.applyTemplateChange(this.getSelectedTemplate(selectedTemplate), this.deck.publishedContent)
+    },
+    getSelectedTemplate: function(selectedTemplateLabel) {
+      if (!this.templates) {
+        throw new Error('Templates list is empty')
+      }
+      let selectedTemplate = this.templates.find(template => template.label === selectedTemplateLabel)
+      if (!selectedTemplate) {
+        console.log('change selectedTemplate', selectedTemplate)
+        selectedTemplate = this.templates.find(template => template.label === 'default')
+      }
+      return selectedTemplate
+    },
   },
   beforeMount: function() {
     console.log('bfrmount',this.$route.params.id)
@@ -86,6 +115,34 @@ export default {
     },
     deck: function() {
       return this.$store.state.deck.deck
+    },
+    templates: function() {
+      const document = this.deck
+      if (!document.attributes) {
+        return
+      }
+
+      const templates = (document.attributes['hp-deckonf'] || '')
+        .split(',')
+        .map(template => template.trim())
+        .filter(template => template !== '')
+        .map(template => {
+          const conferenceAttributes = template.split('/')
+          const conference = {
+            name: conferenceAttributes[0],
+            year: conferenceAttributes[1] || 'latest'
+          }
+          return {
+            label: template,
+            path: `https://deckonf.io/templates/conferences/${conference.name}/${conference.year}/revealjs/style.css`
+          }
+        })
+
+      templates.unshift({
+        label: 'default',
+        path: `${document.attributes['revealjsdir']}/css/theme/${document.attributes['revealjs_theme'] || 'black'}.css`
+      })
+      return templates
     },
     previewLabel: function() {
       return this.isPreviewVisible ? 'Hide fast preview' : 'Show fast preview'

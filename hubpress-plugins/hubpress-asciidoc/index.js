@@ -51,31 +51,31 @@ function convertDecks(config, _asciidocContent, options) {
   const attributes = doc.getAttributes()
   console.log('doc:', doc)
   const deckonfString = attributes['hp-deckonf'] || ''
-  const deckonf = deckonfString.split(',')
-  deckonf.unshift('default')
+  const deckonfs = deckonfString.split(',')
+  deckonfs.unshift('default')
 
-  const convertedDecks = deckonf
-  .map(conf => conf.trim())
-  .map(conf => {
+  const convertedDecks = deckonfs
+  .map(deckonfs => deckonfs.trim())
+  .map(deckonf => {
     const _attributes = options.attributes.slice(0)
     let altTitle = _attributes['hp-alt-title']
     _attributes.name =  slugify(
         `${(altTitle || _attributes['doctitle'])}`,
       ) + '.adoc'
 
-    if (conf !== 'default') {
-      _attributes.push(`revealjs_customtheme=${config.urls.site}/decks/${_attributes.name}`)
+    if (deckonf !== 'default') {
+      _attributes.push(`revealjs_customtheme=$$revealjs_customtheme$$`)
     }
     const _options = {...options}
     _options.attributes = _attributes
     const value = convert(config, _asciidocContent, _options)
-    value.name = conf
+    value.label = deckonf
     return value
   })
 
   return {
     docAttributes: attributes,
-    convertedDecks
+    decks: convertedDecks
   }
 }
 
@@ -150,7 +150,7 @@ export function asciidocPlugin(context) {
       safe: 'unsafe',
       header_footer: true,
       attributes: [
-        'revealjsdir=https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0',
+        'revealjsdir=https://cdn.rawgit.com/hakimel/reveal.js/3.6.0',
         'allow-uri-read',
         `imagesdir=${config.urls.site}/images`,
         'icons=font',
@@ -179,7 +179,8 @@ export function asciidocPlugin(context) {
       _document.image = original.image = original.attributes['hp-image']
       _document.type = original.type = original.attributes['hp-type']
       _document.tags = original.tags = extractTags(original.attributes)
-      _document.url = original.url = getContentUrl(config, _document.type, original.name)
+      console.log('type:', _document.type)
+      _document.url = original.url = config.urls.getGhHtmlPathFromAdoc(original.name, _document.type)
 
       let _documentToSave = Object.assign({}, _document, { original: original })
       if (!_document.type || _document.type === 'post') {
@@ -240,20 +241,13 @@ export function asciidocPlugin(context) {
       safe: 'unsafe',
       header_footer: true,
       attributes: [
-        'revealjsdir=https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0',
+        'revealjsdir=https://cdn.rawgit.com/hakimel/reveal.js/3.6.0',
         'allow-uri-read',
         `imagesdir=${config.urls.site}/images`,
         'icons=font',
+        'revealjs_customtheme=$$revealjs_customtheme$$',
       ],
     }
-
-    // const convertedDecks = convertDecks(
-    //   config,
-    //   opts.payload.deck.content,
-    //   options,
-    // )
-
-    // console.log('convertedDecks:', convertedDecks)
 
     let refreshedDeck
     if (opts.payload.loadOnly) {
@@ -272,7 +266,7 @@ export function asciidocPlugin(context) {
       )
     }
 
-    opts.nextState.deck = Object.assign({}, opts.nextState.deck, refreshedDeck)
+    opts.nextState.deck = Object.assign({}, opts.nextState.deck, opts.payload.deck, refreshedDeck)
 
     opts.nextState.deck.title = refreshedDeck.attributes['doctitle']
     opts.nextState.deck.image = refreshedDeck.attributes['hp-image']
@@ -288,8 +282,7 @@ export function asciidocPlugin(context) {
         `${(altTitle || opts.nextState.deck.title)}`,
       ) + '.adoc'
 
-    opts.nextState.deck.url = getContentUrl(opts.rootState.application.config, opts.nextState.deck.type, opts.nextState.deck.name)
-
+    opts.nextState.deck.url = config.urls.getHtmlPathFromAdoc(opts.nextState.deck.name, opts.nextState.deck.type)
     return opts
   })
 }

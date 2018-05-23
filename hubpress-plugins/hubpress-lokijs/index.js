@@ -33,6 +33,7 @@ export function lokijsPlugin(hubpress) {
                     console.log('lokijsPlugin - post have changed', post.name)
                     post.$loki = savedContent.$loki
                     post.meta = savedContent.meta
+                    post._id = savedContent._id
                     returnedPost = contentCollection.update(post)
                 }
                 else {
@@ -75,10 +76,12 @@ export function lokijsPlugin(hubpress) {
                     console.log(`lokijsPlugin - ${document.type} have changed`, document.name)
                     document.$loki = savedContent.$loki
                     document.meta = savedContent.meta
+                    document._id = savedContent._id
                     returnedDocument = contentCollection.update(document)
                 }
                 else {
                     console.log(`lokijsPlugin - ${document.type} have not changed`, document.name)
+                    console.log(savedContent._id, savedContent)
                     returnedDocument = savedContent
                 }
             }
@@ -86,7 +89,7 @@ export function lokijsPlugin(hubpress) {
             return returnedDocument
         })
 
-
+        console.log('lokijsPlugin - deck:request-local-synchronization return', opts)
         return opts
     })
 
@@ -109,7 +112,7 @@ export function lokijsPlugin(hubpress) {
         db.loadDatabase()
         if (!db.getCollection('content')) {
             db.addCollection('content', {
-                unique: ['name', 'type']
+                unique: ['name']
             })
         }
         window.lokiDb = db

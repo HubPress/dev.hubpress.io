@@ -99,6 +99,24 @@ function fireReceiveSaveRemotePublishedElements(opts) {
   return plugins.fire('receiveSaveRemotePublishedElements', opts)
 }
 
+
+// Generators
+function fireRequestGenerateIndex(opts) {
+  return plugins.fire('requestGenerateIndex', opts)
+}
+
+function fireReceiveGenerateIndex(opts) {
+  return plugins.fire('receiveGenerateIndex', opts)
+}
+
+function fireRequestGeneratePosts(opts) {
+  return plugins.fire('requestGeneratePosts', opts)
+}
+
+function fireReceiveGeneratePosts(opts) {
+  return plugins.fire('receiveGeneratePosts', opts)
+}
+
 export default {
 fireRequestRemoteSynchronization,
 fireReceiveRemoteSynchronization,
@@ -124,4 +142,8 @@ fireRequestDeleteRemoteDeck,
 fireReceiveDeleteRemoteDeck,
 fireRequestSaveRemotePublishedElements,
 fireReceiveSaveRemotePublishedElements,
+fireRequestGenerateIndex,
+fireReceiveGenerateIndex,
+fireRequestGeneratePosts,
+fireReceiveGeneratePosts
 }
