@@ -44,6 +44,10 @@
     <input type="text" name="hubpress-ga" placeholder="Google analytics" v-bind:value="site.googleAnalytics">
   </div>
   <div class="field">
+    <label>Fathom analytics</label>
+    <input type="text" name="hubpress-fathom" placeholder="Fathom analytics" v-bind:value="site.fathomAnalytics">
+  </div>
+  <div class="field">
     <label>Disqus shortname</label>
     <input type="text" name="hubpress-disqus" placeholder="Disqus shortname" v-bind:value="site.disqus">
   </div>

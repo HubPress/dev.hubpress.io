@@ -129,10 +129,11 @@ function login(opts) {
   const meta = opts.rootState.application.config.meta
 
   githubInstance = new Github({
-    auth: 'basic',
+    auth: 'oauth',
     username: credentials.email,
-    password: credentials.password,
-    twoFactorCode: credentials.twoFactorCode,
+    token: credentials.password,
+    // password: credentials.password,
+    // twoFactorCode: credentials.twoFactorCode,
   })
 
   const repository = githubInstance.getRepo(meta.username, meta.repositoryName)
@@ -148,28 +149,11 @@ function login(opts) {
     .then(getUserInformations(user))
     .then(function(userInformations) {
       _userInformations = userInformations
-      return getAuthorizations(authorization)
-    })
-    .then(function(authorizations) {
-      return _searchAndDeleteAuthorization(
-        meta.repositoryName,
-        authorizations,
-        authorization,
-      )
-    })
-    .then(function() {
-      return _createAuthorization(meta.repositoryName, authorization)
-    })
-    .then(function(result) {
-      githubInstance = new Github({
-        auth: 'oauth',
-        token: result.token,
-      })
-
+      
       deferred.resolve({
         isAuthenticated: true,
         credentials: {
-          token: result.token,
+          token: credentials.password,
         },
         permissions: _informations.permissions,
         userInformations: _userInformations,

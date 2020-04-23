@@ -359,6 +359,9 @@ export function hubpressPlugin(context) {
     opts.nextState.config.site.googleAnalytics = opts.payload.formData.get(
       'hubpress-ga',
     )
+    opts.nextState.config.site.fathomAnalytics = opts.payload.formData.get(
+      'hubpress-fathom',
+    )
     opts.nextState.config.site.disqus = opts.payload.formData.get(
       'hubpress-disqus',
     )

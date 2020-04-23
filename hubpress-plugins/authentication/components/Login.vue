@@ -26,7 +26,7 @@
               <div class="field">
                 <div class="ui left icon input">
                   <i class="lock icon"></i>
-                  <input type="password" name="password" placeholder="Password" :value="password" @input="updatePassword">
+                  <input type="password" name="password" placeholder="Personal token" :value="password" @input="updatePassword">
                 </div>
               </div>
               <div class="field" v-if="isTwoFactorCodeRequired">
