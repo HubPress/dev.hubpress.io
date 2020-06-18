@@ -1,55 +1,60 @@
 <!DOCTYPE html>
 <html style="background: url({{@blog.cover}}) center/cover no-repeat fixed">
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>404, Houston, we have a problem</title>
-    {{> meta}}
-    <link rel="stylesheet" type="text/css" href="{{asset "css/uno-zen.css"}}" />
-    {{ghost_head}}
-  </head>
-  <body>
-    <article>
-      <section>
-        <div class="astro-wrap">
-          <a class="astronaut" href="#" title="return to base"></a>
-        </div>
-        <div class="mayday">
-          <h2>
-            Houston, we've got a problem. <br>
-            Houston, 404 error appeared.
-          </h2>
-          <hr class="divider short">
-          <h2>
-            What happens now?
-          </h2>
-        </div>
-        <div class="astro-options">
-          <a id="panic-button" class="btn small" href="#">Panic button</a>
-          <a id="safe-button" class="btn small" href="/#open">Safe button</a>
-        </div>
-      </section>
-    </article>
-    {{ghost_foot}}
-    <script type="text/javascript" src="{{asset "js/uno-zen.js"}}"></script>
-    
-    {{#if @blog.googleAnalytics}}
-    <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>404, Houston, we have a problem</title>
+  {{> meta}}
+  <link rel="stylesheet" type="text/css" href="{{asset "css/uno-zen.css"}}" />
+  {{ghost_head}}
+</head>
+
+<body>
+  <article>
+    <section>
+      <div class="astro-wrap">
+        <a class="astronaut" href="#" title="return to base"></a>
+      </div>
+      <div class="mayday">
+        <h2>
+          Houston, we've got a problem. <br>
+          Houston, 404 error appeared.
+        </h2>
+        <hr class="divider short">
+        <h2>
+          What happens now?
+        </h2>
+      </div>
+      <div class="astro-options">
+        <a id="panic-button" class="btn small" href="#">Panic button</a>
+        <a id="safe-button" class="btn small" href="/#open">Safe button</a>
+      </div>
+    </section>
+  </article>
+  {{ghost_foot}}
+  <script type="text/javascript" src="{{asset "js/uno-zen.js"}}"></script>
+
+  {{#if @blog.googleAnalytics}}
+  <script>
+    (function (i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date(); a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
     ga('create', '{{@blog.googleAnalytics}}', 'auto');
     ga('send', 'pageview');
 
-    </script>
-    {{/if}}
+  </script>
+  {{/if}}
 
-    {{#if @blog.fathomAnalytics}}
-    <!-- Fathom - beautiful, simple website analytics -->
-    <script src="https://cdn.usefathom.com/3.js" site="{{@blog.fathomAnalytics}}"></script>
-    <!-- / Fathom -->
-    {{/if}}
-  </body>
+  {{#if @blog.fathomAnalytics}}
+  <!-- Fathom - beautiful, simple website analytics -->
+  <script src="https://cdn.usefathom.com/script.js" site="{{@blog.fathomAnalytics}}"></script>
+  <!-- / Fathom -->
+  {{/if}}
+</body>
+
 </html>
