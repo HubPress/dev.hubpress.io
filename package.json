@@ -9,7 +9,7 @@
     "bluebird": "^3.5.1",
     "downsize": "0.0.8",
     "github-api": "github:anthonny/github#1c9f02a",
-    "handlebars": "^4.0.11",
+    "handlebars": "^4.7.7",
     "hubpress-core-plugins": "github:hubpress/hubpress-core-plugins#8ad2f94",
     "hubpress-core-slugify": "github:hubpress/hubpress-core-slugify#cfe920c",
     "hubpress-plugin-builder-ghost": "github:hubpress/hubpress-plugin-builder-ghost#47100f3",
